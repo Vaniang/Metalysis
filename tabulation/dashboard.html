@@ -21,8 +21,6 @@
         .brand { padding: 25px; font-size: 1.3rem; font-weight: 700; border-bottom: 1px solid #1e293b; display: flex; align-items: center; gap: 10px; }
         .brand i { color: var(--accent); }
         .nav-links { flex: 1; overflow-y: auto; padding-top: 10px; }
-        
-        /* Sidebar Menus */
         .nav-item { cursor: pointer; }
         .nav-header { padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; color: #94a3b8; font-weight: 600; font-size: 0.85rem; border-left: 3px solid transparent; transition: 0.2s; }
         .nav-header:hover { background: #1e293b; color: white; }
@@ -30,7 +28,6 @@
         .nav-sub a { display: block; padding: 8px 15px 8px 45px; color: #64748b; text-decoration: none; font-size: 0.75rem; border-left: 3px solid transparent; transition: 0.2s; border-bottom: 1px solid #1e293b; }
         .nav-sub a:hover, .nav-sub a.active { color: white; background: #1e293b; border-left-color: var(--accent); }
         .show { display: block; }
-
         .nav-links::-webkit-scrollbar { width: 6px; }
         .nav-links::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
 
@@ -57,30 +54,29 @@
         .charts-container { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 30px; }
         .chart-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); height: 350px; position: relative; }
         
-        /* Matrix Tables (Score Sheet Style) */
+        /* --- MATRIX TABLES (FIXED SIZE) --- */
         .table-wrapper { 
             background: white; 
             padding: 25px; 
             border-radius: 4px; 
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); 
             margin-bottom: 40px; 
-            border: 1px solid #cbd5e1; 
-            overflow-x: auto; /* Allow horizontal scroll */
+            border: 1px solid #cbd5e1;
+            overflow-x: auto; /* Allow scrolling if table is too wide */
         }
         
         .table-header-tools { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid #000; padding-bottom: 10px; }
         .tool-btn { background: white; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 4px; cursor: pointer; color: #475569; font-size: 0.8rem; margin-left: 8px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; }
         .tool-btn:hover { border-color: var(--primary); color: var(--primary); background: #eff6ff; }
 
-        /* TABLE FIXES FOR SPACING */
         .r1aa-table { 
-            width: max-content; /* THIS FIXES THE GAP. It shrinks the table to fit content. */
-            min-width: 50%; /* Ensures it's not too small */
+            width: max-content; /* THIS REMOVES THE GAP */
             border-collapse: collapse; 
             border-spacing: 0; 
             font-family: 'Arial', sans-serif; 
         }
-        .r1aa-table th, .r1aa-table td { border: 1px solid #475569; padding: 4px 8px; text-align: center; font-size: 0.75rem; }
+        
+        .r1aa-table th, .r1aa-table td { border: 1px solid #475569; padding: 6px 8px; text-align: center; font-size: 0.75rem; }
         .r1aa-table thead th { background: #e2e8f0; color: #000; font-weight: 700; text-transform: uppercase; font-size: 0.7rem; }
         
         /* Sticky First Column */
@@ -90,22 +86,22 @@
             background: #fff; 
             position: sticky; 
             left: 0; 
-            width: 250px; /* Fixed width for delegation names */
+            width: 250px; 
             min-width: 250px; 
             border-right: 2px solid #000 !important; 
             z-index: 5;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.05); /* Adds visual separation */
         }
         
         .header-total { border-left: 2px solid #000 !important; }
         .cell-total { border-left: 2px solid #000 !important; font-weight: bold; background-color: #f1f5f9; }
 
-        /* Print */
         @media print {
             .sidebar, .input-panel, .tool-btn, .nav-links { display: none !important; }
             .main, .content-area { overflow: visible; height: auto; display: block; padding: 0; background: white; }
             .charts-container, .dashboard-grid { display: none; }
             .table-wrapper { box-shadow: none; border: none; padding: 0; page-break-inside: avoid; }
-            .r1aa-table { width: 100%; } /* In print, expand to full width */
+            .r1aa-table { width: 100%; } /* Expand on print paper */
             .r1aa-table th, .r1aa-table td { border: 1px solid #000 !important; }
         }
         @media (max-width: 1024px) { .charts-container { grid-template-columns: 1fr; } }
@@ -177,7 +173,6 @@
             "San Fernando City", "Urdaneta City", "Vigan City"
         ];
 
-        // *** COMPLETE SPORTS DATABASE ***
         const EVENTS_DATA = {
             "ELEMENTARY": {
                 // Regular Sports
@@ -451,11 +446,11 @@
             }));
         }
 
-        // --- 9. SPORT MATRIX RENDER (FIXED TITLE + FIXED SPACING) ---
+        // --- 9. SPORT MATRIX RENDER ---
         window.renderSportMatrix = (category, sport) => {
             CURRENT_VIEW = { type: 'sport', cat: category, sport: sport };
             const display = document.getElementById('mainDisplay');
-            display.innerHTML = `<div class="section-title" style="text-transform:uppercase;">${category} - ${sport}</div>`;
+            display.innerHTML = `<div class="section-title" style="text-transform:uppercase;">${category} - ${sport.replace("(DEMO)", " (DEMO)")}</div>`;
 
             const subEvents = EVENTS_DATA[category][sport] || ["Result"];
 
@@ -468,15 +463,10 @@
                 const tableId = `tbl-${category}-${sport}-${gender}`.replace(/[^a-zA-Z0-9]/g, '');
                 
                 // --- FIXED TITLE FORMATTING LOGIC ---
-                // 1. Identify Demo tag
-                const isDemo = sport.includes("(DEMO)");
-                
-                // 2. Clean base name (Remove DEMO and GENDER specific tags)
-                let baseName = sport.replace("(DEMO)", "").replace("(BOYS)", "").replace("(GIRLS)", "").trim();
-                
-                // 3. Construct Title (e.g. "ARCHERY - BOYS (DEMO)")
-                let tableTitle = `${baseName} - ${gender}`;
-                if (isDemo) tableTitle += " (DEMO)";
+                let cleanSport = sport.replace("(DEMO)", "").trim();
+                cleanSport = cleanSport.replace("(BOYS)", "").replace("(GIRLS)", "").trim();
+                let tableTitle = `${cleanSport} - ${gender}`;
+                if(sport.includes("(DEMO)")) tableTitle += " (DEMO)";
 
                 let tableHTML = `
                     <div class="table-wrapper">
