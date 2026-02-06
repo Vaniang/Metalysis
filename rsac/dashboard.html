@@ -20,17 +20,31 @@
         .nav-links a:hover, .nav-links a.active { background: #334155; color: var(--white); border-left: 4px solid var(--primary); }
         .main-content { flex: 1; padding: 30px; overflow-y: auto; }
         .section { display: none; } .section.active { display: block; }
-        .controls-bar { display: flex; gap: 10px; margin-bottom: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        
+        /* Controls Bar */
+        .controls-bar { display: flex; gap: 10px; margin-bottom: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); flex-wrap: wrap; }
+        .controls-bar input, .controls-bar select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; outline: none; }
+        
         .btn { padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; color: white; font-weight: 600; display: flex; gap: 8px; align-items: center; }
         .btn-success { background: var(--success); } .btn-primary { background: var(--primary); } .btn-danger { background: var(--danger); }
+        
+        /* Table */
         .table-container { background: var(--white); padding: 20px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; min-width: 1000px; }
         th, td { padding: 12px; text-align: left; border-bottom: 1px solid #e2e8f0; font-size: 0.85rem; }
         th { background: #f8fafc; color: var(--gray); font-weight: 700; text-transform: uppercase; }
+        
+        /* Modal */
         .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); backdrop-filter: blur(2px); }
         .modal-content { background-color: #fefefe; margin: 10% auto; padding: 25px; border-radius: 10px; width: 90%; max-width: 500px; }
         .close { float: right; font-size: 28px; cursor: pointer; }
         textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px; }
+        
+        /* Medal Colors */
+        .medal-badge { padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 0.8rem; }
+        .medal-GOLD { background: #fef3c7; color: #b45309; border: 1px solid #fcd34d; }
+        .medal-SILVER { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+        .medal-BRONZE { background: #fff7ed; color: #9a3412; border: 1px solid #fdba74; }
     </style>
 </head>
 <body>
@@ -49,7 +63,7 @@
             <div id="athletes" class="section active">
                 <h2>Master List of Athletes</h2>
                 <div class="controls-bar">
-                    <input type="text" id="searchAth" placeholder="Search..." style="padding:8px; border:1px solid #ccc; border-radius:4px; flex:1;" onkeyup="filterTable('athleteTable', this.value)">
+                    <input type="text" id="searchAth" placeholder="Search Name/Passport..." style="flex:1;" onkeyup="filterAthletes()">
                     <button class="btn btn-success" onclick="window.exportTable('athleteTable')"><i class="fas fa-file-excel"></i> Excel</button>
                     <button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
                 </div>
@@ -64,12 +78,29 @@
             <div id="awards" class="section">
                 <h2>Athletes Award</h2>
                 <div class="controls-bar">
-                    <input type="text" placeholder="Search Award..." style="padding:8px; border:1px solid #ccc; border-radius:4px; flex:1;">
+                    <input type="text" id="searchAward" placeholder="Search Athlete Name..." style="flex:1;" onkeyup="filterAwards()">
+                    
+                    <select id="filterAwardSDO" onchange="filterAwards()">
+                        <option value="">All Divisions</option>
+                        <option>Alaminos City</option><option>Batac City</option><option>Candon City</option>
+                        <option>Dagupan City</option><option>Ilocos Norte</option><option>Ilocos Sur</option>
+                        <option>Laoag City</option><option>La Union</option><option>Pangasinan I</option>
+                        <option>Pangasinan II</option><option>San Carlos City</option><option>San Fernando City</option>
+                        <option>Urdaneta City</option><option>Vigan City</option>
+                    </select>
+                    
+                    <select id="filterAwardCategory" onchange="filterAwards()">
+                        <option value="">All Categories</option>
+                        <option value="ELEMENTARY">Elementary</option>
+                        <option value="SECONDARY">Secondary</option>
+                        <option value="PARA GAMES">Para Games</option>
+                    </select>
+
                     <button class="btn btn-primary" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
                 </div>
                 <div class="table-container">
                     <table id="awardTable">
-                        <thead><tr><th>Name</th><th>Division</th><th>Event</th><th>Medal</th></tr></thead>
+                        <thead><tr><th>Name</th><th>Division</th><th>Event (Sub-Event)</th><th>Category</th><th>Medal</th></tr></thead>
                         <tbody id="awardTableBody"></tbody>
                     </table>
                 </div>
@@ -110,17 +141,25 @@
         const firebaseConfig = { apiKey: "AIzaSyDfhfZ_c8wbTTviu4MrhvbRknqzyBkzI_s", authDomain: "metalysis-f38ef.firebaseapp.com", projectId: "metalysis-f38ef", storageBucket: "metalysis-f38ef.firebasestorage.app", messagingSenderId: "666983988939", appId: "1:666983988939:web:f70937a2572ed08015a54e", measurementId: "G-96ZPLMV4J7" };
         const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app);
 
-        // --- ATHLETES (VIEW ONLY) ---
+        // --- GLOBAL DATA STORAGE ---
+        let AWARDS_DATA = [];
+        let ATHLETES_DATA = [];
+
+        // --- 1. ATHLETES (VIEW ONLY) ---
         onSnapshot(collection(db, "athletes"), (snap) => {
-            let html = "";
-            snap.forEach(doc => {
-                const d = doc.data();
-                html += `<tr><td>${d.passport}</td><td>${d.name}</td><td>${d.division}</td><td>${d.sport}</td><td>${d.category}</td><td>${d.age}</td><td>${d.gender}</td><td>${d.weight}</td><td>${d.height}</td><td>${d.birthdate}</td></tr>`;
-            });
-            document.getElementById('athleteTableBody').innerHTML = html;
+            ATHLETES_DATA = [];
+            snap.forEach(doc => ATHLETES_DATA.push(doc.data()));
+            renderAthletes(ATHLETES_DATA);
         });
 
-        // --- PROTESTS (RESOLVE) ---
+        // --- 2. AWARDS (NOW CONNECTED TO GAME RESULTS) ---
+        onSnapshot(collection(db, "game_results"), (snap) => {
+            AWARDS_DATA = [];
+            snap.forEach(doc => AWARDS_DATA.push(doc.data()));
+            filterAwards(); // Initial Render
+        });
+
+        // --- 3. PROTESTS (RESOLVE) ---
         onSnapshot(query(collection(db, "protests"), orderBy("timestamp", "desc")), (snap) => {
             let html = "";
             snap.forEach(doc => {
@@ -131,6 +170,55 @@
             });
             document.getElementById('protestTableBody').innerHTML = html;
         });
+
+        // --- RENDER FUNCTIONS ---
+        function renderAthletes(data) {
+            let html = "";
+            data.forEach(d => {
+                html += `<tr><td>${d.passport}</td><td style="font-weight:bold;">${d.name}</td><td>${d.division}</td><td>${d.sport}</td><td>${d.category}</td><td>${d.age}</td><td>${d.gender}</td><td>${d.weight}</td><td>${d.height}</td><td>${d.birthdate}</td></tr>`;
+            });
+            document.getElementById('athleteTableBody').innerHTML = html;
+        }
+
+        // --- FILTERING LOGIC (ATHLETES) ---
+        window.filterAthletes = () => {
+            const term = document.getElementById('searchAth').value.toLowerCase();
+            const filtered = ATHLETES_DATA.filter(d => 
+                d.name.toLowerCase().includes(term) || d.passport.toLowerCase().includes(term)
+            );
+            renderAthletes(filtered);
+        };
+
+        // --- FILTERING LOGIC (AWARDS) ---
+        window.filterAwards = () => {
+            const term = document.getElementById('searchAward').value.toLowerCase();
+            const sdoFilter = document.getElementById('filterAwardSDO').value;
+            const catFilter = document.getElementById('filterAwardCategory').value;
+
+            const filtered = AWARDS_DATA.filter(d => {
+                const nameMatch = (d.athleteName || "").toLowerCase().includes(term);
+                const sdoMatch = sdoFilter === "" || d.sdo === sdoFilter;
+                const catMatch = catFilter === "" || d.category === catFilter;
+                return nameMatch && sdoMatch && catMatch;
+            });
+
+            let html = "";
+            filtered.forEach(d => {
+                // Ensure athleteName exists (older records might not have it)
+                const name = d.athleteName || "Unassigned";
+                html += `
+                    <tr>
+                        <td style="font-weight:bold;">${name}</td>
+                        <td>${d.sdo}</td>
+                        <td>${d.event} <small style="color:#666;">(${d.subEvent})</small></td>
+                        <td>${d.category}</td>
+                        <td><span class="medal-badge medal-${d.medal}">${d.medal}</span></td>
+                    </tr>`;
+            });
+            
+            if(filtered.length === 0) html = `<tr><td colspan="5" style="text-align:center; color:#888;">No awards found.</td></tr>`;
+            document.getElementById('awardTableBody').innerHTML = html;
+        };
 
         // --- MODAL LOGIC ---
         window.openResolve = (id) => { document.getElementById('protestId').value = id; document.getElementById('resolveModal').style.display = 'block'; };
@@ -149,8 +237,7 @@
 
         // --- UTILS ---
         window.showSection = (id) => { document.querySelectorAll('.section').forEach(el=>el.classList.remove('active')); document.querySelectorAll('.nav-links a').forEach(el=>el.classList.remove('active')); document.getElementById(id).classList.add('active'); document.getElementById('nav-'+id).classList.add('active'); };
-        window.exportTable = (id) => { /* Reuse Excel Logic */ };
-        window.filterTable = (id, text) => { /* Simple Text Filter */ };
+        
         document.getElementById('logoutBtn').addEventListener('click', () => { signOut(auth).then(() => window.location.href = "../index.html"); });
         onAuthStateChanged(auth, (user) => { if (!user) window.location.href = "../index.html"; });
     </script>
