@@ -21,7 +21,6 @@
         .brand { padding: 25px; font-size: 1.3rem; font-weight: 700; border-bottom: 1px solid #1e293b; display: flex; align-items: center; gap: 10px; }
         .brand i { color: var(--accent); }
         .nav-links { flex: 1; overflow-y: auto; padding-top: 10px; }
-        
         .nav-item { cursor: pointer; }
         .nav-header { padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; color: #94a3b8; font-weight: 600; font-size: 0.85rem; border-left: 3px solid transparent; transition: 0.2s; }
         .nav-header:hover { background: #1e293b; color: white; }
@@ -29,14 +28,13 @@
         .nav-sub a { display: block; padding: 8px 15px 8px 45px; color: #64748b; text-decoration: none; font-size: 0.75rem; border-left: 3px solid transparent; transition: 0.2s; border-bottom: 1px solid #1e293b; }
         .nav-sub a:hover, .nav-sub a.active { color: white; background: #1e293b; border-left-color: var(--accent); }
         .show { display: block; }
-
         .nav-links::-webkit-scrollbar { width: 6px; }
         .nav-links::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
 
         /* Main Content */
         .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
         
-        /* Input Panel (Dynamic) */
+        /* Input Panel */
         .input-panel { background: rgba(255, 255, 255, 0.98); padding: 15px 25px; border-bottom: 1px solid #e2e8f0; box-shadow: 0 4px 20px -5px rgba(0,0,0,0.05); z-index: 10; flex-shrink: 0; display: none; }
         .input-panel.active { display: block; animation: slideDown 0.3s ease; }
         @keyframes slideDown { from { transform: translateY(-10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
@@ -44,24 +42,15 @@
         .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
         select, input, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; background: #fff; }
         
+        /* Buttons */
         .btn-submit { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; }
         .btn-danger { background: var(--danger); color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; }
         .btn-success { background: var(--success); color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; }
 
-        /* Content Area */
+        /* Content & Tables */
         .content-area { flex: 1; overflow-y: auto; padding: 30px; background: #f1f5f9; }
         .section-title { font-size: 1.6rem; font-weight: 800; margin-bottom: 25px; color: var(--dark); border-bottom: 4px solid var(--accent); display: inline-block; padding-bottom: 5px; }
-
-        /* Dashboard Widgets */
-        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
-        .stat-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; border-left: 5px solid var(--primary); }
-        .stat-info p { margin: 5px 0 0 0; font-size: 1.6rem; font-weight: 800; color: var(--dark); }
         
-        /* Charts */
-        .charts-container { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 30px; }
-        .chart-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); height: 350px; position: relative; }
-        
-        /* Tables */
         .table-wrapper { background: white; padding: 25px; border-radius: 4px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 40px; border: 1px solid #cbd5e1; overflow-x: auto; }
         .table-header-tools { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid #000; padding-bottom: 10px; }
         .tool-btn { background: white; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 4px; cursor: pointer; color: #475569; font-size: 0.8rem; margin-left: 8px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; }
@@ -70,19 +59,23 @@
         .r1aa-table { width: max-content; min-width: 50%; border-collapse: collapse; border-spacing: 0; font-family: 'Arial', sans-serif; }
         .r1aa-table th, .r1aa-table td { border: 1px solid #475569; padding: 6px 8px; text-align: center; font-size: 0.75rem; }
         .r1aa-table thead th { background: #e2e8f0; color: #000; font-weight: 700; text-transform: uppercase; font-size: 0.7rem; }
-        
         .col-sdo { text-align: left !important; font-weight: 700; background: #fff; position: sticky; left: 0; min-width: 160px; max-width: 200px; white-space: nowrap; border-right: 2px solid #000 !important; z-index: 5; }
         .header-total { border-left: 2px solid #000 !important; }
         .cell-total { border-left: 2px solid #000 !important; font-weight: bold; background-color: #f1f5f9; }
 
-        /* Print */
+        /* Dashboard Widgets */
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); display: flex; align-items: center; justify-content: space-between; border-left: 5px solid var(--primary); }
+        .stat-info p { margin: 5px 0 0 0; font-size: 1.6rem; font-weight: 800; color: var(--dark); }
+        .charts-container { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 30px; }
+        .chart-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); height: 350px; position: relative; }
+
         @media print {
             .sidebar, .input-panel, .tool-btn, .nav-links { display: none !important; }
             .main, .content-area { overflow: visible; height: auto; display: block; padding: 0; background: white; }
             .charts-container, .dashboard-grid { display: none; }
             .table-wrapper { box-shadow: none; border: none; padding: 0; page-break-inside: avoid; }
-            .r1aa-table { width: 100%; } 
-            .r1aa-table th, .r1aa-table td { border: 1px solid #000 !important; }
+            .r1aa-table { width: 100%; } .r1aa-table th, .r1aa-table td { border: 1px solid #000 !important; }
         }
         @media (max-width: 1024px) { .charts-container { grid-template-columns: 1fr; } }
     </style>
@@ -125,9 +118,15 @@
                     <select id="inpSubEvent" required>
                         <option value="" disabled selected>Sub-Event</option>
                     </select>
-                    <select id="inpSDO" required>
+                    
+                    <select id="inpSDO" required onchange="filterAthletesBySDO()">
                         <option value="" disabled selected>SDO</option>
                     </select>
+                    
+                    <select id="inpAthleteName">
+                        <option value="" selected>Select Athlete (Optional)</option>
+                        </select>
+
                     <select id="inpMedal" required>
                         <option value="" disabled selected>Medal</option>
                         <option value="GOLD">Gold</option>
@@ -188,50 +187,34 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        const SDO_LIST = [
-            "Alaminos City", "Batac City", "Candon City", "Dagupan City", "Ilocos Norte", "Ilocos Sur", 
-            "Laoag City", "La Union", "Pangasinan I", "Pangasinan II", "San Carlos City", 
-            "San Fernando City", "Urdaneta City", "Vigan City"
-        ];
-
+        // --- DATA ---
+        const SDO_LIST = ["Alaminos City", "Batac City", "Candon City", "Dagupan City", "Ilocos Norte", "Ilocos Sur", "Laoag City", "La Union", "Pangasinan I", "Pangasinan II", "San Carlos City", "San Fernando City", "Urdaneta City", "Vigan City"];
         const EVENTS_DATA = {
             "ELEMENTARY": {
                 "ARNIS": ["Individual Single Weapon NT", "Individual Double Weapon NT", "Team Likha-Synchronized Single Weapon NT", "Team Likha-Synchronized Double Weapon NT", "Anyo-Individual S&D Weapon NT", "Anyo Event Team S&D", "Pair Team Likha Anyo Double Baston"],
                 "ATHLETICS": ["100M Dash", "200M Dash", "400M Dash", "800M Run", "1500M Run", "100MH", "400MH", "4x100M Relay", "4x400M Relay", "Javelin Throw", "Discus Throw", "Shot Put", "High Jump", "Long Jump", "Triple Jump"],
-                "BADMINTON": ["Singles", "Doubles", "Mixed"],
-                "BASEBALL (BOYS)": ["Team"],
-                "BASKETBALL (BOYS)": ["Team"],
+                "BADMINTON": ["Singles", "Doubles", "Mixed"], "BASEBALL (BOYS)": ["Team"], "BASKETBALL (BOYS)": ["Team"],
                 "CHESS": ["Standard - Individual", "Standard - Team", "Rapid - Individual", "Rapid - Team", "Blitz - Individual", "Blitz – Team"],
                 "DANCESPORTS": ["Chacha", "Samba", "Rumba", "Pasadoble", "Jive", "Grade A - C, S, R, P, D, J", "Waltz", "Tango", "V-Waltz", "Foxtrot", "Quickstep", "Grade A - W, T, VW, SF, Q"],
-                "FOOTBALL (BOYS)": ["Team"],
-                "GYMNASTICS - AERO": ["Individual Men", "Individual Women", "Trio", "Mix Pair", "Aero Dance", "Team"],
+                "FOOTBALL (BOYS)": ["Team"], "GYMNASTICS - AERO": ["Individual Men", "Individual Women", "Trio", "Mix Pair", "Aero Dance", "Team"],
                 "GYMNASTICS - MAG": ["Floor Exercise", "Vaulting Table", "Mushroom", "Individual Around", "Horizontal Bar"],
                 "GYMNASTICS - WAG": ["Floor Exercise", "Balance Beam", "Vault", "Single Bar", "Individual All Around", "Team"],
                 "GYMNASTICS - RG": ["Ball", "Rope", "Hoop", "Free Hand", "Individual All Around", "Team"],
-                "SEPAK TAKRAW JR.": ["Junior - Team", "Double Takraw"],
-                "SOFTBALL (GIRLS)": ["Team"],
+                "SEPAK TAKRAW JR.": ["Junior - Team", "Double Takraw"], "SOFTBALL (GIRLS)": ["Team"],
                 "SWIMMING": ["50M Back Stroke", "50M Breaststroke", "50M Butterfly", "50M Free Style", "100M Back Stroke", "100M Free Style", "200M Freestyle", "200M Individual Medley", "400M Free Style", "4x50M Medley Relay", "4x100M Free Style Relay", "4x100M Medley Relay"],
-                "TABLE TENNIS": ["Singles", "Doubles", "Mixed Doubles"],
-                "TAEKWONDO": ["Over 144cm to 150cm", "Over 152cm to 158cm", "Over 160cm", "Group A – Individual", "Group A - Individual", "Group B - Individual", "Team - Event", "Mix Pair"],
-                "TENNIS": ["Singles", "Doubles"],
-                "VOLLEYBALL": ["Team"],
-                "ARCHERY (DEMO)": ["15 M 1st Distance", "15 M 2nd Distance", "20 M 1st Distance", "20 M 2nd Distance", "Single FITA 1140 Round", "Olympic Round Ind'l"],
-                "BASKETBALL 3x3 (BOYS) (DEMO)": ["Team"],
-                "BASKETBALL 5x5 (GIRLS) (DEMO)": ["Team"]
+                "TABLE TENNIS": ["Singles", "Doubles", "Mixed Doubles"], "TAEKWONDO": ["Over 144cm to 150cm", "Over 152cm to 158cm", "Over 160cm", "Group A – Individual", "Group A - Individual", "Group B - Individual", "Team - Event", "Mix Pair"],
+                "TENNIS": ["Singles", "Doubles"], "VOLLEYBALL": ["Team"], "ARCHERY (DEMO)": ["15 M 1st Distance", "15 M 2nd Distance", "20 M 1st Distance", "20 M 2nd Distance", "Single FITA 1140 Round", "Olympic Round Ind'l"],
+                "BASKETBALL 3x3 (BOYS) (DEMO)": ["Team"], "BASKETBALL 5x5 (GIRLS) (DEMO)": ["Team"]
             },
             "SECONDARY": {
                 "ARCHERY": ["70M Distance", "60M Distance", "50M Distance", "30M Distance", "1140 Round", "Olympic Round (Ind'l 70M)", "Olympic Team Even (70M)", "Mixed Team (60M)"],
                 "ARNIS": ["Ind’l Solo Baston (Single Weapon)", "Ind’l Doble Baston (Double Weapon)", "Team (Synd)-Solo Baston (Single Weapon)", "Team (Synd)-Double Baston (Double Weapon)", "EVENT Individual Espada Y Daga", "EVENT Team Espada Y Daga", "Pin Weight (43kg up to 47kg)", "Bantam-Weight (47kg up to 51kg)", "Feather-Weight (51kg up to 55kg)", "Extra Light Weight (55kg up to 60kg)", "Half Light Weight (60kg up to 65kg)"],
                 "ATHLETICS": ["100M Dash", "200M Dash", "400M Dash", "800M Run", "1500M Run", "110MH", "400MH", "3000M Steeple Chase", "5000M Run", "4x100M Relay", "4x400M Relay", "2000M Walk", "Javelin Throw", "Discus Throw", "Shot Put", "High Jump", "Long Jump", "Triple Jump", "Pole Vault"],
-                "BALL GAMES": ["Baseball", "Basketball (5x5)", "Basketball (3x3)", "Football", "Volleyball", "Futsal", "Softball"],
-                "SEPAK TAKRAW": ["Best Regu", "Team"],
-                "RACKET GAMES - BADMINTON": ["Singles", "Doubles", "Mixed"],
-                "RACKET GAMES - TABLE TENNIS": ["Singles", "Doubles", "Mixed Doubles"],
-                "RACKET GAMES - TENNIS": ["Singles", "Doubles"],
-                "BILLIARDS": ["8 Balls", "9 Balls"],
-                "CHESS": ["Standard - Individual", "Standard - Team", "Rapid - Individual", "Rapid - Team", "Blitz - Individual", "Blitz – Team"],
+                "BALL GAMES": ["Baseball", "Basketball (5x5)", "Basketball (3x3)", "Football", "Volleyball", "Futsal", "Softball"], "SEPAK TAKRAW": ["Best Regu", "Team"],
+                "RACKET GAMES - BADMINTON": ["Singles", "Doubles", "Mixed"], "RACKET GAMES - TABLE TENNIS": ["Singles", "Doubles", "Mixed Doubles"], "RACKET GAMES - TENNIS": ["Singles", "Doubles"],
+                "BILLIARDS": ["8 Balls", "9 Balls"], "CHESS": ["Standard - Individual", "Standard - Team", "Rapid - Individual", "Rapid - Team", "Blitz - Individual", "Blitz – Team"],
                 "PENCAK SILAT - COMBAT": ["Class A Over 42kg up to 45kg", "Class B Over 45kg up to 48kg", "Class C Over 48kg up to 51kg", "Class D Over 51kg up to 54kg", "Class E Over 54kg up to 57kg"],
                 "PENCAK SILAT - DEMO": ["Tunggal-Ind'l Weapon", "Ganda-Double Weapon", "Regu-Team Artistic"],
                 "GYMNASTICS - MAG CLUSTER 3": ["Floor Exercise", "Vaulting Table", "Mushroom", "Individual All Around", "Horizontal Bar", "Team"],
@@ -241,14 +224,10 @@
                 "SWIMMING": ["50M Back Stroke", "50M Breaststroke", "50M Butterfly", "50M Free Style", "100M Back Stroke", "100M Free Style", "100M Butterfly", "200M Backstroke", "200M Breaststroke", "200M Freestyle", "200M Butterfly", "400M Free Style", "800M Freestyle", "1500M Freestyle", "200M Individual Medley", "400M Individual Medley", "200M Freestyle Relay", "200M Medley Relay", "400M Freestyle Relay", "400M Medley Relay"],
                 "TAEKWONDO - KYORUGI": ["Fin Weight", "Fly Weight", "Bantam Weight", "Feather Weight", "Light Weight", "Welter Weight", "LT Middle Weight"],
                 "TAEKWONDO - POOMSAE": ["Group A - Individual", "Group B - Individual", "Team - Event", "Mix Pair"],
-                "Wushu Boys (Group A)": ["48kgs", "52kgs", "56kgs"],
-                "Wushu Boys (Group B)": ["42kgs", "45kgs", "48kgs"],
+                "Wushu Boys (Group A)": ["48kgs", "52kgs", "56kgs"], "Wushu Boys (Group B)": ["42kgs", "45kgs", "48kgs"],
                 "Wrestling": ["Cadet 42kgs", "Cadet 46kgs", "Cadet 50kgs", "Cadet 54kgs", "Junior 54kgs", "Junior 58kgs", "Junior 62kgs", "Junior 66kgs"]
             },
-            "PARA GAMES": {
-                "ATHLETICS": ["100M", "Shot Put", "Long Jump"],
-                "SWIMMING": ["50M Free", "50M Back"]
-            }
+            "PARA GAMES": { "ATHLETICS": ["100M", "Shot Put", "Long Jump"], "SWIMMING": ["50M Free", "50M Back"] }
         };
 
         const firebaseConfig = {
@@ -264,28 +243,23 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- STATE & SIDEBAR ---
+        // --- STATE ---
         let GLOBAL_DATA = [], PROTEST_DATA = [], ATHLETE_DATA = [];
         let CURRENT_VIEW = 'dashboard';
         let CHART_INSTANCES = [];
 
+        // --- SIDEBAR ---
         function renderSidebar() {
             const nav = document.getElementById('sidebarNav');
             nav.innerHTML = `
                 <div class="nav-item"><div class="nav-header" onclick="renderDashboard()"><span><i class="fas fa-home" style="margin-right:8px;"></i> DASHBOARD</span></div></div>
                 <div class="nav-item"><div class="nav-header" onclick="renderAthleteList()"><span><i class="fas fa-users" style="margin-right:8px; color:#10b981;"></i> LIST OF ATHLETES</span></div></div>
             `;
-
             ['ELEMENTARY', 'SECONDARY'].forEach(cat => {
-                let html = `
-                    <div class="nav-item">
-                        <div class="nav-header" onclick="toggleMenu('menu-${cat}')"><span><i class="fas fa-layer-group" style="margin-right:8px;"></i> ${cat}</span><i class="fas fa-chevron-down" style="font-size:0.7rem;"></i></div>
-                        <div id="menu-${cat}" class="nav-sub">`;
-                Object.keys(EVENTS_DATA[cat]).sort().forEach(sport => { html += `<a onclick="renderSportMatrix('${cat}', '${sport}')">${sport}</a>`; });
-                html += `</div></div>`;
-                nav.innerHTML += html;
+                let html = `<div class="nav-item"><div class="nav-header" onclick="toggleMenu('menu-${cat}')"><span><i class="fas fa-layer-group" style="margin-right:8px;"></i> ${cat}</span><i class="fas fa-chevron-down" style="font-size:0.7rem;"></i></div><div id="menu-${cat}" class="nav-sub">`;
+                Object.keys(EVENTS_DATA[cat]).sort().forEach(sport => html += `<a onclick="renderSportMatrix('${cat}', '${sport}')">${sport}</a>`);
+                html += `</div></div>`; nav.innerHTML += html;
             });
-
             nav.innerHTML += `
                 <div class="nav-item"><div class="nav-header" onclick="toggleMenu('menu-PARA')"><span><i class="fas fa-wheelchair" style="margin-right:8px;"></i> PARA GAMES</span><i class="fas fa-chevron-down" style="font-size:0.7rem;"></i></div><div id="menu-PARA" class="nav-sub"><a onclick="renderSportMatrix('PARA GAMES', 'ATHLETICS')">ATHLETICS</a><a onclick="renderSportMatrix('PARA GAMES', 'SWIMMING')">SWIMMING</a></div></div>
                 <div class="nav-item"><div class="nav-header" onclick="toggleMenu('menu-SUMMARY')"><span><i class="fas fa-chart-pie" style="margin-right:8px;"></i> SUMMARY</span><i class="fas fa-chevron-down" style="font-size:0.7rem;"></i></div><div id="menu-SUMMARY" class="nav-sub"><a onclick="renderOverallRegular()">OVERALL REGULAR</a></div></div>
@@ -294,7 +268,7 @@
         }
         renderSidebar();
 
-        // --- FORM HELPERS ---
+        // --- DROPDOWNS ---
         const sdoSelect = document.getElementById('inpSDO');
         const protProtester = document.getElementById('protProtester');
         const protRespondent = document.getElementById('protRespondent');
@@ -323,6 +297,8 @@
             const subSelect = document.getElementById('inpSubEvent');
             subSelect.innerHTML = '<option value="" disabled selected>Sub-Event</option>';
             if (EVENTS_DATA[cat] && EVENTS_DATA[cat][evt]) { EVENTS_DATA[cat][evt].forEach(sub => { const opt = document.createElement('option'); opt.value = sub; opt.textContent = sub; subSelect.appendChild(opt); }); }
+            // Trigger athlete filter whenever event changes
+            window.filterAthletesBySDO();
         };
 
         window.updateAthleteSports = () => {
@@ -332,20 +308,45 @@
             if (EVENTS_DATA[cat]) { Object.keys(EVENTS_DATA[cat]).sort().forEach(evt => { const opt = document.createElement('option'); opt.value = evt; opt.textContent = evt; sportSelect.appendChild(opt); }); }
         };
 
+        // *** SMART FILTERING: POPULATE ATHLETE DROPDOWN ***
+        window.filterAthletesBySDO = () => {
+            const sdo = document.getElementById('inpSDO').value;
+            const sport = document.getElementById('inpEvent').value;
+            const athleteSelect = document.getElementById('inpAthleteName');
+            
+            athleteSelect.innerHTML = '<option value="" selected>Select Athlete (Optional)</option>';
+            
+            if(!sdo || !sport) return;
+
+            // Filter loaded athletes
+            const relevantAthletes = ATHLETE_DATA.filter(a => a.division === sdo && a.sport === sport);
+            
+            relevantAthletes.forEach(a => {
+                const opt = document.createElement('option');
+                opt.value = a.name;
+                opt.textContent = a.name;
+                athleteSelect.appendChild(opt);
+            });
+        };
+
         window.toggleMenu = (id) => document.getElementById(id).classList.toggle('show');
 
-        // --- VIEW CONTROLLER ---
-        function switchView(mode) {
-            document.querySelectorAll('.input-panel').forEach(el => el.classList.remove('active'));
-            if(mode === 'result') document.getElementById('panelResult').classList.add('active');
-            if(mode === 'protest') document.getElementById('panelProtest').classList.add('active');
-            if(mode === 'athlete') document.getElementById('panelAthlete').classList.add('active');
-        }
-
-        // --- DATA SUBMISSION HANDLERS ---
+        // --- SUBMIT HANDLERS ---
         document.getElementById('resultForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            try { await addDoc(collection(db, "game_results"), { category: document.getElementById('inpCategory').value, gender: document.getElementById('inpGender').value, event: document.getElementById('inpEvent').value, subEvent: document.getElementById('inpSubEvent').value, sdo: document.getElementById('inpSDO').value, medal: document.getElementById('inpMedal').value, timestamp: new Date() }); alert("Result Added!"); } catch (err) { alert("Error: " + err.message); }
+            try { 
+                await addDoc(collection(db, "game_results"), { 
+                    category: document.getElementById('inpCategory').value,
+                    gender: document.getElementById('inpGender').value,
+                    event: document.getElementById('inpEvent').value,
+                    subEvent: document.getElementById('inpSubEvent').value,
+                    sdo: document.getElementById('inpSDO').value,
+                    athleteName: document.getElementById('inpAthleteName').value || "", // Save Athlete Name
+                    medal: document.getElementById('inpMedal').value,
+                    timestamp: new Date() 
+                }); 
+                alert("Result Added!"); 
+            } catch (err) { alert("Error: " + err.message); }
         });
 
         document.getElementById('protestForm').addEventListener('submit', async (e) => {
@@ -368,7 +369,6 @@
                     yearLevel: document.getElementById('athYear').value,
                     division: document.getElementById('athDivision').value,
                     sport: document.getElementById('athSport').value,
-                    status: 'Pending', // Default for RSAC to check
                     timestamp: new Date() 
                 }); 
                 alert("Athlete Registered!"); 
@@ -376,12 +376,20 @@
             } catch (err) { alert("Error: " + err.message); }
         });
 
-        // --- DATA LISTENERS ---
+        // --- DATA SYNC ---
         onSnapshot(collection(db, "game_results"), (snap) => { GLOBAL_DATA=[]; snap.forEach(d=>GLOBAL_DATA.push(d.data())); if(CURRENT_VIEW==='dashboard') renderDashboard(); else if(CURRENT_VIEW.type==='sport') renderSportMatrix(CURRENT_VIEW.cat, CURRENT_VIEW.sport); else if(CURRENT_VIEW==='overall') renderOverallRegular(); });
         onSnapshot(query(collection(db, "protests"), orderBy("timestamp", "desc")), (snap) => { PROTEST_DATA=[]; snap.forEach(d=>PROTEST_DATA.push(d.data())); if(CURRENT_VIEW==='protests') renderProtests(); });
         onSnapshot(collection(db, "athletes"), (snap) => { ATHLETE_DATA=[]; snap.forEach(d=>ATHLETE_DATA.push(d.data())); if(CURRENT_VIEW==='athletes') renderAthleteList(); });
 
-        // --- RENDER FUNCTIONS ---
+        // --- VIEW SWITCHING ---
+        function switchView(mode) {
+            document.querySelectorAll('.input-panel').forEach(el => el.classList.remove('active'));
+            if(mode === 'result') document.getElementById('panelResult').classList.add('active');
+            if(mode === 'protest') document.getElementById('panelProtest').classList.add('active');
+            if(mode === 'athlete') document.getElementById('panelAthlete').classList.add('active');
+        }
+
+        // --- RENDERERS ---
         window.renderDashboard = () => {
             CURRENT_VIEW = 'dashboard'; switchView('result');
             const display = document.getElementById('mainDisplay');
