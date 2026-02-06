@@ -21,6 +21,7 @@
         .brand { padding: 25px; font-size: 1.3rem; font-weight: 700; border-bottom: 1px solid #1e293b; display: flex; align-items: center; gap: 10px; }
         .brand i { color: var(--accent); }
         .nav-links { flex: 1; overflow-y: auto; padding-top: 10px; }
+        
         .nav-item { cursor: pointer; }
         .nav-header { padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; color: #94a3b8; font-weight: 600; font-size: 0.85rem; border-left: 3px solid transparent; transition: 0.2s; }
         .nav-header:hover { background: #1e293b; color: white; }
@@ -28,6 +29,7 @@
         .nav-sub a { display: block; padding: 8px 15px 8px 45px; color: #64748b; text-decoration: none; font-size: 0.75rem; border-left: 3px solid transparent; transition: 0.2s; border-bottom: 1px solid #1e293b; }
         .nav-sub a:hover, .nav-sub a.active { color: white; background: #1e293b; border-left-color: var(--accent); }
         .show { display: block; }
+
         .nav-links::-webkit-scrollbar { width: 6px; }
         .nav-links::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
 
@@ -58,7 +60,7 @@
         .r1aa-table { width: max-content; min-width: 50%; border-collapse: collapse; border-spacing: 0; font-family: 'Arial', sans-serif; }
         .r1aa-table th, .r1aa-table td { border: 1px solid #475569; padding: 6px 8px; text-align: center; font-size: 0.75rem; }
         .r1aa-table thead th { background: #e2e8f0; color: #000; font-weight: 700; text-transform: uppercase; font-size: 0.7rem; }
-        .col-sdo { text-align: left !important; font-weight: 700; background: #fff; position: sticky; left: 0; min-width: 160px; max-width: 200px; white-space: nowrap; border-right: 2px solid #000 !important; z-index: 5; }
+        .col-sdo { text-align: left !important; font-weight: 700; background: #fff; position: sticky; left: 0; min-width: 200px; max-width: 250px; white-space: nowrap; border-right: 2px solid #000 !important; z-index: 5; }
         .col-rank { font-weight: 700; background: #f1f5f9; }
         .header-total { border-left: 2px solid #000 !important; }
         .cell-total { border-left: 2px solid #000 !important; font-weight: bold; background-color: #f1f5f9; }
@@ -330,7 +332,7 @@
             try { await addDoc(collection(db, "athletes"), { passport: document.getElementById('athPassport').value, name: document.getElementById('athName').value, birthdate: document.getElementById('athBday').value, age: document.getElementById('athAge').value, gender: document.getElementById('athGender').value, weight: document.getElementById('athWt').value, height: document.getElementById('athHt').value, category: document.getElementById('athCategory').value, yearLevel: document.getElementById('athYear').value, division: document.getElementById('athDivision').value, sport: document.getElementById('athSport').value, timestamp: new Date() }); alert("Athlete Registered!"); document.getElementById('athleteForm').reset(); } catch (err) { alert("Error: " + err.message); }
         });
 
-        // --- DATA LISTENERS & VIEW ROUTING ---
+        // --- DATA LISTENERS ---
         onSnapshot(collection(db, "game_results"), (snap) => { 
             GLOBAL_DATA=[]; snap.forEach(d=>GLOBAL_DATA.push(d.data())); 
             if(CURRENT_VIEW==='dashboard') renderDashboard(); 
@@ -348,7 +350,7 @@
             if(mode === 'athlete') document.getElementById('panelAthlete').classList.add('active');
         }
 
-        // --- RENDER FUNCTIONS ---
+        // --- RENDERERS ---
         window.renderDashboard = () => {
             CURRENT_VIEW = 'dashboard'; switchView('result');
             const display = document.getElementById('mainDisplay');
@@ -397,7 +399,7 @@
             });
         };
 
-        // --- NEW: DETAILED SUMMARY MATRIX (Photo 1 style) ---
+        // --- NEW: DETAILED SUMMARY MATRIX (SPLIT BY GENDER) ---
         window.renderSummaryMatrix = (category) => {
             CURRENT_VIEW = { type: 'summary_matrix', cat: category }; switchView('result');
             const display = document.getElementById('mainDisplay');
@@ -411,14 +413,26 @@
             html += `</tr></thead><tbody>`;
 
             sports.forEach(sport => {
-                html += `<tr><td class="col-sdo" style="font-size:0.7rem;">${sport.replace("(DEMO)", " (DEMO)")}</td>`;
-                SDO_LIST.forEach(sdo => {
-                    let g=0, s=0, b=0;
-                    GLOBAL_DATA.filter(d => d.category === category && d.event === sport && d.sdo === sdo).forEach(d => { if(d.medal==='GOLD')g++; if(d.medal==='SILVER')s++; if(d.medal==='BRONZE')b++; });
-                    sdoTotals[sdo].G += g; sdoTotals[sdo].S += s; sdoTotals[sdo].B += b;
-                    html += `<td>${g||''}</td><td>${s||''}</td><td style="border-right:1px solid #475569;">${b||''}</td>`;
+                // Determine Genders for this sport
+                let gendersToShow = ['BOYS', 'GIRLS'];
+                if (sport.includes('(BOYS)') || sport.includes('MAG') || sport.includes('FOOTBALL')) gendersToShow = ['BOYS'];
+                if (sport.includes('(GIRLS)') || sport.includes('WAG') || sport.includes('RG') || sport.includes('SOFTBALL')) gendersToShow = ['GIRLS'];
+
+                gendersToShow.forEach(gender => {
+                    let label = sport.replace("(DEMO)", "").replace("(BOYS)", "").replace("(GIRLS)", "").trim();
+                    let displayLabel = `${label} - ${gender}`;
+                    if(sport.includes("(DEMO)")) displayLabel += " (DEMO)";
+
+                    html += `<tr><td class="col-sdo" style="font-size:0.7rem;">${displayLabel}</td>`;
+                    SDO_LIST.forEach(sdo => {
+                        let g=0, s=0, b=0;
+                        GLOBAL_DATA.filter(d => d.category === category && d.event === sport && d.gender === gender && d.sdo === sdo)
+                                   .forEach(d => { if(d.medal==='GOLD')g++; if(d.medal==='SILVER')s++; if(d.medal==='BRONZE')b++; });
+                        sdoTotals[sdo].G += g; sdoTotals[sdo].S += s; sdoTotals[sdo].B += b;
+                        html += `<td>${g||''}</td><td>${s||''}</td><td style="border-right:1px solid #475569;">${b||''}</td>`;
+                    });
+                    html += `</tr>`;
                 });
-                html += `</tr>`;
             });
 
             html += `<tr class="row-total"><td class="col-sdo">TOTAL</td>`;
