@@ -1,0 +1,117 @@
+:root {
+    --primary-color: #0056b3; /* DepEd Blue-ish */
+    --accent-color: #fdd835;  /* Yellow accent */
+    --text-dark: #333;
+    --text-light: #666;
+    --bg-color: #f4f6f9;
+    --white: #ffffff;
+    --error: #d32f2f;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+body {
+    background-color: var(--bg-color);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-container {
+    background: var(--white);
+    width: 100%;
+    max-width: 400px;
+    padding: 2.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+.login-header { text-align: center; margin-bottom: 2rem; }
+.logo-placeholder { 
+    font-size: 3rem; 
+    color: var(--primary-color); 
+    margin-bottom: 10px;
+}
+.login-header h2 { color: var(--text-dark); margin-bottom: 5px; }
+.login-header p { color: var(--text-light); font-size: 0.9rem; }
+
+.input-group { margin-bottom: 1.2rem; }
+.input-group label { display: block; font-size: 0.9rem; color: var(--text-dark); margin-bottom: 6px; font-weight: 600; }
+
+.input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-wrapper input {
+    width: 100%;
+    padding: 12px 40px; /* Space for icons */
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: 0.3s;
+}
+
+.input-wrapper input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+}
+
+.input-icon {
+    position: absolute;
+    left: 12px;
+    color: #999;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    cursor: pointer;
+    color: #999;
+}
+
+.error-message {
+    color: var(--error);
+    font-size: 0.85rem;
+    text-align: center;
+    margin-bottom: 1rem;
+    min-height: 20px; /* Prevents jumping */
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+button:hover { background: #004494; }
+button:disabled { background: #ccc; cursor: not-allowed; }
+
+/* Simple Loader */
+.loader {
+    display: none;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #fff;
+    border-bottom-color: transparent;
+    border-radius: 50%;
+    animation: rotation 1s linear infinite;
+    margin-left: 10px;
+}
+
+@keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+.login-footer { text-align: center; margin-top: 1.5rem; font-size: 0.8rem; color: #aaa; }
