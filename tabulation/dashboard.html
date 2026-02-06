@@ -155,12 +155,12 @@
         </div>
     </main>
 
-    <script type="module">
+   <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // --- 1. DATA CONFIGURATION ---
+        // --- 1. DATA CONFIGURATION (Fixed Syntax Errors) ---
         const SDO_LIST = [
             "Alaminos City", "Batac City", "Candon City", "Dagupan City",
             "Ilocos Norte", "Ilocos Sur", "Laoag City", "La Union", 
@@ -168,22 +168,52 @@
             "San Fernando City", "Urdaneta City", "Vigan City"
         ];
 
-        // PASTE YOUR FULL JSON DATA HERE (Truncated for brevity, but I used your logic)
         const EVENTS_DATA = {
             "ELEMENTARY": {
                 "ARCHERY": ["15 M 1st Distance", "15 M 2nd Distance", "20 M 1st Distance", "20 M 2nd Distance", "Single FITA 1140 Round", "Olympic Round Ind'l"],
                 "ARNIS": ["Individual Single Weapon NT", "Individual Double Weapon NT", "Team Likha-Synchronized Single Weapon NT", "Team Likha-Synchronized Double Weapon NT", "Anyo-Individual S&D Weapon NT", "Anyo Event Team S&D", "Pair Team Likha Anyo Double Baston"],
                 "ATHLETICS": ["100M Dash", "200M Dash", "400M Dash", "800M Run", "1500M Run", "100MH", "400MH", "4x100M Relay", "4x400M Relay", "Javelin Throw", "Discus Throw", "Shot Put", "High Jump", "Long Jump", "Triple Jump"],
                 "BALL GAMES": ["Baseball", "Basketball (5x5)", "Basketball (3x3) - Demo Sports", "Football", "Volleyball", "Softball"],
-                "SWIMMING": ["50M Back Stroke", "50M Breaststroke", "50M Butterfly", "50M Free Style", "100M Back Stroke", "100M Free Style", "200M Freestyle", "200M Individual Medley", "400M Free Style", "4x50M Medley Relay", "4x100M Free Style Relay", "4x100M Medley Relay"]
-                // ... Add ALL other elementary sports here from your prompt
+                "SEPAK TAKRAW": ["Junior - Team", "Double Takraw"],
+                "CHESS": ["Standard - Individual", "Standard - Team", "Rapid - Individual", "Rapid - Team", "Blitz - Individual", "Blitz – Team"],
+                "RACKET GAMES - BADMINTON": ["Singles", "Doubles", "Mixed"],
+                "RACKET GAMES - TABLE TENNIS": ["Singles", "Doubles", "Mixed Doubles"],
+                "RACKET GAMES - TENNIS": ["Singles", "Doubles"],
+                "DANCE SPORTS - LATIN SINGLE DANCE": ["Chacha", "Samba", "Rumba", "Pasadoble", "Jive", "Grade A - C, S, R, P, D, J"],
+                "DANCE SPORTS - MODERN STANDARD SINGLE DANCE": ["Waltz", "Tango", "V-Waltz", "Foxtrot", "Quickstep", "Grade A - W, T, VW, SF, Q"],
+                "GYMNASTICS - MAG CLUSTER 1": ["Floor Exercise", "Vaulting Table", "Mushroom", "Individual Around", "Horizontal Bar"],
+                "GYMNASTICS - MAG CLUSTER 2": ["Floor Exercise", "Vaulting Table", "Mushroom", "Individual Around", "Horizontal Bar"],
+                "GYMNASTICS - WAG CLUSTER 1": ["Floor Exercise", "Balance Beam", "Vault", "Single Bar", "Individual All Around", "Team"],
+                "GYMNASTICS - WAG CLUSTER 2": ["Floor Exercise", "Balance Beam", "Vault", "Single Bar", "Individual All Around", "Team"],
+                "GYMNASTICS - RG": ["Ball", "Rope", "Hoop", "Free Hand", "Individual All Around", "Team"],
+                "AEROGYMNASTICS": ["Individual Men", "Individual Women", "Trio", "Mix Pair", "Aero Dance", "Team"],
+                "SWIMMING": ["50M Back Stroke", "50M Breaststroke", "50M Butterfly", "50M Free Style", "100M Back Stroke", "100M Free Style", "200M Freestyle", "200M Individual Medley", "400M Free Style", "4x50M Medley Relay", "4x100M Free Style Relay", "4x100M Medley Relay"],
+                "TAEKWONDO - KYORUGI": ["Over 144cm to 150cm", "Over 152cm to 158cm", "Over 160cm", "Group A – Individual"],
+                "TAEKWONDO - POOMSAE": ["Group A - Individual", "Group B - Individual", "Team - Event", "Mix Pair"]
             },
             "SECONDARY": {
                 "ARCHERY": ["70M Distance", "60M Distance", "50M Distance", "30M Distance", "1140 Round", "Olympic Round (Ind'l 70M)", "Olympic Team Even (70M)", "Mixed Team (60M)"],
+                "ARNIS": ["Ind’l Solo Baston (Single Weapon)", "Ind’l Doble Baston (Double Weapon)", "Team (Synd)-Solo Baston (Single Weapon)", "Team (Synd)-Double Baston (Double Weapon)", "EVENT Individual Espada Y Daga", "EVENT Team Espada Y Daga", "Pin Weight (43kg up to 47kg)", "Bantam-Weight (47kg up to 51kg)", "Feather-Weight (51kg up to 55kg)", "Extra Light Weight (55kg up to 60kg)", "Half Light Weight (60kg up to 65kg)"],
                 "ATHLETICS": ["100M Dash", "200M Dash", "400M Dash", "800M Run", "1500M Run", "110MH", "400MH", "3000M Steeple Chase", "5000M Run", "4x100M Relay", "4x400M Relay", "2000M Walk", "Javelin Throw", "Discus Throw", "Shot Put", "High Jump", "Long Jump", "Triple Jump", "Pole Vault"],
-                "BASKETBALL": ["5x5 Boys", "5x5 Girls", "3x3 Boys", "3x3 Girls"],
-                "BILLIARDS": ["8 Balls", "9 Balls"]
-                // ... Add ALL other secondary sports here
+                "BALL GAMES": ["Baseball", "Basketball (5x5)", "Basketball (3x3)", "Football", "Volleyball", "Futsal", "Softball"],
+                "SEPAK TAKRAW": ["Best Regu", "Team"],
+                "RACKET GAMES - BADMINTON": ["Singles", "Doubles", "Mixed"],
+                "RACKET GAMES - TABLE TENNIS": ["Singles", "Doubles", "Mixed Doubles"],
+                "RACKET GAMES - TENNIS": ["Singles", "Doubles"],
+                "BILLIARDS": ["8 Balls", "9 Balls"],
+                "CHESS": ["Standard - Individual", "Standard - Team", "Rapid - Individual", "Rapid - Team", "Blitz - Individual", "Blitz – Team"],
+                "PENCAK SILAT - COMBAT": ["Class A Over 42kg up to 45kg", "Class B Over 45kg up to 48kg", "Class C Over 48kg up to 51kg", "Class D Over 51kg up to 54kg", "Class E Over 54kg up to 57kg"],
+                "PENCAK SILAT - DEMO": ["Tunggal-Ind'l Weapon", "Ganda-Double Weapon", "Regu-Team Artistic"],
+                "GYMNASTICS - MAG CLUSTER 3": ["Floor Exercise", "Vaulting Table", "Mushroom", "Individual All Around", "Horizontal Bar", "Team"],
+                "GYMNASTICS - WAG CLUSTER 3": ["Floor Exercise", "Balance Beam", "Vault", "Individual All Around", "Single Bar", "Team"],
+                "GYMNASTICS - RG": ["Ball", "Club", "Ribbon", "Hoop", "Individual All Around", "Team"],
+                "BOXING": ["Pin Weight (SB)", "Pin Weight (JB)", "Light Flyweight (SB)", "Light Flyweight (jB)", "Flyweight (JB)", "Light Bantam Weight (JB)", "Bantam Weight (JB)", "Minimum Weight (YB)", "Flyweight (YB)", "Bantam Weight (YB)"],
+                "SWIMMING": ["50M Back Stroke", "50M Breaststroke", "50M Butterfly", "50M Free Style", "100M Back Stroke", "100M Free Style", "100M Butterfly", "200M Backstroke", "200M Breaststroke", "200M Freestyle", "200M Butterfly", "400M Free Style", "800M Freestyle", "1500M Freestyle", "200M Individual Medley", "400M Individual Medley", "200M Freestyle Relay", "200M Medley Relay", "400M Freestyle Relay", "400M Medley Relay"],
+                "TAEKWONDO - KYORUGI": ["Fin Weight", "Fly Weight", "Bantam Weight", "Feather Weight", "Light Weight", "Welter Weight", "LT Middle Weight"],
+                "TAEKWONDO - POOMSAE": ["Group A - Individual", "Group B - Individual", "Team - Event", "Mix Pair"],
+                "Wushu Boys (Group A)": ["48kgs", "52kgs", "56kgs"],
+                "Wushu Boys (Group B)": ["42kgs", "45kgs", "48kgs"],
+                "Wrestling": ["Cadet 42kgs", "Cadet 46kgs", "Cadet 50kgs", "Cadet 54kgs", "Junior 54kgs", "Junior 58kgs", "Junior 62kgs", "Junior 66kgs"]
             },
             "PARA GAMES": {
                 "ATHLETICS": ["100M", "Shot Put", "Long Jump"],
@@ -201,6 +231,7 @@
             appId: "1:666983988939:web:f70937a2572ed08015a54e",
             measurementId: "G-96ZPLMV4J7"
         };
+
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
@@ -221,6 +252,9 @@
             const eventSelect = document.getElementById('inpEvent');
             eventSelect.innerHTML = '<option value="" disabled selected>Select Event</option>';
             
+            // Clear Sub-Event as well when Category changes
+            document.getElementById('inpSubEvent').innerHTML = '<option value="" disabled selected>Select Sub-Event</option>';
+
             if (EVENTS_DATA[cat]) {
                 Object.keys(EVENTS_DATA[cat]).forEach(evt => {
                     const opt = document.createElement('option');
@@ -238,12 +272,23 @@
             subSelect.innerHTML = '<option value="" disabled selected>Select Sub-Event</option>';
 
             if (EVENTS_DATA[cat] && EVENTS_DATA[cat][evt]) {
-                EVENTS_DATA[cat][evt].forEach(sub => {
+                const subEvents = EVENTS_DATA[cat][evt];
+                if(subEvents.length > 0) {
+                     subEvents.forEach(sub => {
+                        const opt = document.createElement('option');
+                        opt.value = sub;
+                        opt.textContent = sub;
+                        subSelect.appendChild(opt);
+                    });
+                    subSelect.disabled = false; // Enable if options exist
+                } else {
+                    // Handle events with no sub-events
                     const opt = document.createElement('option');
-                    opt.value = sub;
-                    opt.textContent = sub;
+                    opt.value = "N/A";
+                    opt.textContent = "N/A";
+                    opt.selected = true;
                     subSelect.appendChild(opt);
-                });
+                }
             }
         };
 
@@ -254,22 +299,39 @@
         // --- 4. DATA SUBMISSION ---
         document.getElementById('resultForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            // Get values explicitly
+            const cat = document.getElementById('inpCategory').value;
+            const gen = document.getElementById('inpGender').value;
+            const evt = document.getElementById('inpEvent').value;
+            const sub = document.getElementById('inpSubEvent').value;
+            const sdo = document.getElementById('inpSDO').value;
+            const medal = document.getElementById('inpMedal').value;
+
+            // Debugging check
+            if(!cat || !gen || !evt || !sub || !sdo || !medal) {
+                alert("Please fill all fields!");
+                return;
+            }
+
             const data = {
-                category: document.getElementById('inpCategory').value,
-                gender: document.getElementById('inpGender').value,
-                event: document.getElementById('inpEvent').value,
-                subEvent: document.getElementById('inpSubEvent').value,
-                sdo: document.getElementById('inpSDO').value,
-                medal: document.getElementById('inpMedal').value,
+                category: cat,
+                gender: gen,
+                event: evt,
+                subEvent: sub,
+                sdo: sdo,
+                medal: medal,
                 timestamp: new Date()
             };
 
             try {
+                console.log("Sending data...", data);
                 await addDoc(collection(db, "game_results"), data);
                 alert("Result Added Successfully!");
                 e.target.reset();
             } catch (error) {
                 console.error("Error adding result: ", error);
+                alert("Error: " + error.message + "\n(Did you update Firestore Rules?)");
             }
         });
 
@@ -279,7 +341,6 @@
         onSnapshot(collection(db, "game_results"), (snapshot) => {
             GLOBAL_DATA = [];
             snapshot.forEach(doc => GLOBAL_DATA.push(doc.data()));
-            // If a view is currently active, refresh it
             if(currentView) window.showView(currentView);
         });
 
@@ -290,28 +351,27 @@
             const display = document.getElementById('mainDisplay');
             display.innerHTML = "";
 
-            if (viewId === 'view-elem' || viewId === 'view-sec') {
-                renderRegularGames(viewId === 'view-elem' ? 'ELEMENTARY' : 'SECONDARY');
-            } 
-            else if (viewId === 'view-best') {
-                renderBestPerforming();
-            }
-            else if (viewId === 'overall-reg') {
-                renderOverallRegular();
-            }
-            // Add other views as needed
+            if (viewId === 'view-elem') renderRegularGames('ELEMENTARY');
+            else if (viewId === 'view-sec') renderRegularGames('SECONDARY');
+            else if (viewId === 'view-best') renderBestPerforming();
+            else if (viewId === 'overall-reg') renderOverallRegular();
+            else if (viewId === 'view-para') renderRegularGames('PARA GAMES');
+            else display.innerHTML = `<h3>View: ${viewId} under construction</h3>`;
         };
 
-        // --- RENDER LOGIC: REGULAR GAMES ---
+        // --- RENDER: REGULAR GAMES ---
         function renderRegularGames(category) {
             const display = document.getElementById('mainDisplay');
             display.innerHTML = `<div class="section-title">${category} RESULTS</div>`;
 
-            // Get unique sports played in this category
             const sports = [...new Set(GLOBAL_DATA.filter(d => d.category === category).map(d => d.event))];
 
+            if(sports.length === 0) {
+                display.innerHTML += "<p>No results added yet for this category.</p>";
+                return;
+            }
+
             sports.forEach(sport => {
-                // Create Container for Boys and Girls Tables
                 const sportContainer = document.createElement('div');
                 sportContainer.innerHTML = `<h3>${sport}</h3>`;
                 
@@ -322,13 +382,8 @@
                         let tableHTML = `
                             <table class="r1aa-table">
                                 <thead>
-                                    <tr>
-                                        <th colspan="2" class="header-main">${sport} - ${gender}</th>
-                                    </tr>
-                                    <tr>
-                                        <th class="header-sub" width="60%">SDO</th>
-                                        <th class="header-sub">MEDAL</th>
-                                    </tr>
+                                    <tr><th colspan="2" class="header-main">${sport} - ${gender}</th></tr>
+                                    <tr><th class="header-sub" width="60%">SDO</th><th class="header-sub">MEDAL</th></tr>
                                 </thead>
                                 <tbody>
                         `;
@@ -338,54 +393,41 @@
                             tableHTML += `
                                 <tr>
                                     <td>${d.sdo}</td>
-                                    <td>
-                                        <span class="medal-icon ${icon}"></span> ${d.medal} 
-                                        <small>(${d.subEvent})</small>
-                                    </td>
-                                </tr>
-                            `;
+                                    <td><span class="medal-icon ${icon}"></span> ${d.medal} <small>(${d.subEvent})</small></td>
+                                </tr>`;
                         });
                         tableHTML += `</tbody></table>`;
                         sportContainer.innerHTML += tableHTML;
                     }
                 });
-                
                 display.appendChild(sportContainer);
             });
         }
 
-        // --- RENDER LOGIC: OVERALL REGULAR (THE OLYMPIC RANKING TABLE) ---
+        // --- RENDER: OVERALL ---
         function renderOverallRegular() {
             const display = document.getElementById('mainDisplay');
-            
-            // 1. Aggregate Data
             let tally = {};
             SDO_LIST.forEach(sdo => {
-                tally[sdo] = { 
-                    elem: {G:0, S:0, B:0}, 
-                    sec: {G:0, S:0, B:0}, 
-                    total: {G:0, S:0, B:0} 
-                };
+                tally[sdo] = { elem: {G:0,S:0,B:0}, sec: {G:0,S:0,B:0}, total: {G:0,S:0,B:0} };
             });
 
             GLOBAL_DATA.forEach(d => {
                 if (!tally[d.sdo]) return;
                 let type = d.category === 'ELEMENTARY' ? 'elem' : d.category === 'SECONDARY' ? 'sec' : null;
                 if (type) {
-                    let m = d.medal.charAt(0); // G, S, B
+                    let m = d.medal.charAt(0); 
                     tally[d.sdo][type][m]++;
                     tally[d.sdo].total[m]++;
                 }
             });
 
-            // 2. Sort by Gold, then Silver, then Bronze
             let sortedSDOs = Object.keys(tally).sort((a, b) => {
                 if (tally[b].total.G !== tally[a].total.G) return tally[b].total.G - tally[a].total.G;
                 if (tally[b].total.S !== tally[a].total.S) return tally[b].total.S - tally[a].total.S;
                 return tally[b].total.B - tally[a].total.B;
             });
 
-            // 3. Build Table
             let html = `
                 <div class="section-title">OVERALL REGULAR GAMES</div>
                 <table class="r1aa-table">
@@ -398,12 +440,8 @@
                             <th rowspan="2" class="header-main">RANK</th>
                         </tr>
                         <tr>
-                            <th><span class="medal-icon bg-gold"></span></th>
-                            <th><span class="medal-icon bg-silver"></span></th>
-                            <th><span class="medal-icon bg-bronze"></span></th>
-                            <th><span class="medal-icon bg-gold"></span></th>
-                            <th><span class="medal-icon bg-silver"></span></th>
-                            <th><span class="medal-icon bg-bronze"></span></th>
+                            <th>G</th><th>S</th><th>B</th>
+                            <th>G</th><th>S</th><th>B</th>
                             <th>G</th><th>S</th><th>B</th>
                         </tr>
                     </thead>
@@ -421,27 +459,25 @@
                         <td style="font-weight:bold;">${t.total.S}</td>
                         <td style="font-weight:bold; color:#cd7f32;">${t.total.B}</td>
                         <td>${index + 1}</td>
-                    </tr>
-                `;
+                    </tr>`;
             });
-
             html += `</tbody></table>`;
             display.innerHTML = html;
         }
 
-        // --- RENDER LOGIC: BEST PERFORMING (The Complex One) ---
+        // Placeholder for Best Performing
         function renderBestPerforming() {
-            // Re-using the aggregation logic from Overall, but displaying breakdown by Gender
-            // Note: This requires much more complex aggregation (Elem-Girls, Elem-Boys, etc.)
-            // For brevity, I will output a placeholder for you to test the structure first.
-            document.getElementById('mainDisplay').innerHTML = "<h3>Best Performing Calculation Module Loaded. (Implement full Gender breakdown logic here similar to Overall Regular)</h3>";
+            document.getElementById('mainDisplay').innerHTML = "<h3>Best Performing Table logic to be implemented.</h3>";
         }
 
-        // Auth Check
         document.getElementById('logoutBtn').addEventListener('click', () => {
             signOut(auth).then(() => window.location.href = "../index.html");
         });
         
+        // Initial Auth Check
+        onAuthStateChanged(auth, (user) => {
+            if (!user) window.location.href = "../index.html";
+        });
     </script>
 </body>
 </html>
