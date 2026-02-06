@@ -42,7 +42,6 @@
         .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
         select, input, textarea { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.85rem; background: #fff; }
         
-        /* Buttons */
         .btn-submit { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; }
         .btn-danger { background: var(--danger); color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; }
         .btn-success { background: var(--success); color: white; border: none; padding: 10px; border-radius: 6px; cursor: pointer; font-weight: bold; width: 100%; }
@@ -60,8 +59,10 @@
         .r1aa-table th, .r1aa-table td { border: 1px solid #475569; padding: 6px 8px; text-align: center; font-size: 0.75rem; }
         .r1aa-table thead th { background: #e2e8f0; color: #000; font-weight: 700; text-transform: uppercase; font-size: 0.7rem; }
         .col-sdo { text-align: left !important; font-weight: 700; background: #fff; position: sticky; left: 0; min-width: 160px; max-width: 200px; white-space: nowrap; border-right: 2px solid #000 !important; z-index: 5; }
+        .col-rank { font-weight: 700; background: #f1f5f9; }
         .header-total { border-left: 2px solid #000 !important; }
         .cell-total { border-left: 2px solid #000 !important; font-weight: bold; background-color: #f1f5f9; }
+        .row-total { font-weight: bold; background-color: #e2e8f0; }
 
         /* Dashboard Widgets */
         .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 30px; }
@@ -118,15 +119,12 @@
                     <select id="inpSubEvent" required>
                         <option value="" disabled selected>Sub-Event</option>
                     </select>
-                    
                     <select id="inpSDO" required onchange="filterAthletesBySDO()">
                         <option value="" disabled selected>SDO</option>
                     </select>
-                    
                     <select id="inpAthleteName">
                         <option value="" selected>Select Athlete (Optional)</option>
-                        </select>
-
+                    </select>
                     <select id="inpMedal" required>
                         <option value="" disabled selected>Medal</option>
                         <option value="GOLD">Gold</option>
@@ -187,7 +185,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         // --- DATA ---
         const SDO_LIST = ["Alaminos City", "Batac City", "Candon City", "Dagupan City", "Ilocos Norte", "Ilocos Sur", "Laoag City", "La Union", "Pangasinan I", "Pangasinan II", "San Carlos City", "San Fernando City", "Urdaneta City", "Vigan City"];
@@ -262,71 +260,58 @@
             });
             nav.innerHTML += `
                 <div class="nav-item"><div class="nav-header" onclick="toggleMenu('menu-PARA')"><span><i class="fas fa-wheelchair" style="margin-right:8px;"></i> PARA GAMES</span><i class="fas fa-chevron-down" style="font-size:0.7rem;"></i></div><div id="menu-PARA" class="nav-sub"><a onclick="renderSportMatrix('PARA GAMES', 'ATHLETICS')">ATHLETICS</a><a onclick="renderSportMatrix('PARA GAMES', 'SWIMMING')">SWIMMING</a></div></div>
-                <div class="nav-item"><div class="nav-header" onclick="toggleMenu('menu-SUMMARY')"><span><i class="fas fa-chart-pie" style="margin-right:8px;"></i> SUMMARY</span><i class="fas fa-chevron-down" style="font-size:0.7rem;"></i></div><div id="menu-SUMMARY" class="nav-sub"><a onclick="renderOverallRegular()">OVERALL REGULAR</a></div></div>
+                
+                <div class="nav-item">
+                    <div class="nav-header" onclick="toggleMenu('menu-SUMMARY')"><span><i class="fas fa-chart-pie" style="margin-right:8px;"></i> SUMMARY</span><i class="fas fa-chevron-down" style="font-size:0.7rem;"></i></div>
+                    <div id="menu-SUMMARY" class="nav-sub">
+                        <a onclick="renderSummaryMatrix('ELEMENTARY')">Elem. Detailed</a>
+                        <a onclick="renderSummaryMatrix('SECONDARY')">Sec. Detailed</a>
+                        <a onclick="renderSummaryMatrix('PARA GAMES')">Para Detailed</a>
+                        <a onclick="renderOverallTally('REGULAR')">Overall Regular</a>
+                        <a onclick="renderOverallTally('PARA')">Overall Para</a>
+                    </div>
+                </div>
+
                 <div class="nav-item"><div class="nav-header" onclick="renderProtests()"><span style="color:#ef4444;"><i class="fas fa-gavel" style="margin-right:8px;"></i> PROTESTS</span></div></div>
             `;
         }
         renderSidebar();
 
-        // --- DROPDOWNS ---
+        // --- DROPDOWNS & HELPERS ---
         const sdoSelect = document.getElementById('inpSDO');
         const protProtester = document.getElementById('protProtester');
         const protRespondent = document.getElementById('protRespondent');
         const athDivision = document.getElementById('athDivision');
 
         SDO_LIST.forEach(sdo => {
-            const opt = document.createElement('option');
-            opt.value = sdo; opt.textContent = sdo;
-            sdoSelect.appendChild(opt.cloneNode(true));
-            protProtester.appendChild(opt.cloneNode(true));
-            protRespondent.appendChild(opt.cloneNode(true));
-            athDivision.appendChild(opt.cloneNode(true));
+            const opt = document.createElement('option'); opt.value = sdo; opt.textContent = sdo;
+            sdoSelect.appendChild(opt.cloneNode(true)); protProtester.appendChild(opt.cloneNode(true)); protRespondent.appendChild(opt.cloneNode(true)); athDivision.appendChild(opt.cloneNode(true));
         });
 
         window.updateEventOptions = () => {
-            const cat = document.getElementById('inpCategory').value;
-            const eventSelect = document.getElementById('inpEvent');
-            eventSelect.innerHTML = '<option value="" disabled selected>Event</option>';
-            document.getElementById('inpSubEvent').innerHTML = '<option value="" disabled selected>Sub-Event</option>';
+            const cat = document.getElementById('inpCategory').value; const eventSelect = document.getElementById('inpEvent');
+            eventSelect.innerHTML = '<option value="" disabled selected>Event</option>'; document.getElementById('inpSubEvent').innerHTML = '<option value="" disabled selected>Sub-Event</option>';
             if (EVENTS_DATA[cat]) { Object.keys(EVENTS_DATA[cat]).sort().forEach(evt => { const opt = document.createElement('option'); opt.value = evt; opt.textContent = evt; eventSelect.appendChild(opt); }); }
         };
 
         window.updateSubEventOptions = () => {
-            const cat = document.getElementById('inpCategory').value;
-            const evt = document.getElementById('inpEvent').value;
-            const subSelect = document.getElementById('inpSubEvent');
+            const cat = document.getElementById('inpCategory').value; const evt = document.getElementById('inpEvent').value; const subSelect = document.getElementById('inpSubEvent');
             subSelect.innerHTML = '<option value="" disabled selected>Sub-Event</option>';
             if (EVENTS_DATA[cat] && EVENTS_DATA[cat][evt]) { EVENTS_DATA[cat][evt].forEach(sub => { const opt = document.createElement('option'); opt.value = sub; opt.textContent = sub; subSelect.appendChild(opt); }); }
-            // Trigger athlete filter whenever event changes
             window.filterAthletesBySDO();
         };
 
         window.updateAthleteSports = () => {
-            const cat = document.getElementById('athCategory').value;
-            const sportSelect = document.getElementById('athSport');
+            const cat = document.getElementById('athCategory').value; const sportSelect = document.getElementById('athSport');
             sportSelect.innerHTML = '<option value="" disabled selected>Sport</option>';
             if (EVENTS_DATA[cat]) { Object.keys(EVENTS_DATA[cat]).sort().forEach(evt => { const opt = document.createElement('option'); opt.value = evt; opt.textContent = evt; sportSelect.appendChild(opt); }); }
         };
 
-        // *** SMART FILTERING: POPULATE ATHLETE DROPDOWN ***
         window.filterAthletesBySDO = () => {
-            const sdo = document.getElementById('inpSDO').value;
-            const sport = document.getElementById('inpEvent').value;
-            const athleteSelect = document.getElementById('inpAthleteName');
-            
+            const sdo = document.getElementById('inpSDO').value; const sport = document.getElementById('inpEvent').value; const athleteSelect = document.getElementById('inpAthleteName');
             athleteSelect.innerHTML = '<option value="" selected>Select Athlete (Optional)</option>';
-            
             if(!sdo || !sport) return;
-
-            // Filter loaded athletes
-            const relevantAthletes = ATHLETE_DATA.filter(a => a.division === sdo && a.sport === sport);
-            
-            relevantAthletes.forEach(a => {
-                const opt = document.createElement('option');
-                opt.value = a.name;
-                opt.textContent = a.name;
-                athleteSelect.appendChild(opt);
-            });
+            ATHLETE_DATA.filter(a => a.division === sdo && a.sport === sport).forEach(a => { const opt = document.createElement('option'); opt.value = a.name; opt.textContent = a.name; athleteSelect.appendChild(opt); });
         };
 
         window.toggleMenu = (id) => document.getElementById(id).classList.toggle('show');
@@ -334,54 +319,28 @@
         // --- SUBMIT HANDLERS ---
         document.getElementById('resultForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            try { 
-                await addDoc(collection(db, "game_results"), { 
-                    category: document.getElementById('inpCategory').value,
-                    gender: document.getElementById('inpGender').value,
-                    event: document.getElementById('inpEvent').value,
-                    subEvent: document.getElementById('inpSubEvent').value,
-                    sdo: document.getElementById('inpSDO').value,
-                    athleteName: document.getElementById('inpAthleteName').value || "", // Save Athlete Name
-                    medal: document.getElementById('inpMedal').value,
-                    timestamp: new Date() 
-                }); 
-                alert("Result Added!"); 
-            } catch (err) { alert("Error: " + err.message); }
+            try { await addDoc(collection(db, "game_results"), { category: document.getElementById('inpCategory').value, gender: document.getElementById('inpGender').value, event: document.getElementById('inpEvent').value, subEvent: document.getElementById('inpSubEvent').value, sdo: document.getElementById('inpSDO').value, athleteName: document.getElementById('inpAthleteName').value || "", medal: document.getElementById('inpMedal').value, timestamp: new Date() }); alert("Result Added!"); } catch (err) { alert("Error: " + err.message); }
         });
-
         document.getElementById('protestForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             try { await addDoc(collection(db, "protests"), { protester: document.getElementById('protProtester').value, respondent: document.getElementById('protRespondent').value, description: document.getElementById('protDesc').value, status: 'Pending', timestamp: new Date() }); alert("Protest Filed!"); document.getElementById('protestForm').reset(); } catch (err) { alert("Error: " + err.message); }
         });
-
         document.getElementById('athleteForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            try { 
-                await addDoc(collection(db, "athletes"), { 
-                    passport: document.getElementById('athPassport').value,
-                    name: document.getElementById('athName').value,
-                    birthdate: document.getElementById('athBday').value,
-                    age: document.getElementById('athAge').value,
-                    gender: document.getElementById('athGender').value,
-                    weight: document.getElementById('athWt').value,
-                    height: document.getElementById('athHt').value,
-                    category: document.getElementById('athCategory').value,
-                    yearLevel: document.getElementById('athYear').value,
-                    division: document.getElementById('athDivision').value,
-                    sport: document.getElementById('athSport').value,
-                    timestamp: new Date() 
-                }); 
-                alert("Athlete Registered!"); 
-                document.getElementById('athleteForm').reset(); 
-            } catch (err) { alert("Error: " + err.message); }
+            try { await addDoc(collection(db, "athletes"), { passport: document.getElementById('athPassport').value, name: document.getElementById('athName').value, birthdate: document.getElementById('athBday').value, age: document.getElementById('athAge').value, gender: document.getElementById('athGender').value, weight: document.getElementById('athWt').value, height: document.getElementById('athHt').value, category: document.getElementById('athCategory').value, yearLevel: document.getElementById('athYear').value, division: document.getElementById('athDivision').value, sport: document.getElementById('athSport').value, timestamp: new Date() }); alert("Athlete Registered!"); document.getElementById('athleteForm').reset(); } catch (err) { alert("Error: " + err.message); }
         });
 
-        // --- DATA SYNC ---
-        onSnapshot(collection(db, "game_results"), (snap) => { GLOBAL_DATA=[]; snap.forEach(d=>GLOBAL_DATA.push(d.data())); if(CURRENT_VIEW==='dashboard') renderDashboard(); else if(CURRENT_VIEW.type==='sport') renderSportMatrix(CURRENT_VIEW.cat, CURRENT_VIEW.sport); else if(CURRENT_VIEW==='overall') renderOverallRegular(); });
+        // --- DATA LISTENERS & VIEW ROUTING ---
+        onSnapshot(collection(db, "game_results"), (snap) => { 
+            GLOBAL_DATA=[]; snap.forEach(d=>GLOBAL_DATA.push(d.data())); 
+            if(CURRENT_VIEW==='dashboard') renderDashboard(); 
+            else if(CURRENT_VIEW.type==='sport') renderSportMatrix(CURRENT_VIEW.cat, CURRENT_VIEW.sport);
+            else if(CURRENT_VIEW.type==='summary_matrix') renderSummaryMatrix(CURRENT_VIEW.cat);
+            else if(CURRENT_VIEW.type==='overall_tally') renderOverallTally(CURRENT_VIEW.mode);
+        });
         onSnapshot(query(collection(db, "protests"), orderBy("timestamp", "desc")), (snap) => { PROTEST_DATA=[]; snap.forEach(d=>PROTEST_DATA.push(d.data())); if(CURRENT_VIEW==='protests') renderProtests(); });
-        onSnapshot(collection(db, "athletes"), (snap) => { ATHLETE_DATA=[]; snap.forEach(d=>ATHLETE_DATA.push(d.data())); if(CURRENT_VIEW==='athletes') renderAthleteList(); });
+        onSnapshot(collection(db, "athletes"), (snap) => { ATHLETE_DATA=[]; snap.forEach(d=>ATHLETE_DATA.push({...d.data(), id: d.id})); if(CURRENT_VIEW==='athletes') renderAthleteList(); });
 
-        // --- VIEW SWITCHING ---
         function switchView(mode) {
             document.querySelectorAll('.input-panel').forEach(el => el.classList.remove('active'));
             if(mode === 'result') document.getElementById('panelResult').classList.add('active');
@@ -389,7 +348,7 @@
             if(mode === 'athlete') document.getElementById('panelAthlete').classList.add('active');
         }
 
-        // --- RENDERERS ---
+        // --- RENDER FUNCTIONS ---
         window.renderDashboard = () => {
             CURRENT_VIEW = 'dashboard'; switchView('result');
             const display = document.getElementById('mainDisplay');
@@ -402,55 +361,9 @@
         window.renderAthleteList = () => {
             CURRENT_VIEW = 'athletes'; switchView('athlete');
             const display = document.getElementById('mainDisplay');
-            let html = `
-                <div class="section-title" style="color:#10b981; border-color:#10b981;">MASTER LIST OF ATHLETES</div>
-                <div class="table-wrapper">
-                    <div class="table-header-tools">
-                        <h3 style="margin:0;">Registered Athletes</h3>
-                        <button class="tool-btn" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
-                    </div>
-                    <table class="r1aa-table" style="width:100%;">
-                        <thead>
-                            <tr>
-                                <th>Passport</th><th>Name</th><th>Division</th><th>Sport</th>
-                                <th>Category</th><th>Age</th><th>Gender</th><th>Wt</th><th>Ht</th>
-                                <th>Action</th> </tr>
-                        </thead>
-                        <tbody>`;
-            
-            ATHLETE_DATA.forEach(a => { 
-                html += `
-                    <tr>
-                        <td>${a.passport}</td>
-                        <td style="font-weight:bold;text-align:left;">${a.name}</td>
-                        <td>${a.division}</td>
-                        <td>${a.sport}</td>
-                        <td>${a.category}</td>
-                        <td>${a.age}</td>
-                        <td>${a.gender}</td>
-                        <td>${a.weight}</td>
-                        <td>${a.height}</td>
-                        <td>
-                            <button onclick="window.deleteAthlete('${a.id}')" style="background:#fee2e2; border:1px solid #ef4444; color:#ef4444; border-radius:4px; padding:4px 8px; cursor:pointer;">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>`; 
-            });
-            html += `</tbody></table></div>`; 
-            display.innerHTML = html;
-        };
-
-        // NEW FUNCTION FOR TABULATION TEAM
-        window.deleteAthlete = async (id) => {
-            if(confirm("Are you sure you want to delete this athlete? This cannot be undone.")) {
-                try {
-                    await deleteDoc(doc(db, "athletes", id));
-                    // The onSnapshot listener will automatically refresh the table
-                } catch (err) {
-                    alert("Error deleting: " + err.message);
-                }
-            }
+            let html = `<div class="section-title" style="color:#10b981; border-color:#10b981;">MASTER LIST OF ATHLETES</div><div class="table-wrapper"><div class="table-header-tools"><h3 style="margin:0;">Registered Athletes</h3><button class="tool-btn" onclick="window.print()"><i class="fas fa-print"></i> Print</button></div><table class="r1aa-table" style="width:100%;"><thead><tr><th>Passport</th><th>Name</th><th>Division</th><th>Sport</th><th>Category</th><th>Age</th><th>Gender</th><th>Wt</th><th>Ht</th><th>Action</th></tr></thead><tbody>`;
+            ATHLETE_DATA.forEach(a => { html += `<tr><td>${a.passport}</td><td style="font-weight:bold;text-align:left;">${a.name}</td><td>${a.division}</td><td>${a.sport}</td><td>${a.category}</td><td>${a.age}</td><td>${a.gender}</td><td>${a.weight}</td><td>${a.height}</td><td><button onclick="window.deleteAthlete('${a.id}')" style="background:#fee2e2; border:1px solid #ef4444; color:#ef4444; border-radius:4px; padding:4px 8px; cursor:pointer;"><i class="fas fa-trash"></i></button></td></tr>`; });
+            html += `</tbody></table></div>`; display.innerHTML = html;
         };
 
         window.renderProtests = () => {
@@ -484,15 +397,82 @@
             });
         };
 
-        window.renderOverallRegular = () => {
-            CURRENT_VIEW = 'overall'; switchView('result');
+        // --- NEW: DETAILED SUMMARY MATRIX (Photo 1 style) ---
+        window.renderSummaryMatrix = (category) => {
+            CURRENT_VIEW = { type: 'summary_matrix', cat: category }; switchView('result');
+            const display = document.getElementById('mainDisplay');
+            const sports = Object.keys(EVENTS_DATA[category]).sort();
+            let sdoTotals = {}; SDO_LIST.forEach(sdo => sdoTotals[sdo] = {G:0, S:0, B:0});
+
+            let html = `<div class="section-title">SUMMARY RESULTS FOR ${category}</div><div class="table-wrapper" style="overflow-x:auto;"><table class="r1aa-table"><thead><tr><th rowspan="2" class="col-sdo" style="min-width:180px;">EVENTS</th>`;
+            SDO_LIST.forEach(sdo => { html += `<th colspan="3">${sdo.replace(" City", "").replace("Pangasinan", "Pang")}</th>`; });
+            html += `</tr><tr>`;
+            SDO_LIST.forEach(() => { html += `<th style="width:25px;">G</th><th style="width:25px;">S</th><th style="width:25px;">B</th>`; });
+            html += `</tr></thead><tbody>`;
+
+            sports.forEach(sport => {
+                html += `<tr><td class="col-sdo" style="font-size:0.7rem;">${sport.replace("(DEMO)", " (DEMO)")}</td>`;
+                SDO_LIST.forEach(sdo => {
+                    let g=0, s=0, b=0;
+                    GLOBAL_DATA.filter(d => d.category === category && d.event === sport && d.sdo === sdo).forEach(d => { if(d.medal==='GOLD')g++; if(d.medal==='SILVER')s++; if(d.medal==='BRONZE')b++; });
+                    sdoTotals[sdo].G += g; sdoTotals[sdo].S += s; sdoTotals[sdo].B += b;
+                    html += `<td>${g||''}</td><td>${s||''}</td><td style="border-right:1px solid #475569;">${b||''}</td>`;
+                });
+                html += `</tr>`;
+            });
+
+            html += `<tr class="row-total"><td class="col-sdo">TOTAL</td>`;
+            SDO_LIST.forEach(sdo => { html += `<td>${sdoTotals[sdo].G}</td><td>${sdoTotals[sdo].S}</td><td style="border-right:1px solid #000;">${sdoTotals[sdo].B}</td>`; });
+            html += `</tr></tbody></table></div>`;
+            display.innerHTML = html;
+        };
+
+        // --- NEW: OVERALL TALLY (Photo 2 style) ---
+        window.renderOverallTally = (mode) => {
+            CURRENT_VIEW = { type: 'overall_tally', mode: mode }; switchView('result');
             const display = document.getElementById('mainDisplay');
             let tally = {}; SDO_LIST.forEach(sdo => tally[sdo] = { elem: {G:0,S:0,B:0}, sec: {G:0,S:0,B:0}, total: {G:0,S:0,B:0} });
-            GLOBAL_DATA.forEach(d => { if (!tally[d.sdo]) return; let type = d.category === 'ELEMENTARY' ? 'elem' : d.category === 'SECONDARY' ? 'sec' : null; if (type) { let m = d.medal.charAt(0); tally[d.sdo][type][m]++; tally[d.sdo].total[m]++; } });
-            let sorted = Object.keys(tally).sort((a, b) => { if (tally[b].total.G !== tally[a].total.G) return tally[b].total.G - tally[a].total.G; return tally[b].total.S - tally[a].total.S; });
-            let html = `<div class="section-title">OVERALL REGULAR GAMES</div><div class="table-wrapper"><table class="r1aa-table"><thead><tr><th rowspan="2" class="col-sdo">SDO</th><th colspan="3" style="background:#e2e8f0;">ELEMENTARY</th><th colspan="3" style="background:#e2e8f0;">SECONDARY</th><th colspan="3" class="header-total" style="color:black;background:#e2e8f0;">OVERALL</th><th rowspan="2" class="header-total" style="color:black;background:#e2e8f0;">RANK</th></tr><tr><th>G</th><th>S</th><th>B</th><th>G</th><th>S</th><th>B</th><th style="border-left:2px solid #000;">G</th><th>S</th><th>B</th></tr></thead><tbody>`;
-            sorted.forEach((sdo, idx) => { const t = tally[sdo]; html += `<tr><td class="col-sdo">${sdo}</td><td>${t.elem.G}</td><td>${t.elem.S}</td><td>${t.elem.B}</td><td>${t.sec.G}</td><td>${t.sec.S}</td><td>${t.sec.B}</td><td class="cell-total">${t.total.G}</td><td style="font-weight:bold;background:#f1f5f9;">${t.total.S}</td><td style="font-weight:bold;background:#f1f5f9;">${t.total.B}</td><td style="font-weight:bold;">${idx+1}</td></tr>`; });
-            html += `</tbody></table></div>`; display.innerHTML = html;
+            
+            GLOBAL_DATA.forEach(d => {
+                if (!tally[d.sdo]) return;
+                if (mode === 'REGULAR' && d.event.includes('(DEMO)')) return; // Skip demos for regular tally
+                if (mode === 'PARA' && d.category !== 'PARA GAMES') return; // Skip non-para
+                if (mode === 'REGULAR' && d.category === 'PARA GAMES') return; // Skip para for regular
+
+                let type = d.category === 'ELEMENTARY' ? 'elem' : d.category === 'SECONDARY' ? 'sec' : null;
+                if (mode === 'PARA') type = 'elem'; // Just use one slot for para
+                
+                if (type) {
+                    let m = d.medal.charAt(0);
+                    tally[d.sdo][type][m]++;
+                    tally[d.sdo].total[m]++;
+                }
+            });
+
+            let sorted = Object.keys(tally).sort((a, b) => { if (tally[b].total.G !== tally[a].total.G) return tally[b].total.G - tally[a].total.G; if (tally[b].total.S !== tally[a].total.S) return tally[b].total.S - tally[a].total.S; return tally[b].total.B - tally[a].total.B; });
+            
+            let title = mode === 'REGULAR' ? 'OVERALL MEDAL TALLY (REGULAR GAMES)' : 'OVERALL MEDAL TALLY (PARA GAMES)';
+            let col1 = mode === 'REGULAR' ? 'ELEMENTARY' : 'PARA GAMES';
+            let col2 = mode === 'REGULAR' ? 'SECONDARY' : '';
+
+            let html = `<div class="section-title">${title}</div><div class="table-wrapper"><table class="r1aa-table"><thead><tr><th rowspan="2" class="col-rank">RANK</th><th rowspan="2" class="col-sdo">DELEGATION</th><th colspan="3" style="background:#e2e8f0;">${col1}</th>`;
+            if(mode === 'REGULAR') html += `<th colspan="3" style="background:#e2e8f0;">${col2}</th>`;
+            html += `<th colspan="3" class="header-total" style="color:black;background:#e2e8f0;">TOTAL</th></tr><tr><th>G</th><th>S</th><th>B</th>`;
+            if(mode === 'REGULAR') html += `<th>G</th><th>S</th><th>B</th>`;
+            html += `<th style="border-left:2px solid #000;">G</th><th>S</th><th>B</th></tr></thead><tbody>`;
+
+            let grandTotal = {G:0, S:0, B:0};
+            sorted.forEach((sdo, idx) => {
+                const t = tally[sdo];
+                grandTotal.G += t.total.G; grandTotal.S += t.total.S; grandTotal.B += t.total.B;
+                html += `<tr><td class="col-rank">${idx+1}</td><td class="col-sdo">${sdo}</td><td>${t.elem.G}</td><td>${t.elem.S}</td><td>${t.elem.B}</td>`;
+                if(mode === 'REGULAR') html += `<td>${t.sec.G}</td><td>${t.sec.S}</td><td>${t.sec.B}</td>`;
+                html += `<td class="cell-total">${t.total.G}</td><td style="font-weight:bold;background:#f1f5f9;">${t.total.S}</td><td style="font-weight:bold;background:#f1f5f9;">${t.total.B}</td></tr>`;
+            });
+            html += `<tr class="row-total"><td colspan="2" style="text-align:right;">GRAND TOTAL</td><td></td><td></td><td></td>`;
+            if(mode === 'REGULAR') html += `<td></td><td></td><td></td>`;
+            html += `<td style="border-left:2px solid #000;">${grandTotal.G}</td><td>${grandTotal.S}</td><td>${grandTotal.B}</td></tr></tbody></table></div>`;
+            display.innerHTML = html;
         };
 
         function initCharts() {
@@ -504,7 +484,7 @@
         }
 
         window.exportToExcel = (id) => { const table=document.getElementById(id); let rows=[]; for(let i=0;i<table.rows.length;i++){ let row=[], cols=table.rows[i].querySelectorAll("td, th"); for(let j=0;j<cols.length;j++) row.push('"'+cols[j].innerText+'"'); rows.push(row.join(",")); } const link = document.createElement("a"); link.setAttribute("href", encodeURI("data:text/csv;charset=utf-8,"+rows.join("\n"))); link.setAttribute("download", `R1AA_${id}.csv`); document.body.appendChild(link); link.click(); document.body.removeChild(link); };
-
+        window.deleteAthlete = async (id) => { if(confirm("Delete this athlete?")) { try { await deleteDoc(doc(db, "athletes", id)); } catch (err) { alert("Error: " + err.message); } } };
         document.getElementById('logoutBtn').addEventListener('click', () => { signOut(auth).then(() => window.location.href = "../index.html"); });
         onAuthStateChanged(auth, (user) => { if (!user) window.location.href = "../index.html"; else renderDashboard(); });
     </script>
