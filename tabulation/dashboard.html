@@ -402,11 +402,55 @@
         window.renderAthleteList = () => {
             CURRENT_VIEW = 'athletes'; switchView('athlete');
             const display = document.getElementById('mainDisplay');
-            let html = `<div class="section-title" style="color:#10b981; border-color:#10b981;">MASTER LIST OF ATHLETES</div>
-            <div class="table-wrapper"><div class="table-header-tools"><h3 style="margin:0;">Registered Athletes</h3><div><button class="tool-btn" onclick="window.print()"><i class="fas fa-print"></i> Print</button></div></div>
-            <table class="r1aa-table" style="width:100%;"><thead><tr><th>Passport</th><th>Name</th><th>Division</th><th>Sport</th><th>Category</th><th>Age</th><th>Gender</th><th>Wt</th><th>Ht</th><th>Birthdate</th></tr></thead><tbody>`;
-            ATHLETE_DATA.forEach(a => { html += `<tr><td>${a.passport}</td><td style="font-weight:bold;text-align:left;">${a.name}</td><td>${a.division}</td><td>${a.sport}</td><td>${a.category}</td><td>${a.age}</td><td>${a.gender}</td><td>${a.weight}</td><td>${a.height}</td><td>${a.birthdate}</td></tr>`; });
-            html += `</tbody></table></div>`; display.innerHTML = html;
+            let html = `
+                <div class="section-title" style="color:#10b981; border-color:#10b981;">MASTER LIST OF ATHLETES</div>
+                <div class="table-wrapper">
+                    <div class="table-header-tools">
+                        <h3 style="margin:0;">Registered Athletes</h3>
+                        <button class="tool-btn" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
+                    </div>
+                    <table class="r1aa-table" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>Passport</th><th>Name</th><th>Division</th><th>Sport</th>
+                                <th>Category</th><th>Age</th><th>Gender</th><th>Wt</th><th>Ht</th>
+                                <th>Action</th> </tr>
+                        </thead>
+                        <tbody>`;
+            
+            ATHLETE_DATA.forEach(a => { 
+                html += `
+                    <tr>
+                        <td>${a.passport}</td>
+                        <td style="font-weight:bold;text-align:left;">${a.name}</td>
+                        <td>${a.division}</td>
+                        <td>${a.sport}</td>
+                        <td>${a.category}</td>
+                        <td>${a.age}</td>
+                        <td>${a.gender}</td>
+                        <td>${a.weight}</td>
+                        <td>${a.height}</td>
+                        <td>
+                            <button onclick="window.deleteAthlete('${a.id}')" style="background:#fee2e2; border:1px solid #ef4444; color:#ef4444; border-radius:4px; padding:4px 8px; cursor:pointer;">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>`; 
+            });
+            html += `</tbody></table></div>`; 
+            display.innerHTML = html;
+        };
+
+        // NEW FUNCTION FOR TABULATION TEAM
+        window.deleteAthlete = async (id) => {
+            if(confirm("Are you sure you want to delete this athlete? This cannot be undone.")) {
+                try {
+                    await deleteDoc(doc(db, "athletes", id));
+                    // The onSnapshot listener will automatically refresh the table
+                } catch (err) {
+                    alert("Error deleting: " + err.message);
+                }
+            }
         };
 
         window.renderProtests = () => {
