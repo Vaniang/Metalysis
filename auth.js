@@ -63,13 +63,13 @@ if (loginForm) {
                     window.location.href = "admin/dashboard.html";
                 } 
                 else if (role === 'TABULATION') {
-                    window.location.href = "tabulation_dashboard.html"; // Make sure this file exists!
+                    window.location.href = "tabulation/dashboard.html"; // Make sure this file exists!
                 }
                 else if (role === 'RSAC') {
-                    window.location.href = "rsac_dashboard.html"; // Make sure this file exists!
+                    window.location.href = "rsac/dashboard.html"; // Make sure this file exists!
                 }
                 else if (role === 'SOCIAL') {
-                    window.location.href = "social_dashboard.html"; // Make sure this file exists!
+                    window.location.href = "social/dashboard.html"; // Make sure this file exists!
                 }
                 else {
                     throw new Error("User has no valid role assigned.");
