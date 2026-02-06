@@ -60,11 +60,13 @@
         .r1aa-table { width: max-content; min-width: 50%; border-collapse: collapse; border-spacing: 0; font-family: 'Arial', sans-serif; }
         .r1aa-table th, .r1aa-table td { border: 1px solid #475569; padding: 6px 8px; text-align: center; font-size: 0.75rem; }
         .r1aa-table thead th { background: #e2e8f0; color: #000; font-weight: 700; text-transform: uppercase; font-size: 0.7rem; }
-        .col-sdo { text-align: left !important; font-weight: 700; background: #fff; position: sticky; left: 0; min-width: 160px; max-width: 200px; white-space: nowrap; border-right: 2px solid #000 !important; z-index: 5; }
+        .col-sdo { text-align: left !important; font-weight: 700; background: #fff; position: sticky; left: 0; min-width: 200px; max-width: 250px; white-space: nowrap; border-right: 2px solid #000 !important; z-index: 5; }
+        .col-rank { font-weight: 700; background: #f1f5f9; }
         .header-total { border-left: 2px solid #000 !important; }
         .cell-total { border-left: 2px solid #000 !important; font-weight: bold; background-color: #f1f5f9; }
+        .row-total { font-weight: bold; background-color: #e2e8f0; }
         
-        /* Delete Button Style */
+        /* Delete Button */
         .btn-delete-row { background: #fee2e2; border: 1px solid #ef4444; color: #ef4444; border-radius: 4px; padding: 4px 8px; cursor: pointer; transition: 0.2s; }
         .btn-delete-row:hover { background: #ef4444; color: white; }
 
@@ -81,7 +83,7 @@
             .charts-container, .dashboard-grid { display: none; }
             .table-wrapper { box-shadow: none; border: none; padding: 0; page-break-inside: avoid; }
             .r1aa-table { width: 100%; } .r1aa-table th, .r1aa-table td { border: 1px solid #000 !important; }
-            .col-action { display: none; } /* Hide delete buttons on print */
+            .col-action { display: none; }
         }
         @media (max-width: 1024px) { .charts-container { grid-template-columns: 1fr; } }
     </style>
@@ -230,7 +232,25 @@
                 "Wushu Boys (Group A)": ["48kgs", "52kgs", "56kgs"], "Wushu Boys (Group B)": ["42kgs", "45kgs", "48kgs"],
                 "Wrestling": ["Cadet 42kgs", "Cadet 46kgs", "Cadet 50kgs", "Cadet 54kgs", "Junior 54kgs", "Junior 58kgs", "Junior 62kgs", "Junior 66kgs"]
             },
-            "PARA GAMES": { "ATHLETICS": ["100M", "Shot Put", "Long Jump"], "SWIMMING": ["50M Free", "50M Back"] }
+            "PARA GAMES": {
+                "ATHLETICS": [
+                    "VI-100M Dash (T11/TB)", "VI-100M Dash (T12/LV) - Boys", "VI-100M Dash (T12) - Girls", "100M Dash (T13/LV)",
+                    "VI-Running Long Jump (T11/TB)", "VI-Running Long Jump (T12/LV)", "VI-Running Long Jump (T13/LV)",
+                    "VI-Shotput (T11/TB)", "VI-Shotput (T12/LV)", "VI-Shotput (T13/LV)",
+                    "ID-100M 15 Yrs Old Below (Youth)", "ID-100M 16-25 Yrs Old Below (Junior)",
+                    "ID-200M 15 Yrs Old Below (Youth)", "ID-200M Dash 16-25 Yrs Old Below (Junior)",
+                    "ID-400M 15 Yrs Old Below (Youth)", "ID-400M 16-25 Yrs Old Below (Junior)",
+                    "ID-4x100M Relay 15 Yrs Old Below (Youth)", "ID-4x100M Relay 16-25 Yrs Old Below (Junior)",
+                    "ID-Running Long Jump 15 Yrs Old Below (Youth)", "ID-Running Long Jump 16-25 Yrs Old Below (Junior)",
+                    "ID-Shotput T14- 15 Yrs Old Below", "ID-Shotput T14- 16-25 Yrs Old"
+                ],
+                "SWIMMING": [
+                    "OH-50M Ortho - Special Event Freestyle", "OH-50M Ortho - Special Event Backstroke", "OH-50M Ortho - Special Event Breastroke",
+                    "ID-50M Freestyle", "ID-50M Butterfly", "ID-50M Backstroke", "ID-50M Breastroke"
+                ],
+                "GOAL BALL": ["Goal Ball (V1)"],
+                "BOCCE": ["Bocce - Single T14", "Bocce-Double T14", "Bocce - Mixed Doubles", "Bocce-Team"]
+            }
         };
 
         const firebaseConfig = {
@@ -265,7 +285,9 @@
                 html += `</div></div>`; nav.innerHTML += html;
             });
             nav.innerHTML += `
-                <div class="nav-item"><div class="nav-header" onclick="toggleMenu('menu-PARA')"><span><i class="fas fa-wheelchair" style="margin-right:8px;"></i> PARA GAMES</span><i class="fas fa-chevron-down" style="font-size:0.7rem;"></i></div><div id="menu-PARA" class="nav-sub"><a onclick="renderSportMatrix('PARA GAMES', 'ATHLETICS')">ATHLETICS</a><a onclick="renderSportMatrix('PARA GAMES', 'SWIMMING')">SWIMMING</a></div></div>
+                <div class="nav-item"><div class="nav-header" onclick="toggleMenu('menu-PARA')"><span><i class="fas fa-wheelchair" style="margin-right:8px;"></i> PARA GAMES</span><i class="fas fa-chevron-down" style="font-size:0.7rem;"></i></div><div id="menu-PARA" class="nav-sub">`;
+                Object.keys(EVENTS_DATA["PARA GAMES"]).sort().forEach(sport => { nav.innerHTML += `<a onclick="renderSportMatrix('PARA GAMES', '${sport}')">${sport}</a>`; });
+            nav.innerHTML += `</div></div>
                 <div class="nav-item">
                     <div class="nav-header" onclick="toggleMenu('menu-SUMMARY')"><span><i class="fas fa-chart-pie" style="margin-right:8px;"></i> SUMMARY</span><i class="fas fa-chevron-down" style="font-size:0.7rem;"></i></div>
                     <div id="menu-SUMMARY" class="nav-sub">
@@ -336,12 +358,12 @@
 
         // --- DATA LISTENERS ---
         onSnapshot(collection(db, "game_results"), (snap) => { 
-            GLOBAL_DATA=[]; snap.forEach(d=>GLOBAL_DATA.push({...d.data(), id: d.id})); // Store ID for delete
+            GLOBAL_DATA=[]; snap.forEach(d=>GLOBAL_DATA.push({...d.data(), id: d.id})); 
             if(CURRENT_VIEW==='dashboard') renderDashboard(); 
             else if(CURRENT_VIEW.type==='sport') renderSportMatrix(CURRENT_VIEW.cat, CURRENT_VIEW.sport);
             else if(CURRENT_VIEW.type==='summary_matrix') renderSummaryMatrix(CURRENT_VIEW.cat);
             else if(CURRENT_VIEW.type==='overall_tally') renderOverallTally(CURRENT_VIEW.mode);
-            else if(CURRENT_VIEW==='manage') renderManageResults(); // Refresh Manage View
+            else if(CURRENT_VIEW==='manage') renderManageResults();
         });
         onSnapshot(query(collection(db, "protests"), orderBy("timestamp", "desc")), (snap) => { PROTEST_DATA=[]; snap.forEach(d=>PROTEST_DATA.push({...d.data(), id: d.id})); if(CURRENT_VIEW==='protests') renderProtests(); });
         onSnapshot(collection(db, "athletes"), (snap) => { ATHLETE_DATA=[]; snap.forEach(d=>ATHLETE_DATA.push({...d.data(), id: d.id})); if(CURRENT_VIEW==='athletes') renderAthleteList(); });
@@ -363,84 +385,22 @@
             initCharts();
         };
 
-        // --- NEW: MANAGE RESULTS (DELETE FUNCTIONALITY) ---
         window.renderManageResults = () => {
             CURRENT_VIEW = 'manage'; switchView('result');
             const display = document.getElementById('mainDisplay');
-            // Sort by latest first for easy deletion
             let sortedData = [...GLOBAL_DATA].sort((a,b) => b.timestamp - a.timestamp);
-            
-            let html = `
-                <div class="section-title" style="color:#ef4444; border-color:#ef4444;">MANAGE RESULTS (DELETE)</div>
-                <div class="table-wrapper">
-                    <div class="table-header-tools">
-                        <h3 style="margin:0;">All Entered Results</h3>
-                        <input type="text" placeholder="Search..." style="padding:6px; border:1px solid #ccc; border-radius:4px;" onkeyup="filterManageTable(this.value)">
-                    </div>
-                    <table class="r1aa-table" style="width:100%;" id="manageTable">
-                        <thead>
-                            <tr>
-                                <th>Category</th><th>Event</th><th>Sub-Event</th><th>Gender</th>
-                                <th>SDO</th><th>Medal</th><th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>`;
-            
-            if(sortedData.length === 0) {
-                html += `<tr><td colspan="7" style="padding:20px; text-align:center;">No results found.</td></tr>`;
-            } else {
-                sortedData.forEach(d => {
-                    html += `
-                        <tr>
-                            <td>${d.category}</td>
-                            <td style="font-weight:bold;">${d.event}</td>
-                            <td>${d.subEvent}</td>
-                            <td>${d.gender}</td>
-                            <td>${d.sdo}</td>
-                            <td style="font-weight:bold; color:${d.medal==='GOLD'?'#b45309':d.medal==='SILVER'?'#475569':'#92400e'}">${d.medal}</td>
-                            <td>
-                                <button class="btn-delete-row" onclick="window.deleteResult('${d.id}')">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    `;
-                });
-            }
-            html += `</tbody></table></div>`;
-            display.innerHTML = html;
+            let html = `<div class="section-title" style="color:#ef4444; border-color:#ef4444;">MANAGE RESULTS</div><div class="table-wrapper"><div class="table-header-tools"><h3 style="margin:0;">All Entered Results</h3><input type="text" placeholder="Search..." style="padding:6px; border:1px solid #ccc; border-radius:4px;" onkeyup="filterManageTable(this.value)"></div><table class="r1aa-table" style="width:100%;" id="manageTable"><thead><tr><th>Category</th><th>Event</th><th>Sub-Event</th><th>Gender</th><th>SDO</th><th>Medal</th><th>Action</th></tr></thead><tbody>`;
+            if(sortedData.length === 0) { html += `<tr><td colspan="7" style="padding:20px; text-align:center;">No results found.</td></tr>`; } else { sortedData.forEach(d => { html += `<tr><td>${d.category}</td><td style="font-weight:bold;">${d.event}</td><td>${d.subEvent}</td><td>${d.gender}</td><td>${d.sdo}</td><td style="font-weight:bold; color:${d.medal==='GOLD'?'#b45309':d.medal==='SILVER'?'#475569':'#92400e'}">${d.medal}</td><td><button class="btn-delete-row" onclick="window.deleteResult('${d.id}')"><i class="fas fa-trash"></i></button></td></tr>`; }); }
+            html += `</tbody></table></div>`; display.innerHTML = html;
         };
 
-        // --- FILTER FUNCTION FOR MANAGE TABLE ---
         window.filterManageTable = (text) => {
-            const filter = text.toUpperCase();
-            const table = document.getElementById("manageTable");
-            const tr = table.getElementsByTagName("tr");
-            for (let i = 1; i < tr.length; i++) {
-                let visible = false;
-                const tds = tr[i].getElementsByTagName("td");
-                for(let j=0; j<tds.length-1; j++) { // Skip action column
-                    if(tds[j].textContent.toUpperCase().indexOf(filter) > -1) {
-                        visible = true; break;
-                    }
-                }
-                tr[i].style.display = visible ? "" : "none";
-            }
+            const filter = text.toUpperCase(); const table = document.getElementById("manageTable"); const tr = table.getElementsByTagName("tr");
+            for (let i = 1; i < tr.length; i++) { let visible = false; const tds = tr[i].getElementsByTagName("td"); for(let j=0; j<tds.length-1; j++) { if(tds[j].textContent.toUpperCase().indexOf(filter) > -1) { visible = true; break; } } tr[i].style.display = visible ? "" : "none"; }
         };
 
-        // --- DELETE FUNCTION ---
-        window.deleteResult = async (id) => {
-            if(confirm("Are you sure you want to delete this result? This will remove it from all tally sheets and the RSAC dashboard.")) {
-                try {
-                    await deleteDoc(doc(db, "game_results", id));
-                    // Snapshot listener will refresh UI automatically
-                } catch (err) {
-                    alert("Error deleting: " + err.message);
-                }
-            }
-        };
+        window.deleteResult = async (id) => { if(confirm("Delete result?")) { try { await deleteDoc(doc(db, "game_results", id)); } catch (err) { alert("Error: " + err.message); } } };
 
-        // --- RENDER ATHLETE LIST (WITH DELETE) ---
         window.renderAthleteList = () => {
             CURRENT_VIEW = 'athletes'; switchView('athlete');
             const display = document.getElementById('mainDisplay');
@@ -453,17 +413,11 @@
             CURRENT_VIEW = 'protests'; switchView('protest');
             const display = document.getElementById('mainDisplay');
             let html = `<div class="section-title" style="color:#ef4444; border-color:#ef4444;">PROTEST MANAGEMENT</div><div class="table-wrapper"><table class="r1aa-table" style="width:100%;"><thead><tr><th>Status</th><th>Protester</th><th>Respondent</th><th>Description</th><th>Resolution</th><th>Action</th></tr></thead><tbody>`;
-            PROTEST_DATA.forEach(p => { 
-                let color = p.status === 'Resolved' ? 'green' : '#ef4444'; 
-                html += `<tr><td><span style="background:${color};color:white;padding:2px 6px;border-radius:4px;font-size:0.7rem;">${p.status}</span></td><td>${p.protester}</td><td>${p.respondent}</td><td style="text-align:left;">${p.description}</td><td>${p.resolution || '-'}</td><td><button class="btn-delete-row" onclick="window.deleteProtest('${p.id}')"><i class="fas fa-trash"></i></button></td></tr>`; 
-            });
+            PROTEST_DATA.forEach(p => { let color = p.status === 'Resolved' ? 'green' : '#ef4444'; html += `<tr><td><span style="background:${color};color:white;padding:2px 6px;border-radius:4px;font-size:0.7rem;">${p.status}</span></td><td>${p.protester}</td><td>${p.respondent}</td><td style="text-align:left;">${p.description}</td><td>${p.resolution || '-'}</td><td><button class="btn-delete-row" onclick="window.deleteProtest('${p.id}')"><i class="fas fa-trash"></i></button></td></tr>`; });
             html += `</tbody></table></div>`; display.innerHTML = html;
         };
 
-        // --- NEW DELETE FOR PROTESTS ---
-        window.deleteProtest = async (id) => {
-            if(confirm("Delete this protest?")) { try { await deleteDoc(doc(db, "protests", id)); } catch(err) { alert(err.message); } }
-        };
+        window.deleteProtest = async (id) => { if(confirm("Delete protest?")) { try { await deleteDoc(doc(db, "protests", id)); } catch(err) { alert(err.message); } } };
 
         window.renderSportMatrix = (category, sport) => {
             CURRENT_VIEW = { type: 'sport', cat: category, sport: sport }; switchView('result');
@@ -488,44 +442,55 @@
             });
         };
 
+        // --- NEW: SUMMARY MATRIX (SPLIT BY GENDER + SEPARATE DEMO TABLES) ---
         window.renderSummaryMatrix = (category) => {
             CURRENT_VIEW = { type: 'summary_matrix', cat: category }; switchView('result');
             const display = document.getElementById('mainDisplay');
             const sports = Object.keys(EVENTS_DATA[category]).sort();
-            let sdoTotals = {}; SDO_LIST.forEach(sdo => sdoTotals[sdo] = {G:0, S:0, B:0});
+            
+            // Separation of Regular vs Demo
+            const regularSports = sports.filter(s => !s.includes('(DEMO)'));
+            const demoSports = sports.filter(s => s.includes('(DEMO)'));
 
-            let html = `<div class="section-title">SUMMARY RESULTS FOR ${category}</div><div class="table-wrapper" style="overflow-x:auto;"><table class="r1aa-table"><thead><tr><th rowspan="2" class="col-sdo" style="min-width:180px;">EVENTS</th>`;
-            SDO_LIST.forEach(sdo => { html += `<th colspan="3">${sdo.replace(" City", "").replace("Pangasinan", "Pang")}</th>`; });
-            html += `</tr><tr>`;
-            SDO_LIST.forEach(() => { html += `<th style="width:25px;">G</th><th style="width:25px;">S</th><th style="width:25px;">B</th>`; });
-            html += `</tr></thead><tbody>`;
+            const generateTable = (title, sportList) => {
+                if(sportList.length === 0) return "";
+                let sdoTotals = {}; SDO_LIST.forEach(sdo => sdoTotals[sdo] = {G:0, S:0, B:0});
+                let html = `<div class="section-title" style="margin-top:30px;">${title}</div><div class="table-wrapper" style="overflow-x:auto;"><table class="r1aa-table"><thead><tr><th rowspan="2" class="col-sdo" style="min-width:180px;">EVENTS</th>`;
+                SDO_LIST.forEach(sdo => { html += `<th colspan="3">${sdo.replace(" City", "").replace("Pangasinan", "Pang")}</th>`; });
+                html += `</tr><tr>`;
+                SDO_LIST.forEach(() => { html += `<th style="width:25px;">G</th><th style="width:25px;">S</th><th style="width:25px;">B</th>`; });
+                html += `</tr></thead><tbody>`;
 
-            sports.forEach(sport => {
-                let gendersToShow = ['BOYS', 'GIRLS'];
-                if (sport.includes('(BOYS)') || sport.includes('MAG') || sport.includes('FOOTBALL')) gendersToShow = ['BOYS'];
-                if (sport.includes('(GIRLS)') || sport.includes('WAG') || sport.includes('RG') || sport.includes('SOFTBALL')) gendersToShow = ['GIRLS'];
+                sportList.forEach(sport => {
+                    let gendersToShow = ['BOYS', 'GIRLS'];
+                    if (sport.includes('(BOYS)') || sport.includes('MAG') || sport.includes('FOOTBALL') || sport.includes('BASEBALL')) gendersToShow = ['BOYS'];
+                    if (sport.includes('(GIRLS)') || sport.includes('WAG') || sport.includes('RG') || sport.includes('SOFTBALL')) gendersToShow = ['GIRLS'];
 
-                gendersToShow.forEach(gender => {
-                    let label = sport.replace("(DEMO)", "").replace("(BOYS)", "").replace("(GIRLS)", "").trim();
-                    let displayLabel = `${label} - ${gender}`;
-                    if(sport.includes("(DEMO)")) displayLabel += " (DEMO)";
-
-                    html += `<tr><td class="col-sdo" style="font-size:0.7rem;">${displayLabel}</td>`;
-                    SDO_LIST.forEach(sdo => {
-                        let g=0, s=0, b=0;
-                        GLOBAL_DATA.filter(d => d.category === category && d.event === sport && d.gender === gender && d.sdo === sdo)
-                                   .forEach(d => { if(d.medal==='GOLD')g++; if(d.medal==='SILVER')s++; if(d.medal==='BRONZE')b++; });
-                        sdoTotals[sdo].G += g; sdoTotals[sdo].S += s; sdoTotals[sdo].B += b;
-                        html += `<td>${g||''}</td><td>${s||''}</td><td style="border-right:1px solid #475569;">${b||''}</td>`;
+                    gendersToShow.forEach(gender => {
+                        let label = sport.replace("(DEMO)", "").replace("(BOYS)", "").replace("(GIRLS)", "").trim();
+                        let displayLabel = `${label} (${gender})`;
+                        
+                        html += `<tr><td class="col-sdo" style="font-size:0.7rem;">${displayLabel}</td>`;
+                        SDO_LIST.forEach(sdo => {
+                            let g=0, s=0, b=0;
+                            GLOBAL_DATA.filter(d => d.category === category && d.event === sport && d.gender === gender && d.sdo === sdo)
+                                       .forEach(d => { if(d.medal==='GOLD')g++; if(d.medal==='SILVER')s++; if(d.medal==='BRONZE')b++; });
+                            sdoTotals[sdo].G += g; sdoTotals[sdo].S += s; sdoTotals[sdo].B += b;
+                            html += `<td>${g||''}</td><td>${s||''}</td><td style="border-right:1px solid #475569;">${b||''}</td>`;
+                        });
+                        html += `</tr>`;
                     });
-                    html += `</tr>`;
                 });
-            });
 
-            html += `<tr class="row-total"><td class="col-sdo">TOTAL</td>`;
-            SDO_LIST.forEach(sdo => { html += `<td>${sdoTotals[sdo].G}</td><td>${sdoTotals[sdo].S}</td><td style="border-right:1px solid #000;">${sdoTotals[sdo].B}</td>`; });
-            html += `</tr></tbody></table></div>`;
-            display.innerHTML = html;
+                html += `<tr class="row-total"><td class="col-sdo">TOTAL</td>`;
+                SDO_LIST.forEach(sdo => { html += `<td>${sdoTotals[sdo].G}</td><td>${sdoTotals[sdo].S}</td><td style="border-right:1px solid #000;">${sdoTotals[sdo].B}</td>`; });
+                html += `</tr></tbody></table></div>`;
+                return html;
+            };
+
+            let finalHtml = generateTable(`SUMMARY RESULTS FOR ${category} (REGULAR)`, regularSports);
+            if(demoSports.length > 0) finalHtml += generateTable(`SUMMARY RESULTS FOR ${category} (DEMONSTRATION)`, demoSports);
+            display.innerHTML = finalHtml;
         };
 
         window.renderOverallTally = (mode) => {
@@ -541,12 +506,7 @@
 
                 let type = d.category === 'ELEMENTARY' ? 'elem' : d.category === 'SECONDARY' ? 'sec' : null;
                 if (mode === 'PARA') type = 'elem';
-                
-                if (type) {
-                    let m = d.medal.charAt(0);
-                    tally[d.sdo][type][m]++;
-                    tally[d.sdo].total[m]++;
-                }
+                if (type) { let m = d.medal.charAt(0); tally[d.sdo][type][m]++; tally[d.sdo].total[m]++; }
             });
 
             let sorted = Object.keys(tally).sort((a, b) => { if (tally[b].total.G !== tally[a].total.G) return tally[b].total.G - tally[a].total.G; if (tally[b].total.S !== tally[a].total.S) return tally[b].total.S - tally[a].total.S; return tally[b].total.B - tally[a].total.B; });
