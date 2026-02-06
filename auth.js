@@ -62,7 +62,7 @@ if (loginForm) {
                 // Note: Make sure these HTML files exist in your folder!
                 switch(role) {
                     case 'ADMIN':
-                        window.location.href = "admin_dashboard.html";
+                        window.location.href = "admin/dashboard.html";
                         break;
                     case 'TABULATION':
                         window.location.href = "tabulation_dashboard.html";
