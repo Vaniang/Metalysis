@@ -57,12 +57,13 @@
         .charts-container { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; margin-bottom: 30px; }
         .chart-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); height: 350px; position: relative; }
         
-        /* Matrix Tables (Score Sheet Style) */
+        /* Matrix Tables */
         .table-wrapper { background: white; padding: 25px; border-radius: 4px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 40px; border: 1px solid #cbd5e1; }
         .table-header-tools { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 2px solid #000; padding-bottom: 10px; }
         .tool-btn { background: white; border: 1px solid #cbd5e1; padding: 6px 12px; border-radius: 4px; cursor: pointer; color: #475569; font-size: 0.8rem; margin-left: 8px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; }
         .tool-btn:hover { border-color: var(--primary); color: var(--primary); background: #eff6ff; }
 
+        /* EXACT SCORE SHEET STYLING */
         .r1aa-table { width: 100%; border-collapse: collapse; border-spacing: 0; font-family: 'Arial', sans-serif; }
         .r1aa-table th, .r1aa-table td { border: 1px solid #475569; padding: 6px; text-align: center; font-size: 0.75rem; }
         .r1aa-table thead th { background: #e2e8f0; color: #000; font-weight: 700; text-transform: uppercase; font-size: 0.7rem; }
@@ -70,7 +71,6 @@
         .header-total { border-left: 2px solid #000 !important; }
         .cell-total { border-left: 2px solid #000 !important; font-weight: bold; background-color: #f1f5f9; }
 
-        /* Print */
         @media print {
             .sidebar, .input-panel, .tool-btn, .nav-links { display: none !important; }
             .main, .content-area { overflow: visible; height: auto; display: block; padding: 0; background: white; }
@@ -140,13 +140,13 @@
         import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        // --- 1. DATA CONFIGURATION ---
         const SDO_LIST = [
             "Alaminos City", "Batac City", "Candon City", "Dagupan City", "Ilocos Norte", "Ilocos Sur", 
             "Laoag City", "La Union", "Pangasinan I", "Pangasinan II", "San Carlos City", 
             "San Fernando City", "Urdaneta City", "Vigan City"
         ];
 
-        // *** COMPLETE SPORTS DATABASE ***
         const EVENTS_DATA = {
             "ELEMENTARY": {
                 // Regular Sports
@@ -166,7 +166,7 @@
                 "SOFTBALL (GIRLS)": ["Team"],
                 "SWIMMING": ["50M Back Stroke", "50M Breaststroke", "50M Butterfly", "50M Free Style", "100M Back Stroke", "100M Free Style", "200M Freestyle", "200M Individual Medley", "400M Free Style", "4x50M Medley Relay", "4x100M Free Style Relay", "4x100M Medley Relay"],
                 "TABLE TENNIS": ["Singles", "Doubles", "Mixed Doubles"],
-                "TAEKWONDO": ["Over 144cm to 150cm", "Over 152cm to 158cm", "Over 160cm", "Group A – Individual", "Group B - Individual", "Team - Event", "Mix Pair"],
+                "TAEKWONDO": ["Over 144cm to 150cm", "Over 152cm to 158cm", "Over 160cm", "Group A – Individual", "Group A - Individual", "Group B - Individual", "Team - Event", "Mix Pair"],
                 "TENNIS": ["Singles", "Doubles"],
                 "VOLLEYBALL": ["Team"],
                 
@@ -420,25 +420,35 @@
             }));
         }
 
-        // --- 9. SPORT MATRIX RENDER (UPDATED: Smart Gender Logic) ---
+        // --- 9. SPORT MATRIX RENDER (UPDATED WITH EXACT FORMATTING) ---
         window.renderSportMatrix = (category, sport) => {
             CURRENT_VIEW = { type: 'sport', cat: category, sport: sport };
             const display = document.getElementById('mainDisplay');
-            display.innerHTML = `<div class="section-title">${category} - ${sport}</div>`;
+            display.innerHTML = `<div class="section-title" style="text-transform:uppercase;">${category} - ${sport.replace("(DEMO)", " (DEMO)")}</div>`;
 
             const subEvents = EVENTS_DATA[category][sport] || ["Result"];
 
-            // Determine which tables to show based on Sport Name Constraints
+            // Logic to determine which gender tables to show
             let gendersToShow = ['BOYS', 'GIRLS'];
             if (sport.includes('(BOYS)') || sport.includes('MAG')) gendersToShow = ['BOYS'];
             if (sport.includes('(GIRLS)') || sport.includes('WAG') || sport.includes('RG')) gendersToShow = ['GIRLS'];
 
             gendersToShow.forEach(gender => {
                 const tableId = `tbl-${category}-${sport}-${gender}`.replace(/[^a-zA-Z0-9]/g, '');
+                
+                // --- TITLE FORMATTING LOGIC ---
+                // 1. Remove "(DEMO)" temporarily
+                let cleanSport = sport.replace("(DEMO)", "").trim();
+                // 2. Remove redundant gender tags from name (e.g. "BASEBALL (BOYS)")
+                cleanSport = cleanSport.replace("(BOYS)", "").replace("(GIRLS)", "").trim();
+                // 3. Construct Title: "ARCHERY - BOYS" or "ARCHERY - BOYS (DEMO)"
+                let tableTitle = `${cleanSport} - ${gender}`;
+                if(sport.includes("(DEMO)")) tableTitle += " (DEMO)";
+
                 let tableHTML = `
                     <div class="table-wrapper">
                         <div class="table-header-tools">
-                            <h3 style="margin:0; font-size:1.1rem; color:#000; text-transform:uppercase;">${gender} DIVISION</h3>
+                            <h3 style="margin:0; font-size:1.2rem; color:#000; text-transform:uppercase; font-weight:800;">${tableTitle}</h3>
                             <div>
                                 <button class="tool-btn" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
                                 <button class="tool-btn" onclick="window.exportToExcel('${tableId}')"><i class="fas fa-file-excel"></i> Excel</button>
