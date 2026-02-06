@@ -318,15 +318,16 @@
         const assignmentGroup = document.getElementById('assignmentGroup');
 
         // 5. SECURITY CHECK & LOAD DATA
-        onAuthStateChanged(auth, (user) => {
-            if (!user) {
-                // If not logged in, go back to login page
-                window.location.href = "index.html"; 
-            } else {
-                console.log("Admin Logged In:", user.email);
-                loadUsers();
-            }
-        });
+        // Security Check (Corrected)
+onAuthStateChanged(auth, (user) => {
+    if (!user) {
+        // Go up one folder to find the login page
+        window.location.href = "../index.html"; 
+    } else {
+        console.log("Admin Logged In:", user.email);
+        loadUsers();
+    }
+});
 
         // 6. FUNCTION: LOAD USERS
         async function loadUsers() {
@@ -474,7 +475,7 @@
         logoutBtn.addEventListener('click', (e) => {
             e.preventDefault();
             signOut(auth).then(() => {
-                window.location.href = "index.html"; // Go back to login
+               window.location.href = "../index.html";
             });
         });
 
