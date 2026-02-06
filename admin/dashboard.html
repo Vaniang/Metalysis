@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | R1AA System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* --- CSS STYLES --- */
+        :root {
+            --primary: #0056b3; /* DepEd Blue */
+            --dark: #1e293b;
+            --light: #f1f5f9;
+            --white: #ffffff;
+            --gray: #64748b;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--light); color: var(--dark); }
+
+        .dashboard-container { display: flex; height: 100vh; }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 260px;
+            background: var(--dark);
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            transition: 0.3s;
+        }
+
+        .brand {
+            padding: 25px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .brand i { color: #fdd835; }
+
+        .nav-links { flex: 1; padding-top: 20px; }
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 25px;
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: 0.2s;
+            font-size: 0.95rem;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            background: #334155;
+            color: var(--white);
+            border-left: 4px solid var(--primary);
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+        }
+        h1 { font-size: 1.8rem; font-weight: 600; }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+        .btn-primary:hover { background: #004494; }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+
+        .stat-card {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid var(--primary);
+        }
+        .stat-card h3 { color: var(--gray); font-size: 0.9rem; margin-bottom: 10px; font-weight: 600; }
+        .stat-card p { font-size: 2.2rem; font-weight: 700; color: var(--dark); }
+
+        /* Table Styles */
+        .table-container {
+            background: var(--white);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 16px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        th { color: var(--gray); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+        tr:last-child td { border-bottom: none; }
+        
+        .badge {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .badge.RSAC { background: #dbeafe; color: #1e40af; }
+        .badge.TABULATION { background: #fce7f3; color: #9d174d; }
+        .badge.SOCIAL { background: #fae8ff; color: #86198f; }
+        .badge.ADMIN { background: #dcfce7; color: #166534; }
+
+        .btn-delete {
+            background: #fee2e2;
+            color: #ef4444;
+            border: none;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-delete:hover { background: #ef4444; color: white; }
+
+        /* Modal Styles */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 100; 
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            height: 100%; 
+            background-color: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .close { color: #aaa; float: right; font-size: 28px; font-weight: bold; cursor: pointer; }
+        .close:hover { color: #000; }
+        
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+        }
+        .form-group input:focus, .form-group select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 86, 179, 0.1);
+        }
+        .modal h2 { margin-bottom: 20px; color: var(--dark); }
+        .btn-submit { width: 100%; justify-content: center; }
+
+        /* Loading */
+        .loading-text { text-align: center; color: var(--gray); font-style: italic; }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="brand">
+                <i class="fas fa-medal"></i>
+                <span>R1AA Admin</span>
+            </div>
+            
+            <nav class="nav-links">
+                <a href="#" class="active"><i class="fas fa-users-cog"></i> User Management</a>
+                <a href="#"><i class="fas fa-database"></i> Database Backup</a>
+                <a href="#" id="logoutBtn" style="margin-top: auto; border-top: 1px solid #334155;"><i class="fas fa-sign-out-alt"></i> Logout</a>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header>
+                <div>
+                    <h1>System Users</h1>
+                    <p style="color: var(--gray);">Manage access for RSAC, Tabulation, and Media teams.</p>
+                </div>
+                <button class="btn-primary" id="openAddUserModal">
+                    <i class="fas fa-plus"></i> Add New User
+                </button>
+            </header>
+
+            <div class="stats-grid">
+                <div class="stat-card" style="border-left-color: var(--primary);">
+                    <h3>Total Users</h3>
+                    <p id="totalUsersCount">0</p>
+                </div>
+                <div class="stat-card" style="border-left-color: var(--success);">
+                    <h3>RSAC Officers</h3>
+                    <p id="rsacCount">0</p>
+                </div>
+                <div class="stat-card" style="border-left-color: var(--warning);">
+                    <h3>Tabulators</h3>
+                    <p id="tabCount">0</p>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Assignment</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                        <tr><td colspan="4" class="loading-text">Connecting to R1AA Database...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <div id="addUserModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Create New Account</h2>
+            <form id="createUserForm">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" id="newEmail" placeholder="officer@deped.gov.ph" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="newPassword" placeholder="Minimum 6 characters" required>
+                </div>
+                <div class="form-group">
+                    <label>Role</label>
+                    <select id="newRole" required>
+                        <option value="" disabled selected>Select Role...</option>
+                        <option value="RSAC">RSAC (Screening)</option>
+                        <option value="TABULATION">Tabulation (Scoring)</option>
+                        <option value="SOCIAL">Social Media</option>
+                        <option value="ADMIN">Administrator</option>
+                    </select>
+                </div>
+                <div class="form-group" id="assignmentGroup" style="display:none;">
+                    <label id="assignmentLabel">Assignment</label>
+                    <input type="text" id="newAssignment" placeholder="e.g. Ilocos Norte or Basketball">
+                </div>
+                <button type="submit" class="btn-primary btn-submit">Create Account</button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        // 1. IMPORT FIREBASE (Using CDN for single file compatibility)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signOut, createUserWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getFirestore, collection, getDocs, doc, setDoc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // 2. CONFIGURATION
+        const firebaseConfig = {
+            apiKey: "AIzaSyDfhfZ_c8wbTTviu4MrhvbRknqzyBkzI_s",
+            authDomain: "metalysis-f38ef.firebaseapp.com",
+            projectId: "metalysis-f38ef",
+            storageBucket: "metalysis-f38ef.firebasestorage.app",
+            messagingSenderId: "666983988939",
+            appId: "1:666983988939:web:f70937a2572ed08015a54e",
+            measurementId: "G-96ZPLMV4J7"
+        };
+
+        // 3. INITIALIZE APPS
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        // Secondary App for creating users without logging out
+        const secondaryApp = initializeApp(firebaseConfig, "Secondary");
+        const secondaryAuth = getAuth(secondaryApp);
+
+        // 4. DOM ELEMENTS
+        const userTableBody = document.getElementById('userTableBody');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const modal = document.getElementById('addUserModal');
+        const openModalBtn = document.getElementById('openAddUserModal');
+        const closeModalSpan = document.getElementsByClassName("close")[0];
+        const createUserForm = document.getElementById('createUserForm');
+        const newRoleSelect = document.getElementById('newRole');
+        const assignmentGroup = document.getElementById('assignmentGroup');
+
+        // 5. SECURITY CHECK & LOAD DATA
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                // If not logged in, go back to login page
+                window.location.href = "index.html"; 
+            } else {
+                console.log("Admin Logged In:", user.email);
+                loadUsers();
+            }
+        });
+
+        // 6. FUNCTION: LOAD USERS
+        async function loadUsers() {
+            userTableBody.innerHTML = '<tr><td colspan="4" class="loading-text">Loading users...</td></tr>';
+            
+            try {
+                const q = query(collection(db, "users")); // Optional: orderBy('createdAt') if you add that field
+                const querySnapshot = await getDocs(q);
+                
+                let html = "";
+                let counts = { total: 0, RSAC: 0, TABULATION: 0 };
+
+                if (querySnapshot.empty) {
+                    userTableBody.innerHTML = '<tr><td colspan="4" class="loading-text">No users found. Create one!</td></tr>';
+                    return;
+                }
+
+                querySnapshot.forEach((doc) => {
+                    const data = doc.data();
+                    counts.total++;
+                    if(data.role === 'RSAC') counts.RSAC++;
+                    if(data.role === 'TABULATION') counts.TABULATION++;
+
+                    // Determine assignment text
+                    let assignmentText = "-";
+                    if(data.assigned_sdo) assignmentText = data.assigned_sdo;
+                    if(data.assigned_sport) assignmentText = data.assigned_sport;
+
+                    html += `
+                        <tr>
+                            <td style="font-weight: 500;">${data.email}</td>
+                            <td><span class="badge ${data.role}">${data.role}</span></td>
+                            <td>${assignmentText}</td>
+                            <td>
+                                <button class="btn-delete" onclick="window.deleteUser('${doc.id}')" title="Delete User">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                userTableBody.innerHTML = html;
+                
+                // Update Stats
+                document.getElementById('totalUsersCount').textContent = counts.total;
+                document.getElementById('rsacCount').textContent = counts.RSAC;
+                document.getElementById('tabCount').textContent = counts.TABULATION;
+
+            } catch (error) {
+                console.error("Error loading users:", error);
+                userTableBody.innerHTML = `<tr><td colspan="4" style="color:var(--danger)">Error: ${error.message}</td></tr>`;
+            }
+        }
+
+        // 7. FUNCTION: CREATE USER
+        createUserForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Get values
+            const email = document.getElementById('newEmail').value;
+            const password = document.getElementById('newPassword').value;
+            const role = document.getElementById('newRole').value;
+            const assignment = document.getElementById('newAssignment').value;
+            const submitBtn = createUserForm.querySelector('button');
+
+            // UI Loading state
+            const originalBtnText = submitBtn.textContent;
+            submitBtn.textContent = "Creating...";
+            submitBtn.disabled = true;
+
+            try {
+                // A. Create Auth User using SECONDARY instance (keeps admin logged in)
+                const userCredential = await createUserWithEmailAndPassword(secondaryAuth, email, password);
+                const newUserUid = userCredential.user.uid;
+
+                // B. Create Firestore Document
+                await setDoc(doc(db, "users", newUserUid), {
+                    email: email,
+                    role: role,
+                    ...(role === 'RSAC' && { assigned_sdo: assignment }),
+                    ...(role === 'TABULATION' && { assigned_sport: assignment }),
+                    createdAt: new Date()
+                });
+
+                // Success
+                alert("User created successfully!");
+                modal.style.display = "none";
+                createUserForm.reset();
+                assignmentGroup.style.display = 'none';
+                
+                // Refresh data
+                loadUsers();
+                
+                // Sign out secondary auth immediately
+                await signOut(secondaryAuth);
+
+            } catch (error) {
+                console.error("Error creating user:", error);
+                let msg = error.message;
+                if(error.code === 'auth/email-already-in-use') msg = "That email is already registered.";
+                alert("Error: " + msg);
+            } finally {
+                submitBtn.textContent = originalBtnText;
+                submitBtn.disabled = false;
+            }
+        });
+
+        // 8. FUNCTION: DELETE USER
+        // We attach this to 'window' so the HTML onclick="" can see it
+        window.deleteUser = async (id) => {
+            if(confirm("Are you sure? This removes the user from the database. \n\nNOTE: To fully block access, you must also disable/delete the account in the Firebase Auth Console.")) {
+                try {
+                    await deleteDoc(doc(db, "users", id));
+                    loadUsers(); // Refresh
+                } catch (err) {
+                    alert("Error deleting: " + err.message);
+                }
+            }
+        };
+
+        // 9. UI INTERACTIONS
+        // Show/Hide Assignment Input based on Role
+        newRoleSelect.addEventListener('change', (e) => {
+            const role = e.target.value;
+            if (role === 'RSAC') {
+                assignmentGroup.style.display = 'block';
+                document.getElementById('assignmentLabel').textContent = "Assigned SDO (e.g., Ilocos Norte)";
+                document.getElementById('newAssignment').placeholder = "Enter SDO Name";
+            } else if (role === 'TABULATION') {
+                assignmentGroup.style.display = 'block';
+                document.getElementById('assignmentLabel').textContent = "Assigned Sport (e.g., Basketball)";
+                document.getElementById('newAssignment').placeholder = "Enter Sport Name";
+            } else {
+                assignmentGroup.style.display = 'none';
+            }
+        });
+
+        // Modal Open/Close
+        openModalBtn.onclick = () => modal.style.display = "block";
+        closeModalSpan.onclick = () => modal.style.display = "none";
+        window.onclick = (event) => { if (event.target == modal) modal.style.display = "none"; }
+
+        // Logout
+        logoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            signOut(auth).then(() => {
+                window.location.href = "index.html"; // Go back to login
+            });
+        });
+
+    </script>
+</body>
+</html>
