@@ -60,7 +60,7 @@
         .r1aa-table { width: max-content; min-width: 50%; border-collapse: collapse; border-spacing: 0; font-family: 'Arial', sans-serif; }
         .r1aa-table th, .r1aa-table td { border: 1px solid #475569; padding: 6px 8px; text-align: center; font-size: 0.75rem; }
         .r1aa-table thead th { background: #e2e8f0; color: #000; font-weight: 700; text-transform: uppercase; font-size: 0.7rem; }
-        .col-sdo { text-align: left !important; font-weight: 700; background: #fff; position: sticky; left: 0; min-width: 200px; max-width: 250px; white-space: nowrap; border-right: 2px solid #000 !important; z-index: 5; }
+        .col-sdo { text-align: left !important; font-weight: 700; background: #fff; position: sticky; left: 0; min-width: 200px; max-width: 300px; white-space: nowrap; border-right: 2px solid #000 !important; z-index: 5; }
         .col-rank { font-weight: 700; background: #f1f5f9; }
         .header-total { border-left: 2px solid #000 !important; }
         .cell-total { border-left: 2px solid #000 !important; font-weight: bold; background-color: #f1f5f9; }
@@ -273,24 +273,20 @@
         // --- SIDEBAR ---
         function renderSidebar() {
             const nav = document.getElementById('sidebarNav');
-            let sidebarHTML = `
+            nav.innerHTML = `
                 <div class="nav-item"><div class="nav-header" onclick="renderDashboard()"><span><i class="fas fa-home" style="margin-right:8px;"></i> DASHBOARD</span></div></div>
                 <div class="nav-item"><div class="nav-header" onclick="renderAthleteList()"><span><i class="fas fa-users" style="margin-right:8px; color:#10b981;"></i> LIST OF ATHLETES</span></div></div>
                 <div class="nav-item"><div class="nav-header" onclick="renderManageResults()"><span><i class="fas fa-trash-alt" style="margin-right:8px; color:#ef4444;"></i> MANAGE RESULTS</span></div></div>
             `;
-            
             ['ELEMENTARY', 'SECONDARY'].forEach(cat => {
-                sidebarHTML += `<div class="nav-item"><div class="nav-header" onclick="toggleMenu('menu-${cat}')"><span><i class="fas fa-layer-group" style="margin-right:8px;"></i> ${cat}</span><i class="fas fa-chevron-down" style="font-size:0.7rem;"></i></div><div id="menu-${cat}" class="nav-sub">`;
-                Object.keys(EVENTS_DATA[cat]).sort().forEach(sport => { sidebarHTML += `<a onclick="renderSportMatrix('${cat}', '${sport}')">${sport}</a>`; });
-                sidebarHTML += `</div></div>`;
+                let html = `<div class="nav-item"><div class="nav-header" onclick="toggleMenu('menu-${cat}')"><span><i class="fas fa-layer-group" style="margin-right:8px;"></i> ${cat}</span><i class="fas fa-chevron-down" style="font-size:0.7rem;"></i></div><div id="menu-${cat}" class="nav-sub">`;
+                Object.keys(EVENTS_DATA[cat]).sort().forEach(sport => html += `<a onclick="renderSportMatrix('${cat}', '${sport}')">${sport}</a>`);
+                html += `</div></div>`; nav.innerHTML += html;
             });
-
-            // PARA GAMES (FIXED)
-            sidebarHTML += `<div class="nav-item"><div class="nav-header" onclick="toggleMenu('menu-PARA')"><span><i class="fas fa-wheelchair" style="margin-right:8px;"></i> PARA GAMES</span><i class="fas fa-chevron-down" style="font-size:0.7rem;"></i></div><div id="menu-PARA" class="nav-sub">`;
-            Object.keys(EVENTS_DATA["PARA GAMES"]).sort().forEach(sport => { sidebarHTML += `<a onclick="renderSportMatrix('PARA GAMES', '${sport}')">${sport}</a>`; });
-            sidebarHTML += `</div></div>`;
-
-            sidebarHTML += `
+            nav.innerHTML += `
+                <div class="nav-item"><div class="nav-header" onclick="toggleMenu('menu-PARA')"><span><i class="fas fa-wheelchair" style="margin-right:8px;"></i> PARA GAMES</span><i class="fas fa-chevron-down" style="font-size:0.7rem;"></i></div><div id="menu-PARA" class="nav-sub">`;
+                Object.keys(EVENTS_DATA["PARA GAMES"]).sort().forEach(sport => { nav.innerHTML += `<a onclick="renderSportMatrix('PARA GAMES', '${sport}')">${sport}</a>`; });
+            nav.innerHTML += `</div></div>
                 <div class="nav-item">
                     <div class="nav-header" onclick="toggleMenu('menu-SUMMARY')"><span><i class="fas fa-chart-pie" style="margin-right:8px;"></i> SUMMARY</span><i class="fas fa-chevron-down" style="font-size:0.7rem;"></i></div>
                     <div id="menu-SUMMARY" class="nav-sub">
@@ -303,8 +299,6 @@
                 </div>
                 <div class="nav-item"><div class="nav-header" onclick="renderProtests()"><span style="color:#ef4444;"><i class="fas fa-gavel" style="margin-right:8px;"></i> PROTESTS</span></div></div>
             `;
-            
-            nav.innerHTML = sidebarHTML;
         }
         renderSidebar();
 
@@ -328,7 +322,10 @@
         window.updateSubEventOptions = () => {
             const cat = document.getElementById('inpCategory').value; const evt = document.getElementById('inpEvent').value; const subSelect = document.getElementById('inpSubEvent');
             subSelect.innerHTML = '<option value="" disabled selected>Sub-Event</option>';
-            if (EVENTS_DATA[cat] && EVENTS_DATA[cat][evt]) { EVENTS_DATA[cat][evt].forEach(sub => { const opt = document.createElement('option'); opt.value = sub; opt.textContent = sub; subSelect.appendChild(opt); }); }
+            // Special handling for Para Games to list sub-events properly
+            if (EVENTS_DATA[cat] && EVENTS_DATA[cat][evt]) { 
+                EVENTS_DATA[cat][evt].forEach(sub => { const opt = document.createElement('option'); opt.value = sub; opt.textContent = sub; subSelect.appendChild(opt); }); 
+            }
             window.filterAthletesBySDO();
         };
 
@@ -433,6 +430,9 @@
             if (sport.includes('(BOYS)') || sport.includes('MAG')) gendersToShow = ['BOYS'];
             if (sport.includes('(GIRLS)') || sport.includes('WAG') || sport.includes('RG')) gendersToShow = ['GIRLS'];
 
+            // Force Para Games to show both tables if generic
+            if (category === 'PARA GAMES' && !sport.includes('Boys') && !sport.includes('Girls')) gendersToShow = ['BOYS', 'GIRLS'];
+
             gendersToShow.forEach(gender => {
                 const tableId = `tbl-${category}-${sport}-${gender}`.replace(/[^a-zA-Z0-9]/g, '');
                 let cleanSport = sport.replace("(DEMO)", "").replace("(BOYS)", "").replace("(GIRLS)", "").trim();
@@ -447,44 +447,74 @@
             });
         };
 
-        // --- NEW: SUMMARY MATRIX (SPLIT BY GENDER + SEPARATE DEMO TABLES) ---
+        // --- NEW: SUMMARY MATRIX (FIXED FOR PARA GAMES) ---
         window.renderSummaryMatrix = (category) => {
             CURRENT_VIEW = { type: 'summary_matrix', cat: category }; switchView('result');
             const display = document.getElementById('mainDisplay');
+            
+            // For Para, we iterate through the Sub-Events as rows
+            const isPara = category === 'PARA GAMES';
             const sports = Object.keys(EVENTS_DATA[category]).sort();
             
-            // Separation of Regular vs Demo
+            // Regular separation
             const regularSports = sports.filter(s => !s.includes('(DEMO)'));
             const demoSports = sports.filter(s => s.includes('(DEMO)'));
 
             const generateTable = (title, sportList) => {
                 if(sportList.length === 0) return "";
                 let sdoTotals = {}; SDO_LIST.forEach(sdo => sdoTotals[sdo] = {G:0, S:0, B:0});
-                let html = `<div class="section-title" style="margin-top:30px;">${title}</div><div class="table-wrapper" style="overflow-x:auto;"><table class="r1aa-table"><thead><tr><th rowspan="2" class="col-sdo" style="min-width:180px;">EVENTS</th>`;
+                let html = `<div class="section-title" style="margin-top:30px;">${title}</div><div class="table-wrapper" style="overflow-x:auto;"><table class="r1aa-table"><thead><tr><th rowspan="2" class="col-sdo" style="min-width:250px;">EVENTS</th>`;
                 SDO_LIST.forEach(sdo => { html += `<th colspan="3">${sdo.replace(" City", "").replace("Pangasinan", "Pang")}</th>`; });
                 html += `</tr><tr>`;
                 SDO_LIST.forEach(() => { html += `<th style="width:25px;">G</th><th style="width:25px;">S</th><th style="width:25px;">B</th>`; });
                 html += `</tr></thead><tbody>`;
 
                 sportList.forEach(sport => {
-                    let gendersToShow = ['BOYS', 'GIRLS'];
-                    if (sport.includes('(BOYS)') || sport.includes('MAG') || sport.includes('FOOTBALL') || sport.includes('BASEBALL')) gendersToShow = ['BOYS'];
-                    if (sport.includes('(GIRLS)') || sport.includes('WAG') || sport.includes('RG') || sport.includes('SOFTBALL')) gendersToShow = ['GIRLS'];
+                    // IF PARA GAMES: Iterate through sub-events as rows
+                    if(isPara) {
+                       const subEvents = EVENTS_DATA[category][sport];
+                       subEvents.forEach(sub => {
+                           // Determine if this sub-event is specific or generic
+                           let genders = ['BOYS', 'GIRLS'];
+                           if (sub.includes('Boys')) genders = ['BOYS'];
+                           if (sub.includes('Girls')) genders = ['GIRLS'];
+                           
+                           genders.forEach(gender => {
+                               let displayLabel = `${sub} - ${gender}`;
+                               html += `<tr><td class="col-sdo" style="font-size:0.7rem;">${displayLabel}</td>`;
+                               SDO_LIST.forEach(sdo => {
+                                   let g=0, s=0, b=0;
+                                   GLOBAL_DATA.filter(d => d.category===category && d.event===sport && d.subEvent===sub && d.gender===gender && d.sdo===sdo)
+                                              .forEach(d => { if(d.medal==='GOLD')g++; if(d.medal==='SILVER')s++; if(d.medal==='BRONZE')b++; });
+                                   sdoTotals[sdo].G += g; sdoTotals[sdo].S += s; sdoTotals[sdo].B += b;
+                                   html += `<td>${g||''}</td><td>${s||''}</td><td style="border-right:1px solid #475569;">${b||''}</td>`;
+                               });
+                               html += `</tr>`;
+                           });
+                       });
+                    } 
+                    // ELSE (Regular/Secondary): Iterate Sport Name as rows
+                    else {
+                        let gendersToShow = ['BOYS', 'GIRLS'];
+                        if (sport.includes('(BOYS)') || sport.includes('MAG') || sport.includes('FOOTBALL') || sport.includes('BASEBALL')) gendersToShow = ['BOYS'];
+                        if (sport.includes('(GIRLS)') || sport.includes('WAG') || sport.includes('RG') || sport.includes('SOFTBALL')) gendersToShow = ['GIRLS'];
 
-                    gendersToShow.forEach(gender => {
-                        let label = sport.replace("(DEMO)", "").replace("(BOYS)", "").replace("(GIRLS)", "").trim();
-                        let displayLabel = `${label} (${gender})`;
-                        
-                        html += `<tr><td class="col-sdo" style="font-size:0.7rem;">${displayLabel}</td>`;
-                        SDO_LIST.forEach(sdo => {
-                            let g=0, s=0, b=0;
-                            GLOBAL_DATA.filter(d => d.category === category && d.event === sport && d.gender === gender && d.sdo === sdo)
-                                       .forEach(d => { if(d.medal==='GOLD')g++; if(d.medal==='SILVER')s++; if(d.medal==='BRONZE')b++; });
-                            sdoTotals[sdo].G += g; sdoTotals[sdo].S += s; sdoTotals[sdo].B += b;
-                            html += `<td>${g||''}</td><td>${s||''}</td><td style="border-right:1px solid #475569;">${b||''}</td>`;
+                        gendersToShow.forEach(gender => {
+                            let label = sport.replace("(DEMO)", "").replace("(BOYS)", "").replace("(GIRLS)", "").trim();
+                            let displayLabel = `${label} - ${gender}`;
+                            if(sport.includes("(DEMO)")) displayLabel += " (DEMO)";
+
+                            html += `<tr><td class="col-sdo" style="font-size:0.7rem;">${displayLabel}</td>`;
+                            SDO_LIST.forEach(sdo => {
+                                let g=0, s=0, b=0;
+                                GLOBAL_DATA.filter(d => d.category === category && d.event === sport && d.gender === gender && d.sdo === sdo)
+                                           .forEach(d => { if(d.medal==='GOLD')g++; if(d.medal==='SILVER')s++; if(d.medal==='BRONZE')b++; });
+                                sdoTotals[sdo].G += g; sdoTotals[sdo].S += s; sdoTotals[sdo].B += b;
+                                html += `<td>${g||''}</td><td>${s||''}</td><td style="border-right:1px solid #475569;">${b||''}</td>`;
+                            });
+                            html += `</tr>`;
                         });
-                        html += `</tr>`;
-                    });
+                    }
                 });
 
                 html += `<tr class="row-total"><td class="col-sdo">TOTAL</td>`;
