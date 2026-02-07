@@ -19,7 +19,7 @@
         body { font-family: 'Segoe UI', sans-serif; background: var(--light); margin: 0; display: flex; height: 100vh; overflow: hidden; color: #334155; }
 
         /* SIDEBAR */
-        .sidebar { width: 280px; background: var(--dark); color: white; display: flex; flex-direction: column; flex-shrink: 0; }
+        .sidebar { width: 260px; background: var(--dark); color: white; display: flex; flex-direction: column; flex-shrink: 0; }
         .brand { padding: 25px; font-size: 1.2rem; font-weight: 800; border-bottom: 1px solid #334155; display: flex; align-items: center; gap: 10px; letter-spacing: 1px; }
         .brand i { color: var(--social-pink); }
         .nav-links { flex: 1; padding-top: 20px; }
@@ -45,7 +45,7 @@
         .feed-sdo { font-size: 0.8rem; color: #64748b; }
 
         /* RIGHT: WORKSPACE */
-        .workspace { flex: 1; background: #cbd5e1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; overflow: hidden; position: relative; }
+        .workspace { flex: 1; background: #cbd5e1; display: flex; flex-direction: column; align-items: center; padding: 40px; overflow-y: auto; }
         
         /* --- NEW GRAPHIC DESIGN --- */
         .social-card {
@@ -61,7 +61,9 @@
             border: 8px solid #fbbf24; /* Gold Border */
             overflow: hidden;
             flex-shrink: 0;
-            transform: scale(0.65); /* Scale down to fit screen preview */
+            transform: scale(0.6); /* Viewport Scale */
+            margin-bottom: -120px; /* Counteract scale margin */
+            margin-top: -100px;
         }
 
         /* Abstract Waves Background */
@@ -117,15 +119,22 @@
         .theme-BRONZE .medal-icon-lg { color: #d97706; }
         .theme-BRONZE .event-name-lg { color: #d97706; }
 
-        /* Action Bar */
-        .action-bar { position: absolute; bottom: 30px; display: flex; gap: 15px; z-index: 100; }
-        .action-btn { padding: 12px 25px; border-radius: 50px; border: none; font-weight: 700; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.2); transition: 0.2s; display: flex; align-items: center; gap: 10px; }
-        .btn-dl { background: #fbbf24; color: #0f172a; } .btn-dl:hover { transform: translateY(-3px); }
-        .btn-copy { background: white; color: #334155; } .btn-copy:hover { transform: translateY(-3px); }
-
-        /* Caption Hidden Input */
-        #captionText { position: absolute; opacity: 0; pointer-events: none; }
+        /* --- RESTORED CAPTION TOOLS --- */
+        .caption-container { 
+            width: 600px; background: white; padding: 25px; 
+            border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+            margin-top: 30px; z-index: 50; 
+        }
+        .tools-title { font-size: 0.9rem; font-weight: 800; color: #475569; margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center; }
+        .caption-area { width: 100%; height: 100px; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: 'Segoe UI', sans-serif; font-size: 0.9rem; resize: none; background: #f8fafc; color: #334155; margin-bottom: 15px; }
+        .caption-area:focus { outline: none; border-color: var(--primary); background: white; }
         
+        .action-row { display: flex; gap: 10px; }
+        .action-btn { flex: 1; padding: 12px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; font-size: 0.9rem; }
+        
+        .btn-dl { background: var(--primary); color: white; } .btn-dl:hover { background: #1e40af; }
+        .btn-copy { background: #e2e8f0; color: #334155; } .btn-copy:hover { background: #cbd5e1; }
+
         /* Tally View */
         #tallyView { display: none; padding: 40px; width: 100%; overflow-y: auto; }
         .tally-table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-radius: 12px; overflow: hidden; }
@@ -209,12 +218,22 @@
                     </div>
                 </div>
 
-                <div class="action-bar">
-                    <button class="action-btn btn-dl" onclick="downloadCard()"><i class="fas fa-download"></i> Download Graphic</button>
-                    <button class="action-btn btn-copy" onclick="copyCaption()"><i class="far fa-copy"></i> Copy Caption</button>
+                <div class="caption-container">
+                    <div class="tools-title">
+                        <span><i class="fas fa-pen-nib"></i> CAPTION GENERATOR</span>
+                        <span style="font-weight:400; font-size:0.75rem; color:#94a3b8;">Auto-generated</span>
+                    </div>
+                    <textarea id="captionText" class="caption-area" readonly>Select a winner to generate caption...</textarea>
+                    <div class="action-row">
+                        <button class="action-btn btn-dl" onclick="downloadCard()">
+                            <i class="fas fa-download"></i> DOWNLOAD GRAPHIC
+                        </button>
+                        <button class="action-btn btn-copy" onclick="copyCaption()">
+                            <i class="far fa-copy"></i> COPY CAPTION
+                        </button>
+                    </div>
                 </div>
-                
-                <textarea id="captionText" readonly></textarea>
+
             </div>
         </div>
 
@@ -322,7 +341,11 @@
             
             // Temporarily scale up for high-res download
             const originalTransform = card.style.transform;
+            const originalMargin = card.style.marginTop;
+            
+            // Reset adjustments for clean capture
             card.style.transform = "scale(1)"; 
+            card.style.marginTop = "0";
             
             html2canvas(card, { scale: 2, useCORS: true }).then(canvas => {
                 const link = document.createElement('a');
@@ -331,7 +354,8 @@
                 link.click();
                 
                 // Restore preview scale
-                card.style.transform = originalTransform || "scale(0.65)";
+                card.style.transform = originalTransform || "scale(0.6)";
+                card.style.marginTop = originalMargin || "-100px";
             });
         };
 
