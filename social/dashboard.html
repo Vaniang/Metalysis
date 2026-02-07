@@ -14,8 +14,6 @@
             --dark: #0f172a; --light: #f1f5f9; --white: #ffffff;
             --gold: #fbbf24; --silver: #cbd5e1; --bronze: #b45309;
             --social-pink: #ec4899;
-            --r1aa-red: #dc2626;
-            --r1aa-yellow: #facc15;
         }
         * { box-sizing: border-box; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--light); margin: 0; display: flex; height: 100vh; overflow: hidden; color: #334155; }
@@ -49,7 +47,7 @@
         /* RIGHT: WORKSPACE */
         .workspace { flex: 1; background: #cbd5e1; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 40px; overflow-y: auto; position: relative; }
         
-        /* --- NEW GRAPHIC DESIGN (Using Template) --- */
+        /* --- GRAPHIC DESIGN --- */
         .social-card {
             width: 800px; height: 800px; /* Square */
             background-color: white;
@@ -69,31 +67,25 @@
             margin-bottom: -250px; margin-top: -80px;
         }
 
-        /* Top Header Area (Invisible container for the logo in the BG) */
+        .wave-bg { position: absolute; width: 100%; height: 100%; top: 0; left: 0; z-index: 0; opacity: 0.6; pointer-events: none; }
+        
+        /* Header Section */
         .card-header { 
             width: 100%; height: 200px; 
             display: flex; justify-content: center; align-items: center; 
             margin-top: 20px;
         }
-        /* Optional: If you want to overlay a different logo */
         .header-logo-overlay { height: 160px; object-fit: contain; cursor: pointer; transition: 0.2s; }
         .header-logo-overlay:hover { transform: scale(1.05); filter: drop-shadow(0 0 10px white); }
 
         /* BANNER */
         .congrats-banner {
             background: linear-gradient(90deg, #ea580c 0%, #dc2626 100%);
-            color: white;
-            width: 100%;
-            padding: 10px 0;
-            font-family: 'Oswald', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
-            margin-top: -10px; /* Pull up closer to logo area */
-            z-index: 5;
+            color: white; width: 100%; padding: 10px 0;
+            font-family: 'Oswald', sans-serif; font-size: 2.5rem; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 2px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+            margin-top: -10px; z-index: 5;
         }
 
         /* MAIN CONTENT AREA */
@@ -104,54 +96,42 @@
             padding: 20px; z-index: 5;
         }
 
-        /* Event Title Styling */
         .event-name-lg { 
-            font-family: 'Oswald', sans-serif; 
-            font-size: 3.5rem; font-weight: 800; 
-            text-transform: uppercase; 
-            color: #fbbf24; /* Default Gold */
-            -webkit-text-stroke: 1px #b45309;
-            text-shadow: 2px 2px 0px #b45309;
+            font-family: 'Oswald', sans-serif; font-size: 3.5rem; font-weight: 800; 
+            text-transform: uppercase; color: #fbbf24; 
+            -webkit-text-stroke: 1px #b45309; text-shadow: 2px 2px 0px #b45309;
             margin-bottom: 5px; line-height: 1.1;
         }
         .category-text { 
-            font-family: 'Montserrat', sans-serif; 
-            font-size: 1.2rem; font-weight: 700; 
+            font-family: 'Montserrat', sans-serif; font-size: 1.2rem; font-weight: 700; 
             text-transform: uppercase; letter-spacing: 3px; 
             color: white; margin-bottom: 25px; 
         }
 
         /* Winner Box */
         .winner-box {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 25px 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            width: 90%;
-            border-left: 10px solid #fbbf24;
-            display: flex; flex-direction: column; align-items: center;
+            background: rgba(255, 255, 255, 0.95); padding: 25px 40px;
+            border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 90%; border-left: 10px solid #fbbf24;
+            display: flex; flex-direction: column; align-items: center; position: relative;
         }
 
         .winner-name { 
-            font-size: 2.8rem; font-weight: 900; 
-            text-transform: uppercase; line-height: 1; 
+            font-size: 2.8rem; font-weight: 900; text-transform: uppercase; line-height: 1; 
             margin-bottom: 10px; color: #1e3a8a; 
         }
         .winner-sdo { 
-            font-size: 1.5rem; font-weight: 600; 
-            text-transform: uppercase; color: #dc2626; 
-            border-top: 2px solid #e2e8f0;
-            padding-top: 10px; width: 100%;
+            font-size: 1.5rem; font-weight: 600; text-transform: uppercase; color: #dc2626; 
+            border-top: 2px solid #e2e8f0; padding-top: 10px; width: 100%;
         }
 
-        /* Medal Icon Badge */
         .medal-badge {
             position: absolute; top: -40px; right: -20px;
             font-size: 80px; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3));
             transform: rotate(15deg);
         }
 
-        /* FOOTER SECTION (Logos) */
+        /* Footer Logos */
         .card-footer { 
             width: 100%; height: 130px; 
             display: flex; justify-content: center; align-items: center; gap: 20px; 
@@ -190,12 +170,50 @@
         .btn-dl { background: var(--primary); color: white; } .btn-dl:hover { background: #1e40af; }
         .btn-copy { background: #e2e8f0; color: #334155; } .btn-copy:hover { background: #cbd5e1; }
 
-        /* Tally View */
-        #tallyView { display: none; padding: 40px; width: 100%; overflow-y: auto; }
-        .tally-table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-radius: 12px; overflow: hidden; }
-        .tally-table th { background: #1e3a8a; color: white; padding: 15px; text-align: left; }
-        .tally-table td { padding: 12px 15px; border-bottom: 1px solid #e2e8f0; }
-        .rank-badge { background: #f1f5f9; padding: 4px 10px; border-radius: 4px; font-weight: 700; font-size: 0.8rem; }
+        /* TALLY & LIST VIEWS */
+        #tallyView, #awardsView { display: none; padding: 40px; width: 100%; overflow-y: auto; background: #f1f5f9; }
+        .section-header { font-size: 1.5rem; font-weight: 800; color: #1e3a8a; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
+        .tally-table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-radius: 12px; overflow: hidden; font-family: 'Segoe UI', sans-serif; }
+        .tally-table th { background: #1e3a8a; color: white; padding: 15px; text-align: left; font-weight: 700; text-transform: uppercase; font-size: 0.85rem; }
+        .tally-table td { padding: 12px 15px; border-bottom: 1px solid #e2e8f0; color: #334155; font-size: 0.9rem; }
+        .tally-table tr:nth-child(even) { background-color: #f8fafc; }
+        .rank-badge { background: #f1f5f9; padding: 4px 10px; border-radius: 4px; font-weight: 700; font-size: 0.8rem; color: #334155; }
+
+        .controls-bar { display: flex; gap: 10px; margin-bottom: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .control-input { padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; flex: 1; }
+        .control-select { padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 0.9rem; width: 200px; }
+        .control-btn { padding: 10px 20px; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; color: white; display: flex; align-items: center; gap: 8px; }
+        .btn-print { background: #64748b; } .btn-print:hover { background: #475569; }
+        .btn-excel { background: #10b981; } .btn-excel:hover { background: #059669; }
+
+        /* PIL UPDATES (NEWS GEN) VIEW */
+        #pilUpdatesView { display: none; padding: 40px; width: 100%; overflow-y: auto; background: #f1f5f9; }
+        .pil-container { max-width: 800px; margin: 0 auto; background: white; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); padding: 30px; }
+        .pil-header { border-bottom: 2px solid #f1f5f9; padding-bottom: 20px; margin-bottom: 25px; }
+        .pil-title { font-size: 1.5rem; font-weight: 800; color: #1e3a8a; }
+        .pil-desc { color: #64748b; font-size: 0.9rem; margin-top: 5px; }
+        
+        .pil-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+        .pil-full { grid-column: span 2; }
+        .pil-label { display: block; font-weight: 700; font-size: 0.8rem; color: #475569; margin-bottom: 8px; text-transform: uppercase; }
+        .pil-input { width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: inherit; transition: 0.2s; }
+        .pil-input:focus { border-color: var(--primary); outline: none; box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1); }
+        .pil-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #ec4899, #be185d); color: white; border: none; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 1rem; margin-top: 10px; transition: 0.2s; }
+        .pil-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(236, 72, 153, 0.3); }
+        
+        .pil-result { margin-top: 30px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; }
+        .pil-output { width: 100%; height: 150px; border: none; background: transparent; resize: none; font-family: 'Segoe UI', sans-serif; font-size: 1rem; color: #334155; line-height: 1.6; }
+        .pil-output:focus { outline: none; }
+        .pil-actions { display: flex; justify-content: flex-end; margin-top: 10px; }
+
+        @media print {
+            .sidebar, .feed-panel, .tools-panel, .caption-container, .controls-bar, .action-bar, .pil-container { display: none !important; }
+            .workspace, #tallyView, #awardsView { display: block !important; background: white !important; padding: 0 !important; width: 100% !important; overflow: visible !important; }
+            .social-card { display: none !important; } 
+            .tally-table { box-shadow: none !important; border: 1px solid #000; }
+            .tally-table th, .tally-table td { border: 1px solid #000 !important; color: black !important; }
+            .tally-table th { background-color: #eee !important; -webkit-print-color-adjust: exact; }
+        }
     </style>
 </head>
 <body>
@@ -210,6 +228,8 @@
         <div class="brand"><i class="fas fa-hashtag"></i> R1AA SOCIAL</div>
         <div class="nav-links">
             <div class="nav-item active" onclick="switchView('feed')" id="nav-feed"><i class="fas fa-bolt"></i> Live Feed & Graphics</div>
+            <div class="nav-item" onclick="switchView('updates')" id="nav-updates"><i class="fas fa-bullhorn"></i> PILUpdates Generator</div>
+            <div class="nav-item" onclick="switchView('awards')" id="nav-awards"><i class="fas fa-medal"></i> Athlete Awards List</div>
             <div class="nav-item" onclick="switchView('tally')" id="nav-tally"><i class="fas fa-list-ol"></i> Official Tally</div>
             <div class="nav-item" id="logoutBtn" style="margin-top: auto;"><i class="fas fa-sign-out-alt"></i> Sign Out</div>
         </div>
@@ -232,7 +252,6 @@
             </div>
 
             <div class="workspace">
-                
                 <div id="socialCard" class="social-card theme-GOLD">
                     
                     <div class="card-header">
@@ -283,12 +302,70 @@
                         </button>
                     </div>
                 </div>
-
             </div>
         </div>
 
+        <div id="updatesView" style="display: none; padding: 40px; width: 100%; overflow-y: auto;">
+            <div class="pil-container">
+                <div class="pil-header">
+                    <div class="pil-title"><i class="fas fa-newspaper"></i> PILUpdates Generator</div>
+                    <div class="pil-desc">Enter the 5Ws and 1H to instantly generate a news caption.</div>
+                </div>
+                
+                <div class="pil-grid">
+                    <div>
+                        <label class="pil-label">WHO</label>
+                        <input type="text" id="pilWho" class="pil-input" placeholder="e.g. Candon City Athletics Team">
+                    </div>
+                    <div>
+                        <label class="pil-label">WHAT</label>
+                        <input type="text" id="pilWhat" class="pil-input" placeholder="e.g. Secured the first gold medal">
+                    </div>
+                    <div>
+                        <label class="pil-label">WHERE</label>
+                        <input type="text" id="pilWhere" class="pil-input" placeholder="e.g. Quirino Stadium">
+                    </div>
+                    <div>
+                        <label class="pil-label">WHEN</label>
+                        <input type="text" id="pilWhen" class="pil-input" placeholder="e.g. Early this morning">
+                    </div>
+                    <div class="pil-full">
+                        <label class="pil-label">WHY / HOW (Context)</label>
+                        <textarea id="pilWhy" class="pil-input" style="height:80px;" placeholder="e.g. After a thrilling 100m sprint finish against Ilocos Norte"></textarea>
+                    </div>
+                </div>
+                
+                <button class="pil-btn" onclick="generateNews()">GENERATE UPDATE</button>
+                
+                <div class="pil-result">
+                    <label class="pil-label">GENERATED CAPTION</label>
+                    <textarea id="pilOutput" class="pil-output" readonly>Your news update will appear here...</textarea>
+                    <div class="pil-actions">
+                        <button class="action-btn btn-copy" onclick="copyPil()" style="width:auto; padding:8px 20px;"><i class="far fa-copy"></i> Copy</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="awardsView">
+            <div class="section-header">Athlete Awards List</div>
+            <div class="controls-bar">
+                <input type="text" id="awardSearch" class="control-input" placeholder="Search athlete name..." onkeyup="renderAwardsTable()">
+                <select id="awardFilterSDO" class="control-select" onchange="renderAwardsTable()">
+                    <option value="">All Delegations</option>
+                    <option>Alaminos City</option><option>Batac City</option><option>Candon City</option><option>Dagupan City</option>
+                    <option>Ilocos Norte</option><option>Ilocos Sur</option><option>Laoag City</option><option>La Union</option>
+                    <option>Pangasinan I</option><option>Pangasinan II</option><option>San Carlos City</option><option>San Fernando City</option>
+                    <option>Urdaneta City</option><option>Vigan City</option>
+                </select>
+                <button class="control-btn btn-print" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
+                <button class="control-btn btn-excel" onclick="exportAwardsCSV()"><i class="fas fa-file-excel"></i> Export CSV</button>
+            </div>
+            <div id="awardsTableContainer"></div>
+        </div>
+
         <div id="tallyView">
-            <h2 style="margin-bottom: 20px; color: #1e3a8a;">Overall Medal Tally</h2>
+            <h2 class="section-header">Overall Medal Tally</h2>
             <div id="tallyTableContainer"></div>
         </div>
 
@@ -362,6 +439,7 @@
                 generateCard(GLOBAL_DATA[0]);
             }
             renderTally();
+            renderAwardsTable();
         });
 
         // --- GRAPHIC GENERATOR ---
@@ -373,12 +451,36 @@
             document.getElementById('cardSDO').innerText = data.sdo;
 
             card.className = `social-card theme-${data.medal}`;
+            // const rankNum = data.medal === 'GOLD' ? '1' : data.medal === 'SILVER' ? '2' : '3';
+            // document.getElementById('rankNum').innerText = rankNum; // Not used in this template
 
             const medalEmoji = data.medal === 'GOLD' ? '🥇' : data.medal === 'SILVER' ? '🥈' : '🥉';
             const hashtags = `#R1AA2026 #OneRegionOneGoal #${data.sdo.replace(/\s/g, '')}`;
             const caption = `${medalEmoji} ${data.medal} MEDAL ALERT!\n\nCongratulations to ${data.athleteName || "our athlete"} from ${data.sdo} for winning ${data.medal} in ${data.event} (${data.category})!\n\n${hashtags}`;
             document.getElementById('captionText').value = caption;
         }
+
+        // --- PIL UPDATES GENERATOR ---
+        window.generateNews = () => {
+            const who = document.getElementById('pilWho').value.trim();
+            const what = document.getElementById('pilWhat').value.trim();
+            const where = document.getElementById('pilWhere').value.trim();
+            const when = document.getElementById('pilWhen').value.trim();
+            const why = document.getElementById('pilWhy').value.trim();
+            
+            if(!who || !what) { alert("Please fill in at least Who and What!"); return; }
+
+            const output = `🚨 PILUPDATES: ${what.toUpperCase()}!\n\n${who} has officially ${what.toLowerCase()} at ${where}, ${when}.\n\n${why}\n\nStay tuned for more updates! 📲\n\n#R1AA2026 #PILUpdates #Region1Sports`;
+            
+            document.getElementById('pilOutput').value = output;
+        };
+
+        window.copyPil = () => {
+            const copyText = document.getElementById("pilOutput");
+            copyText.select();
+            navigator.clipboard.writeText(copyText.value);
+            alert("Update copied!");
+        };
 
         // --- IMAGE UPLOAD LOGIC ---
         window.triggerUpload = (inputId) => { document.getElementById(inputId).click(); };
@@ -394,7 +496,7 @@
             }
         };
 
-        // --- DOWNLOAD & TALLY ---
+        // --- DOWNLOAD & ACTIONS ---
         window.downloadCard = () => {
             const card = document.getElementById('socialCard');
             const originalTransform = card.style.transform;
@@ -416,6 +518,63 @@
             });
         };
 
+        window.copyCaption = () => {
+            const copyText = document.getElementById("captionText");
+            copyText.select();
+            navigator.clipboard.writeText(copyText.value);
+            alert("Caption copied!");
+        };
+
+        // --- AWARDS TABLE LOGIC ---
+        window.renderAwardsTable = () => {
+            const search = document.getElementById('awardSearch').value.toLowerCase();
+            const sdoFilter = document.getElementById('awardFilterSDO').value;
+            const container = document.getElementById('awardsTableContainer');
+
+            let filtered = GLOBAL_DATA.filter(d => {
+                const matchName = (d.athleteName || "").toLowerCase().includes(search);
+                const matchSDO = sdoFilter ? d.sdo === sdoFilter : true;
+                return matchName && matchSDO;
+            });
+
+            if(filtered.length === 0) {
+                container.innerHTML = `<div style="text-align:center; padding:20px; color:#64748b;">No results found.</div>`;
+                return;
+            }
+
+            let html = `<table class="tally-table"><thead><tr><th>Athlete</th><th>Event</th><th>Medal</th><th>Delegation</th></tr></thead><tbody>`;
+            filtered.forEach(d => {
+                let color = d.medal === 'GOLD' ? '#b45309' : d.medal === 'SILVER' ? '#64748b' : '#a16207';
+                html += `<tr><td style="font-weight:700;">${d.athleteName || "Team"}</td><td>${d.event}</td><td style="color:${color}; font-weight:bold;">${d.medal}</td><td>${d.sdo}</td></tr>`;
+            });
+            html += `</tbody></table>`;
+            container.innerHTML = html;
+        }
+
+        window.exportAwardsCSV = () => {
+            const search = document.getElementById('awardSearch').value.toLowerCase();
+            const sdoFilter = document.getElementById('awardFilterSDO').value;
+            
+            let filtered = GLOBAL_DATA.filter(d => {
+                const matchName = (d.athleteName || "").toLowerCase().includes(search);
+                const matchSDO = sdoFilter ? d.sdo === sdoFilter : true;
+                return matchName && matchSDO;
+            });
+
+            let csv = "Athlete,Event,Medal,Delegation\n";
+            filtered.forEach(d => {
+                csv += `"${d.athleteName || 'Team'}","${d.event}","${d.medal}","${d.sdo}"\n`;
+            });
+
+            const link = document.createElement("a");
+            link.setAttribute("href", "data:text/csv;charset=utf-8," + encodeURI(csv));
+            link.setAttribute("download", "R1AA_Awards_List.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        };
+
+        // --- TALLY LOGIC ---
         function renderTally() {
             let tally = {};
             GLOBAL_DATA.forEach(d => {
@@ -431,23 +590,15 @@
             document.getElementById('tallyTableContainer').innerHTML = html;
         }
 
+        // --- NAVIGATION ---
         window.switchView = (view) => {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             document.getElementById('nav-'+view).classList.add('active');
-            if(view === 'feed') {
-                document.getElementById('feedView').style.display = 'flex';
-                document.getElementById('tallyView').style.display = 'none';
-            } else {
-                document.getElementById('feedView').style.display = 'none';
-                document.getElementById('tallyView').style.display = 'block';
-            }
-        };
-
-        window.copyCaption = () => {
-            const copyText = document.getElementById("captionText");
-            copyText.select();
-            navigator.clipboard.writeText(copyText.value);
-            alert("Caption copied!");
+            
+            ['feedView', 'tallyView', 'awardsView', 'updatesView'].forEach(v => document.getElementById(v).style.display = 'none');
+            
+            if(view === 'feed') document.getElementById('feedView').style.display = 'flex';
+            else document.getElementById(view + 'View').style.display = 'block';
         };
 
         function timeAgo(date) {
