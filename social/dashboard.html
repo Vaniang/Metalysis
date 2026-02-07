@@ -6,7 +6,6 @@
     <title>Social Media Dashboard | R1AA</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <style>
         /* --- CSS STYLES --- */
@@ -20,148 +19,197 @@
         body { font-family: 'Segoe UI', sans-serif; background: var(--light); margin: 0; display: flex; height: 100vh; overflow: hidden; color: #334155; }
 
         /* SIDEBAR */
-        .sidebar { width: 300px; background: white; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; z-index: 10; }
-        .feed-header { padding: 20px; border-bottom: 1px solid #e2e8f0; font-weight: 800; color: var(--dark); display: flex; justify-content: space-between; align-items: center; }
+        .sidebar { width: 260px; background: var(--dark); color: white; display: flex; flex-direction: column; flex-shrink: 0; }
+        .brand { padding: 25px; font-size: 1.2rem; font-weight: 800; border-bottom: 1px solid #334155; display: flex; align-items: center; gap: 10px; letter-spacing: 1px; }
+        .brand i { color: var(--social-pink); }
+        .nav-links { flex: 1; padding-top: 20px; }
+        .nav-item { padding: 15px 25px; cursor: pointer; color: #94a3b8; font-weight: 600; display: flex; align-items: center; gap: 12px; transition: 0.2s; border-left: 4px solid transparent; }
+        .nav-item:hover, .nav-item.active { background: #1e293b; color: white; border-left-color: var(--social-pink); }
+
+        /* MAIN LAYOUT */
+        .main { flex: 1; display: flex; overflow: hidden; }
         
-        /* Graphic Type Selector */
-        .mode-selector { display: flex; gap: 5px; padding: 10px 15px; border-bottom: 1px solid #e2e8f0; overflow-x: auto; }
-        .mode-btn { border: none; background: #f1f5f9; padding: 8px 12px; border-radius: 6px; font-size: 0.75rem; font-weight: 700; color: #64748b; cursor: pointer; white-space: nowrap; transition: 0.2s; }
-        .mode-btn.active { background: var(--primary); color: white; }
+        /* LEFT: LIVE FEED */
+        .feed-panel { width: 380px; background: white; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; z-index: 10; }
+        .feed-header { padding: 20px; border-bottom: 1px solid #e2e8f0; font-weight: 800; font-size: 0.9rem; color: var(--dark); display: flex; justify-content: space-between; align-items: center; letter-spacing: 0.5px; }
+        .live-badge { background: var(--social-pink); color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.65rem; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
         
-        /* Inputs Area */
-        .controls-area { flex: 1; padding: 20px; overflow-y: auto; }
-        .input-group { margin-bottom: 15px; }
-        .input-label { font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 5px; display: block; text-transform: uppercase; }
-        .input-field { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; font-size: 0.9rem; }
-        
-        /* Feed List (Only visible in Winner/Podium mode) */
-        .feed-list { border: 1px solid #e2e8f0; border-radius: 8px; max-height: 200px; overflow-y: auto; margin-bottom: 15px; }
-        .feed-item { padding: 10px; border-bottom: 1px solid #f1f5f9; cursor: pointer; font-size: 0.85rem; }
+        .feed-list { flex: 1; overflow-y: auto; }
+        .feed-item { padding: 20px; border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: 0.2s; position: relative; }
         .feed-item:hover { background: #f8fafc; }
-        
+        .feed-item.active { background: #ec48990d; border-left: 4px solid var(--social-pink); }
+        .feed-meta { font-size: 0.7rem; color: #94a3b8; margin-bottom: 5px; font-weight: 700; text-transform: uppercase; display: flex; align-items: center; gap: 6px; }
+        .medal-dot { width: 8px; height: 8px; border-radius: 50%; }
+        .feed-name { font-weight: 700; color: var(--dark); font-size: 1rem; margin-bottom: 4px; }
+        .feed-sdo { font-size: 0.85rem; color: #64748b; }
+
         /* RIGHT: WORKSPACE */
-        .workspace { flex: 1; background: #cbd5e1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; overflow: hidden; position: relative; }
+        .workspace { flex: 1; background: #f1f5f9; display: flex; flex-direction: column; align-items: center; padding: 40px; overflow-y: auto; }
         
-        /* --- UNIVERSAL CARD CONTAINER --- */
+        /* --- BRANDED SOCIAL CARD (OFFICIAL DESIGN) --- */
         .social-card {
-            width: 800px; height: 800px; /* Square for FB/IG */
-            background: linear-gradient(135deg, #002855 0%, #001f3f 100%);
+            width: 500px; height: 500px;
+            /* Official R1AA Colors Background Gradient */
+            background: linear-gradient(135deg, #002855 0%, #001f3f 100%); 
             position: relative;
-            display: flex; flex-direction: column;
-            text-align: center; color: white;
+            display: flex; flex-direction: column; justify-content: space-between; /* Space header/footer */
+            align-items: center;
+            text-align: center;
+            color: white;
             font-family: 'Montserrat', sans-serif;
-            box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.5);
-            border: 8px solid #fbbf24; /* Default Gold Border */
-            overflow: hidden; flex-shrink: 0;
-            transform: scale(0.7); /* Scale down to fit screen */
+            margin-bottom: 30px;
+            overflow: hidden;
+            flex-shrink: 0;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 4px solid #fbbf24; /* Gold Border Default */
         }
 
-        /* HEADER (Logos) */
-        .card-header { height: 180px; padding-top: 30px; display: flex; flex-direction: column; align-items: center; z-index: 2; }
-        .main-logo { height: 100px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); }
-        .header-title { font-family: 'Oswald', sans-serif; font-size: 1.2rem; letter-spacing: 2px; text-transform: uppercase; margin-top: 10px; }
+        /* CARD HEADER (R1AA LOGO) */
+        .card-header-area {
+            width: 100%; padding-top: 20px;
+            display: flex; flex-direction: column; align-items: center;
+            z-index: 2;
+        }
+        .main-logo { height: 80px; object-fit: contain; margin-bottom: 5px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+        .header-text { font-family: 'Oswald', sans-serif; font-size: 0.9rem; letter-spacing: 1px; text-transform: uppercase; opacity: 0.9; }
 
-        /* BODY (Dynamic Content) */
-        .card-body { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100%; z-index: 2; position: relative; }
-
-        /* FOOTER (Logos) */
-        .card-footer { height: 100px; background: white; display: flex; justify-content: center; align-items: center; gap: 30px; z-index: 2; }
-        .footer-logo { height: 60px; object-fit: contain; }
-
-        /* --- LAYOUTS --- */
+        /* CARD BODY (WINNER INFO) */
+        .card-body-area {
+            flex: 1;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            width: 100%; z-index: 2;
+        }
         
-        /* 1. WINNER LAYOUT */
-        .layout-winner .medal-icon { font-size: 120px; margin-bottom: 20px; filter: drop-shadow(0 5px 15px rgba(0,0,0,0.5)); }
-        .layout-winner .event-name { font-family: 'Oswald', sans-serif; font-size: 2.5rem; text-transform: uppercase; margin-bottom: 10px; color: #e2e8f0; }
-        .layout-winner .winner-name { font-size: 4rem; font-weight: 900; text-transform: uppercase; line-height: 1; margin-bottom: 10px; color: #fbbf24; text-shadow: 0 4px 20px rgba(0,0,0,0.5); }
-        .layout-winner .winner-sdo { font-size: 2rem; font-weight: 500; text-transform: uppercase; letter-spacing: 3px; }
+        .medal-icon-lg { font-size: 70px; margin-bottom: 10px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5)); }
+        .category-pill { background: rgba(255,255,255,0.1); padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.2); }
+        .card-event { font-family: 'Oswald', sans-serif; font-size: 1.6rem; font-weight: 700; text-transform: uppercase; color: white; margin-bottom: 10px; line-height: 1.1; max-width: 90%; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .card-name { font-size: 2.2rem; font-weight: 900; margin-bottom: 5px; text-transform: uppercase; line-height: 1; text-shadow: 0 2px 10px rgba(0,0,0,0.5); color: #fbbf24; }
+        .card-sdo { font-size: 1.1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; }
 
-        /* 2. PODIUM LAYOUT */
-        .podium-grid { display: grid; grid-template-columns: 1fr 1.2fr 1fr; align-items: end; gap: 20px; width: 90%; margin-bottom: 40px; }
-        .podium-item { display: flex; flex-direction: column; align-items: center; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); }
-        .podium-rank { font-family: 'Oswald', sans-serif; font-size: 4rem; font-weight: 700; line-height: 1; }
-        .podium-name { font-size: 1.2rem; font-weight: 700; margin-top: 10px; text-transform: uppercase; }
-        .podium-sdo { font-size: 0.9rem; opacity: 0.8; text-transform: uppercase; }
-        .rank-1 { color: #fbbf24; transform: scale(1.1); border-color: #fbbf24; background: rgba(251, 191, 36, 0.1); }
-        .rank-2 { color: #cbd5e1; border-color: #cbd5e1; }
-        .rank-3 { color: #b45309; border-color: #b45309; }
-
-        /* 3. TALLY LAYOUT */
-        .tally-list { width: 80%; }
-        .tally-row { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.1); padding: 15px 30px; margin-bottom: 10px; border-radius: 8px; }
-        .tally-rank { font-weight: 900; font-size: 1.5rem; width: 40px; }
-        .tally-sdo { font-weight: 700; font-size: 1.5rem; flex: 1; text-align: left; text-transform: uppercase; }
-        .tally-medals { display: flex; gap: 15px; font-weight: 700; font-size: 1.5rem; }
-        .tm-g { color: #fbbf24; } .tm-s { color: #cbd5e1; } .tm-b { color: #d97706; }
-
-        /* 4. VS MATCH LAYOUT */
-        .match-container { display: flex; align-items: center; justify-content: space-between; width: 90%; }
-        .team-box { width: 35%; display: flex; flex-direction: column; align-items: center; }
-        .team-logo-ph { width: 120px; height: 120px; background: rgba(255,255,255,0.1); border-radius: 50%; margin-bottom: 15px; display: flex; align-items: center; justify-content: center; font-size: 3rem; }
-        .team-name { font-size: 2rem; font-weight: 900; text-transform: uppercase; line-height: 1.1; }
-        .match-score { font-family: 'Oswald', sans-serif; font-size: 6rem; font-weight: 700; color: #fbbf24; }
-        .vs-text { font-size: 2rem; font-weight: 900; opacity: 0.5; margin: 0 20px; }
+        /* CARD FOOTER (LOGOS ROW) */
+        .card-footer-area {
+            width: 100%; background: white; 
+            padding: 15px; 
+            display: flex; justify-content: center; align-items: center; gap: 20px;
+            z-index: 2;
+        }
+        .footer-logo { height: 45px; width: 45px; object-fit: contain; }
+        .footer-text { position: absolute; bottom: 5px; width: 100%; text-align: center; color: #334155; font-size: 0.6rem; font-weight: 700; letter-spacing: 1px; display: none; }
 
         /* Background Watermark */
-        .bg-watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 120%; opacity: 0.05; z-index: 0; pointer-events: none; }
+        .bg-watermark {
+            position: absolute; top: 55%; left: 50%; transform: translate(-50%, -50%);
+            width: 120%; height: 120%;
+            background-image: url('assets/r1aa_logo.png'); 
+            background-size: contain; background-repeat: no-repeat; background-position: center;
+            opacity: 0.05; z-index: 0;
+        }
 
-        /* Action Bar */
-        .action-bar { position: absolute; bottom: 30px; display: flex; gap: 15px; z-index: 100; }
-        .action-btn { padding: 12px 25px; border-radius: 50px; border: none; font-weight: 700; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.2); transition: 0.2s; display: flex; align-items: center; gap: 10px; }
-        .btn-dl { background: #fbbf24; color: #0f172a; } .btn-dl:hover { transform: translateY(-3px); }
-        .btn-copy { background: white; color: #334155; } .btn-copy:hover { transform: translateY(-3px); }
+        /* Themes (Medal Colors) */
+        .theme-GOLD { border-color: #fbbf24; } 
+        .theme-GOLD .medal-icon-lg { color: #fbbf24; }
+        .theme-GOLD .card-name { color: #fbbf24; background: -webkit-linear-gradient(#fff, #fbbf24); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .theme-SILVER { border-color: #cbd5e1; } 
+        .theme-SILVER .medal-icon-lg { color: #cbd5e1; }
+        .theme-SILVER .card-name { color: #cbd5e1; background: -webkit-linear-gradient(#fff, #cbd5e1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        .theme-BRONZE { border-color: #d97706; } 
+        .theme-BRONZE .medal-icon-lg { color: #d97706; }
+        .theme-BRONZE .card-name { color: #d97706; background: -webkit-linear-gradient(#fff, #d97706); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
+        /* Tools Panel */
+        .tools-panel { width: 500px; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+        .tools-title { font-size: 0.9rem; font-weight: 700; color: #475569; margin-bottom: 15px; }
+        .caption-area { width: 100%; height: 120px; padding: 15px; border: 1px solid #e2e8f0; border-radius: 8px; font-family: 'Segoe UI', sans-serif; font-size: 0.9rem; resize: none; background: #f8fafc; color: #334155; margin-bottom: 15px; }
+        .btn-copy { width: 100%; padding: 12px; background: var(--dark); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
+        .btn-copy:hover { background: #1e293b; }
+
+        /* Tally View (Hidden) */
+        #tallyView { display: none; padding: 40px; width: 100%; overflow-y: auto; }
+        .tally-table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-radius: 12px; overflow: hidden; }
+        .tally-table th { background: #1e293b; color: white; padding: 15px; text-align: left; }
+        .tally-table td { padding: 12px 15px; border-bottom: 1px solid #e2e8f0; }
+        .rank-badge { background: #f1f5f9; padding: 4px 10px; border-radius: 4px; font-weight: 700; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
     <aside class="sidebar">
-        <div class="feed-header">
-            <span>GRAPHIC BUILDER</span>
-            <i class="fas fa-paint-brush" style="color:var(--social-pink);"></i>
+        <div class="brand"><i class="fas fa-hashtag"></i> R1AA SOCIAL</div>
+        <div class="nav-links">
+            <div class="nav-item active" onclick="switchView('feed')" id="nav-feed"><i class="fas fa-bolt"></i> Live Feed & Graphics</div>
+            <div class="nav-item" onclick="switchView('tally')" id="nav-tally"><i class="fas fa-list-ol"></i> Official Tally</div>
+            <div class="nav-item" id="logoutBtn" style="margin-top: auto;"><i class="fas fa-sign-out-alt"></i> Sign Out</div>
         </div>
-        
-        <div class="mode-selector">
-            <button class="mode-btn active" onclick="setMode('winner')">🏆 Winner</button>
-            <button class="mode-btn" onclick="setMode('podium')">🏅 Podium</button>
-            <button class="mode-btn" onclick="setMode('tally')">📊 Tally</button>
-            <button class="mode-btn" onclick="setMode('match')">🆚 Match</button>
-        </div>
-
-        <div class="controls-area" id="controls">
-            </div>
     </aside>
 
-    <div class="workspace">
+    <main class="main">
         
-        <div id="socialCard" class="social-card layout-winner">
-            <img src="assets/r1aa_logo.png" class="bg-watermark">
-
-            <div class="card-header">
-                <img src="assets/r1aa_logo.png" class="main-logo">
-                <div class="header-title">Region 1 Athletic Association Meet 2026</div>
+        <div id="feedView" style="display: flex; width: 100%; height: 100%;">
+            <div class="feed-panel">
+                <div class="feed-header">
+                    <span>LATEST RESULTS</span>
+                    <span class="live-badge">LIVE</span>
+                </div>
+                <div class="feed-list" id="feedContainer">
+                    <div style="padding:40px; text-align:center; color:#94a3b8; font-size:0.9rem;">
+                        <i class="fas fa-sync fa-spin" style="margin-bottom:10px; font-size:1.5rem;"></i><br>
+                        Connecting to Tabulation...
+                    </div>
+                </div>
             </div>
 
-            <div class="card-body" id="cardBody">
+            <div class="workspace">
+                <div id="socialCard" class="social-card theme-GOLD">
+                    
+                    <div class="bg-watermark"></div>
+
+                    <div class="card-header-area">
+                        <img src="assets/r1aa_logo.png" class="main-logo" alt="R1AA Logo" onerror="this.style.opacity='0.3'">
+                        <div class="header-text">Region 1 Athletic Association Meet</div>
+                        <div class="header-text" style="font-size:0.7rem; color:#cbd5e1;">City of Candon, Ilocos Sur</div>
+                    </div>
+
+                    <div class="card-body-area">
+                        <i class="fas fa-medal medal-icon-lg"></i>
+                        <div class="category-pill" id="cardCategory">CATEGORY</div>
+                        <div class="card-event" id="cardEvent">EVENT NAME</div>
+                        
+                        <div class="card-name" id="cardName">ATHLETE NAME</div>
+                        <div class="card-sdo" id="cardSDO">DELEGATION</div>
+                    </div>
+                    
+                    <div class="card-footer-area">
+                        <img src="assets/deped_logo.png" class="footer-logo" title="DepEd" onerror="this.style.display='none'">
+                        <img src="assets/host_logo.png" class="footer-logo" title="Host SDO" onerror="this.style.display='none'">
+                        <img src="assets/lgu_logo.png" class="footer-logo" title="LGU" onerror="this.style.display='none'">
+                        <img src="assets/mayor_logo.png" class="footer-logo" title="Mayor" onerror="this.style.display='none'">
+                    </div>
                 </div>
 
-            <div class="card-footer">
-                <img src="assets/deped_logo.png" class="footer-logo" onerror="this.style.display='none'">
-                <img src="assets/host_logo.png" class="footer-logo" onerror="this.style.display='none'">
-                <img src="assets/lgu_logo.png" class="footer-logo" onerror="this.style.display='none'">
-                <img src="assets/mayor_logo.png" class="footer-logo" onerror="this.style.display='none'">
+                <div class="tools-panel">
+                    <div class="tools-title">CAPTION GENERATOR</div>
+                    <textarea id="captionText" class="caption-area" readonly>Waiting for selection...</textarea>
+                    <button class="btn-copy" onclick="copyCaption()"><i class="far fa-copy"></i> Copy Caption</button>
+                    <p style="text-align:center; margin-top:15px; font-size:0.8rem; color:#64748b;">
+                        <i class="fas fa-camera"></i> <strong>Pro Tip:</strong> Use Snipping Tool to capture the card above.
+                    </p>
+                </div>
             </div>
         </div>
 
-        <div class="action-bar">
-            <button class="action-btn btn-dl" onclick="downloadCard()"><i class="fas fa-download"></i> Download PNG</button>
-            <button class="action-btn btn-copy" onclick="generateCaption()"><i class="fas fa-copy"></i> Copy Caption</button>
+        <div id="tallyView">
+            <h2 style="margin-bottom: 20px; color: #1e293b;">Overall Medal Tally</h2>
+            <div id="tallyTableContainer"></div>
         </div>
 
-    </div>
+    </main>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
@@ -174,232 +222,132 @@
             measurementId: "G-96ZPLMV4J7"
         };
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const db = getFirestore(app);
 
         let GLOBAL_DATA = [];
-        let CURRENT_MODE = 'winner';
 
-        // --- DATA LISTENER ---
+        // --- REAL-TIME FEED ---
         const q = query(collection(db, "game_results"), orderBy("timestamp", "desc"));
         onSnapshot(q, (snapshot) => {
+            const container = document.getElementById('feedContainer');
+            container.innerHTML = "";
             GLOBAL_DATA = [];
-            snapshot.forEach(doc => GLOBAL_DATA.push(doc.data()));
-            renderControls(); // Refresh list
+
+            if(snapshot.empty) {
+                container.innerHTML = `<div style="padding:40px; text-align:center; color:#94a3b8;">No medals awarded yet.</div>`;
+                return;
+            }
+
+            snapshot.forEach(doc => {
+                const data = doc.data();
+                GLOBAL_DATA.push(data);
+                
+                let color = data.medal === 'GOLD' ? '#fbbf24' : data.medal === 'SILVER' ? '#94a3b8' : '#b45309';
+                let medalIcon = data.medal === 'GOLD' ? '🥇' : data.medal === 'SILVER' ? '🥈' : '🥉';
+
+                const div = document.createElement('div');
+                div.className = 'feed-item';
+                div.innerHTML = `
+                    <div class="feed-meta">
+                        <div class="medal-dot" style="background:${color}"></div>
+                        ${medalIcon} ${data.medal} • ${timeAgo(data.timestamp.toDate())}
+                    </div>
+                    <div class="feed-name">${data.athleteName || "Unassigned Athlete"}</div>
+                    <div class="feed-sdo">${data.sdo}</div>
+                    <div style="font-size:0.75rem; color:#64748b; margin-top:4px;">
+                        ${data.event} (${data.category})
+                    </div>
+                `;
+                
+                div.onclick = () => {
+                    document.querySelectorAll('.feed-item').forEach(el => el.classList.remove('active'));
+                    div.classList.add('active');
+                    generateCard(data);
+                };
+                
+                container.appendChild(div);
+            });
+
+            if(GLOBAL_DATA.length > 0) {
+                const firstItem = container.firstChild;
+                firstItem.classList.add('active');
+                generateCard(GLOBAL_DATA[0]);
+            }
+            renderTally();
         });
 
-        // --- CONTROLS RENDERER ---
-        window.setMode = (mode) => {
-            CURRENT_MODE = mode;
-            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-            event.target.classList.add('active');
-            renderControls();
-            
-            // Reset Card Class
+        // --- GRAPHIC & CAPTION GENERATOR ---
+        function generateCard(data) {
             const card = document.getElementById('socialCard');
-            card.className = `social-card layout-${mode}`;
             
-            // Initial Render of empty state
-            if(mode === 'tally') renderTallyCard();
-            else if(mode === 'match') renderMatchCard();
-        };
+            document.getElementById('cardCategory').innerText = `${data.category} • ${data.gender}`;
+            document.getElementById('cardEvent').innerText = data.event + (data.subEvent ? ` (${data.subEvent})` : "");
+            document.getElementById('cardName').innerText = data.athleteName || "ATHLETE NAME";
+            document.getElementById('cardSDO').innerText = data.sdo;
 
-        function renderControls() {
-            const container = document.getElementById('controls');
-            container.innerHTML = '';
+            card.className = `social-card theme-${data.medal}`;
 
-            if (CURRENT_MODE === 'winner') {
-                container.innerHTML = `<div class="input-label">Select Recent Result</div>`;
-                const list = document.createElement('div');
-                list.className = 'feed-list';
-                GLOBAL_DATA.forEach(d => {
-                    const item = document.createElement('div');
-                    item.className = 'feed-item';
-                    item.innerHTML = `<strong>${d.athleteName}</strong> (${d.medal})<br><span style="color:#94a3b8">${d.event}</span>`;
-                    item.onclick = () => renderWinnerCard(d);
-                    list.appendChild(item);
-                });
-                container.appendChild(list);
-            } 
-            else if (CURRENT_MODE === 'podium') {
-                container.innerHTML = `
-                    <div class="input-group">
-                        <label class="input-label">Event Title</label>
-                        <input type="text" class="input-field" id="inEvent" value="100M Dash - Boys" oninput="updatePodiumText()">
-                    </div>
-                    <div class="input-group">
-                        <label class="input-label">Gold Winner</label>
-                        <input type="text" class="input-field" id="inGold" placeholder="Name - SDO" oninput="updatePodiumText()">
-                    </div>
-                    <div class="input-group">
-                        <label class="input-label">Silver Winner</label>
-                        <input type="text" class="input-field" id="inSilver" placeholder="Name - SDO" oninput="updatePodiumText()">
-                    </div>
-                    <div class="input-group">
-                        <label class="input-label">Bronze Winner</label>
-                        <input type="text" class="input-field" id="inBronze" placeholder="Name - SDO" oninput="updatePodiumText()">
-                    </div>
-                `;
-                renderPodiumCard();
-            }
-            else if (CURRENT_MODE === 'match') {
-                container.innerHTML = `
-                    <div class="input-group">
-                        <label class="input-label">Event</label>
-                        <input type="text" class="input-field" id="matchEvent" value="BASKETBALL BOYS" oninput="updateMatchCard()">
-                    </div>
-                    <div class="input-group">
-                        <label class="input-label">Team A</label>
-                        <input type="text" class="input-field" id="teamA" value="ILOCOS NORTE" oninput="updateMatchCard()">
-                        <input type="number" class="input-field" id="scoreA" value="85" style="margin-top:5px;" oninput="updateMatchCard()">
-                    </div>
-                    <div class="input-group">
-                        <label class="input-label">Team B</label>
-                        <input type="text" class="input-field" id="teamB" value="LA UNION" oninput="updateMatchCard()">
-                        <input type="number" class="input-field" id="scoreB" value="82" style="margin-top:5px;" oninput="updateMatchCard()">
-                    </div>
-                `;
-                renderMatchCard();
-            }
-            else if (CURRENT_MODE === 'tally') {
-                container.innerHTML = `<div style="text-align:center; color:#64748b; padding:20px;">Top 5 SDOs Auto-Generated from Data</div>`;
-                renderTallyCard();
-            }
+            const medalEmoji = data.medal === 'GOLD' ? '🥇' : data.medal === 'SILVER' ? '🥈' : '🥉';
+            const hashtags = `#R1AA2026 #OneRegionOneGoal #${data.sdo.replace(/\s/g, '')}`;
+            
+            const caption = `${medalEmoji} ${data.medal} MEDAL ALERT!\n\nHuge congratulations to ${data.athleteName || "our athlete"} from ${data.sdo} for securing the ${data.medal} medal in ${data.event} - ${data.subEvent || ""} (${data.category})!\n\nYour hard work has paid off! We are so proud of you! 👏💪\n\n${hashtags}`;
+            
+            document.getElementById('captionText').value = caption;
         }
 
-        // --- CARD RENDERERS ---
-
-        window.renderWinnerCard = (d) => {
-            const body = document.getElementById('cardBody');
-            let medalColor = d.medal === 'GOLD' ? '#fbbf24' : d.medal === 'SILVER' ? '#cbd5e1' : '#b45309';
-            
-            body.innerHTML = `
-                <i class="fas fa-medal medal-icon" style="color:${medalColor}; font-size:80px; margin-bottom:10px;"></i>
-                <div class="category-pill" style="border:1px solid ${medalColor}; color:${medalColor}">${d.category}</div>
-                <div class="event-name">${d.event}</div>
-                <div class="winner-name" style="color:${medalColor}">${d.athleteName}</div>
-                <div class="winner-sdo">${d.sdo}</div>
-            `;
-            document.getElementById('socialCard').style.borderColor = medalColor;
-        };
-
-        window.renderPodiumCard = () => {
-            const body = document.getElementById('cardBody');
-            body.innerHTML = `
-                <div class="event-name" id="podEventDisplay" style="margin-bottom:30px;">EVENT NAME</div>
-                <div class="podium-grid">
-                    <div class="podium-item rank-2">
-                        <div class="podium-rank">2</div>
-                        <div class="podium-name" id="dispSilver">Silver Name</div>
-                        <div class="podium-sdo">SDO</div>
-                    </div>
-                    <div class="podium-item rank-1">
-                        <div class="podium-rank">1</div>
-                        <div class="podium-name" id="dispGold">Gold Name</div>
-                        <div class="podium-sdo">SDO</div>
-                    </div>
-                    <div class="podium-item rank-3">
-                        <div class="podium-rank">3</div>
-                        <div class="podium-name" id="dispBronze">Bronze Name</div>
-                        <div class="podium-sdo">SDO</div>
-                    </div>
-                </div>
-            `;
-            document.getElementById('socialCard').style.borderColor = '#fbbf24';
-        };
-
-        window.updatePodiumText = () => {
-            document.getElementById('podEventDisplay').innerText = document.getElementById('inEvent').value;
-            document.getElementById('dispGold').innerText = document.getElementById('inGold').value || "Winner";
-            document.getElementById('dispSilver').innerText = document.getElementById('inSilver').value || "Winner";
-            document.getElementById('dispBronze').innerText = document.getElementById('inBronze').value || "Winner";
-        };
-
-        window.renderMatchCard = () => {
-            const body = document.getElementById('cardBody');
-            document.getElementById('socialCard').style.borderColor = '#fff';
-            
-            // Get values safely
-            const event = document.getElementById('matchEvent') ? document.getElementById('matchEvent').value : "EVENT";
-            const tA = document.getElementById('teamA') ? document.getElementById('teamA').value : "TEAM A";
-            const sA = document.getElementById('scoreA') ? document.getElementById('scoreA').value : "00";
-            const tB = document.getElementById('teamB') ? document.getElementById('teamB').value : "TEAM B";
-            const sB = document.getElementById('scoreB') ? document.getElementById('scoreB').value : "00";
-
-            body.innerHTML = `
-                <div class="category-pill">MATCH RESULT</div>
-                <div class="event-name" style="margin-bottom:40px;">${event}</div>
-                <div class="match-container">
-                    <div class="team-box">
-                        <div class="team-logo-ph">${tA.charAt(0)}</div>
-                        <div class="team-name">${tA}</div>
-                        <div class="match-score">${sA}</div>
-                    </div>
-                    <div class="vs-text">VS</div>
-                    <div class="team-box">
-                        <div class="team-logo-ph">${tB.charAt(0)}</div>
-                        <div class="team-name">${tB}</div>
-                        <div class="match-score">${sB}</div>
-                    </div>
-                </div>
-            `;
-        };
-        window.updateMatchCard = renderMatchCard; // Bind update function
-
-        window.renderTallyCard = () => {
-            const body = document.getElementById('cardBody');
-            document.getElementById('socialCard').style.borderColor = '#fff';
-            
-            // Calculate Tally
+        // --- TALLY VIEW ---
+        function renderTally() {
             let tally = {};
             GLOBAL_DATA.forEach(d => {
                 if(!tally[d.sdo]) tally[d.sdo] = {G:0, S:0, B:0};
                 if(d.medal) tally[d.sdo][d.medal.charAt(0)]++;
             });
-            const top5 = Object.keys(tally).sort((a,b) => tally[b].G - tally[a].G).slice(0, 5);
-
-            let html = `<div class="event-name" style="margin-bottom:20px;">MEDAL TALLY UPDATE</div><div class="tally-list">`;
-            top5.forEach((sdo, idx) => {
-                html += `
-                    <div class="tally-row">
-                        <div class="tally-rank">${idx+1}</div>
-                        <div class="tally-sdo">${sdo}</div>
-                        <div class="tally-medals">
-                            <span class="tm-g"><i class="fas fa-circle"></i> ${tally[sdo].G}</span>
-                            <span class="tm-s"><i class="fas fa-circle"></i> ${tally[sdo].S}</span>
-                            <span class="tm-b"><i class="fas fa-circle"></i> ${tally[sdo].B}</span>
-                        </div>
-                    </div>
-                `;
-            });
-            html += `</div>`;
-            body.innerHTML = html;
-        };
-
-        // --- ACTIONS ---
-        window.downloadCard = () => {
-            const card = document.getElementById('socialCard');
-            // Reset scaling for clear capture
-            card.style.transform = "scale(1)";
             
-            html2canvas(card, { scale: 2, useCORS: true }).then(canvas => {
-                const link = document.createElement('a');
-                link.download = `R1AA_Graphic_${Date.now()}.png`;
-                link.href = canvas.toDataURL();
-                link.click();
-                
-                // Restore preview scale
-                card.style.transform = "scale(0.7)";
+            const sorted = Object.keys(tally).sort((a,b) => tally[b].G - tally[a].G || tally[b].S - tally[a].S);
+            
+            let html = `<table class="tally-table"><thead><tr><th>Rank</th><th>Delegation</th><th>Gold</th><th>Silver</th><th>Bronze</th></tr></thead><tbody>`;
+            sorted.forEach((sdo, idx) => {
+                html += `<tr><td><span class="rank-badge">${idx+1}</span></td><td style="font-weight:bold;">${sdo}</td><td style="color:#b45309;font-weight:bold;">${tally[sdo].G}</td><td style="color:#64748b;">${tally[sdo].S}</td><td style="color:#a16207;">${tally[sdo].B}</td></tr>`;
             });
+            html += `</tbody></table>`;
+            document.getElementById('tallyTableContainer').innerHTML = html;
+        }
+
+        // --- UTILITIES ---
+        window.switchView = (view) => {
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+            document.getElementById('nav-'+view).classList.add('active');
+            
+            if(view === 'feed') {
+                document.getElementById('feedView').style.display = 'flex';
+                document.getElementById('tallyView').style.display = 'none';
+            } else {
+                document.getElementById('feedView').style.display = 'none';
+                document.getElementById('tallyView').style.display = 'block';
+            }
         };
 
-        window.generateCaption = () => {
-            alert("Caption generation coming soon based on card type!");
+        window.copyCaption = () => {
+            const copyText = document.getElementById("captionText");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(copyText.value);
+            alert("Caption copied!");
         };
 
-        // Initial Load
-        renderControls();
-        renderWinnerCard({medal:'GOLD', category:'CATEGORY', event:'EVENT', athleteName:'SELECT RESULT', sdo:'DELEGATION'});
+        function timeAgo(date) {
+            const seconds = Math.floor((new Date() - date) / 1000);
+            if (seconds < 60) return "Just now";
+            const minutes = Math.floor(seconds / 60);
+            if (minutes < 60) return minutes + "m ago";
+            const hours = Math.floor(minutes / 60);
+            if (hours < 24) return hours + "h ago";
+            return Math.floor(hours / 24) + "d ago";
+        }
 
+        document.getElementById('logoutBtn').addEventListener('click', () => { signOut(auth).then(() => window.location.href = "../index.html"); });
+        onAuthStateChanged(auth, (user) => { if (!user) window.location.href = "../index.html"; });
     </script>
 </body>
 </html>
