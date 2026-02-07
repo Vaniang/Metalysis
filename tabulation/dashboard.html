@@ -60,7 +60,24 @@
         .r1aa-table { width: max-content; min-width: 50%; border-collapse: collapse; border-spacing: 0; font-family: 'Arial', sans-serif; }
         .r1aa-table th, .r1aa-table td { border: 1px solid #475569; padding: 6px 8px; text-align: center; font-size: 0.75rem; }
         .r1aa-table thead th { background: #e2e8f0; color: #000; font-weight: 700; text-transform: uppercase; font-size: 0.7rem; }
-        .col-sdo { text-align: left !important; font-weight: 700; background: #fff; position: sticky; left: 0; min-width: 200px; max-width: 300px; white-space: nowrap; border-right: 2px solid #000 !important; z-index: 5; }
+        
+        /* FIXED COLUMN STYLE - WIDER & WRAPPING ENABLED */
+        .col-sdo { 
+            text-align: left !important; 
+            font-weight: 700; 
+            background: #fff; 
+            position: sticky; 
+            left: 0; 
+            width: 320px; 
+            min-width: 320px; 
+            max-width: 320px;
+            white-space: normal; /* Allows text to wrap to next line */
+            line-height: 1.3;
+            border-right: 2px solid #000 !important; 
+            z-index: 5;
+            padding-right: 10px;
+        }
+        
         .col-rank { font-weight: 700; background: #f1f5f9; }
         .header-total { border-left: 2px solid #000 !important; }
         .cell-total { border-left: 2px solid #000 !important; font-weight: bold; background-color: #f1f5f9; }
@@ -270,23 +287,27 @@
         let CURRENT_VIEW = 'dashboard';
         let CHART_INSTANCES = [];
 
-        // --- SIDEBAR ---
+        // --- SIDEBAR (FIXED: BUILDS STRING FIRST) ---
         function renderSidebar() {
             const nav = document.getElementById('sidebarNav');
-            nav.innerHTML = `
+            let sidebarHTML = `
                 <div class="nav-item"><div class="nav-header" onclick="renderDashboard()"><span><i class="fas fa-home" style="margin-right:8px;"></i> DASHBOARD</span></div></div>
                 <div class="nav-item"><div class="nav-header" onclick="renderAthleteList()"><span><i class="fas fa-users" style="margin-right:8px; color:#10b981;"></i> LIST OF ATHLETES</span></div></div>
                 <div class="nav-item"><div class="nav-header" onclick="renderManageResults()"><span><i class="fas fa-trash-alt" style="margin-right:8px; color:#ef4444;"></i> MANAGE RESULTS</span></div></div>
             `;
+            
             ['ELEMENTARY', 'SECONDARY'].forEach(cat => {
-                let html = `<div class="nav-item"><div class="nav-header" onclick="toggleMenu('menu-${cat}')"><span><i class="fas fa-layer-group" style="margin-right:8px;"></i> ${cat}</span><i class="fas fa-chevron-down" style="font-size:0.7rem;"></i></div><div id="menu-${cat}" class="nav-sub">`;
-                Object.keys(EVENTS_DATA[cat]).sort().forEach(sport => html += `<a onclick="renderSportMatrix('${cat}', '${sport}')">${sport}</a>`);
-                html += `</div></div>`; nav.innerHTML += html;
+                sidebarHTML += `<div class="nav-item"><div class="nav-header" onclick="toggleMenu('menu-${cat}')"><span><i class="fas fa-layer-group" style="margin-right:8px;"></i> ${cat}</span><i class="fas fa-chevron-down" style="font-size:0.7rem;"></i></div><div id="menu-${cat}" class="nav-sub">`;
+                Object.keys(EVENTS_DATA[cat]).sort().forEach(sport => { sidebarHTML += `<a onclick="renderSportMatrix('${cat}', '${sport}')">${sport}</a>`; });
+                sidebarHTML += `</div></div>`;
             });
-            nav.innerHTML += `
-                <div class="nav-item"><div class="nav-header" onclick="toggleMenu('menu-PARA')"><span><i class="fas fa-wheelchair" style="margin-right:8px;"></i> PARA GAMES</span><i class="fas fa-chevron-down" style="font-size:0.7rem;"></i></div><div id="menu-PARA" class="nav-sub">`;
-                Object.keys(EVENTS_DATA["PARA GAMES"]).sort().forEach(sport => { nav.innerHTML += `<a onclick="renderSportMatrix('PARA GAMES', '${sport}')">${sport}</a>`; });
-            nav.innerHTML += `</div></div>
+
+            // PARA GAMES SIDEBAR
+            sidebarHTML += `<div class="nav-item"><div class="nav-header" onclick="toggleMenu('menu-PARA')"><span><i class="fas fa-wheelchair" style="margin-right:8px;"></i> PARA GAMES</span><i class="fas fa-chevron-down" style="font-size:0.7rem;"></i></div><div id="menu-PARA" class="nav-sub">`;
+            Object.keys(EVENTS_DATA["PARA GAMES"]).sort().forEach(sport => { sidebarHTML += `<a onclick="renderSportMatrix('PARA GAMES', '${sport}')">${sport}</a>`; });
+            sidebarHTML += `</div></div>`;
+
+            sidebarHTML += `
                 <div class="nav-item">
                     <div class="nav-header" onclick="toggleMenu('menu-SUMMARY')"><span><i class="fas fa-chart-pie" style="margin-right:8px;"></i> SUMMARY</span><i class="fas fa-chevron-down" style="font-size:0.7rem;"></i></div>
                     <div id="menu-SUMMARY" class="nav-sub">
@@ -299,6 +320,8 @@
                 </div>
                 <div class="nav-item"><div class="nav-header" onclick="renderProtests()"><span style="color:#ef4444;"><i class="fas fa-gavel" style="margin-right:8px;"></i> PROTESTS</span></div></div>
             `;
+            
+            nav.innerHTML = sidebarHTML;
         }
         renderSidebar();
 
@@ -463,7 +486,7 @@
             const generateTable = (title, sportList) => {
                 if(sportList.length === 0) return "";
                 let sdoTotals = {}; SDO_LIST.forEach(sdo => sdoTotals[sdo] = {G:0, S:0, B:0});
-                let html = `<div class="section-title" style="margin-top:30px;">${title}</div><div class="table-wrapper" style="overflow-x:auto;"><table class="r1aa-table"><thead><tr><th rowspan="2" class="col-sdo" style="min-width:250px;">EVENTS</th>`;
+                let html = `<div class="section-title" style="margin-top:30px;">${title}</div><div class="table-wrapper" style="overflow-x:auto;"><table class="r1aa-table"><thead><tr><th rowspan="2" class="col-sdo" style="min-width:320px;">EVENTS</th>`;
                 SDO_LIST.forEach(sdo => { html += `<th colspan="3">${sdo.replace(" City", "").replace("Pangasinan", "Pang")}</th>`; });
                 html += `</tr><tr>`;
                 SDO_LIST.forEach(() => { html += `<th style="width:25px;">G</th><th style="width:25px;">S</th><th style="width:25px;">B</th>`; });
