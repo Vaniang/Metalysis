@@ -13,7 +13,7 @@
             --primary: #1e3a8a; --secondary: #3b82f6; --accent: #f59e0b;
             --light: #f8fafc; --white: #ffffff; --dark: #0f172a; 
             --danger: #ef4444; --success: #10b981;
-            --table-head-bg: #1e293b; /* Dark Slate for Headers */
+            --table-head-bg: var(--primary); /* Changed to Primary Blue for better visibility */
             --table-row-hover: #e2e8f0;
             --table-row-alt: #f8fafc;
         }
@@ -62,12 +62,12 @@
         /* --- AESTHETIC TABLE STYLING --- */
         .table-wrapper { 
             background: white; 
-            padding: 0; /* Let table fill the card */
+            padding: 0; 
             border-radius: 12px; 
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); 
             margin-bottom: 40px; 
             border: 1px solid #e2e8f0; 
-            overflow: hidden; /* For rounded corners */
+            overflow: hidden; 
             overflow-x: auto; 
         }
         
@@ -83,24 +83,29 @@
 
         .r1aa-table { width: max-content; min-width: 100%; border-collapse: collapse; border-spacing: 0; font-family: 'Segoe UI', sans-serif; }
         
-        /* Table Header */
+        /* Table Header - UPDATED FOR VISIBILITY */
         .r1aa-table thead th { 
             background: var(--table-head-bg); 
             color: white; 
-            padding: 15px 12px; 
-            font-weight: 600; 
+            padding: 16px 14px; /* Increased padding */
+            font-weight: 700; /* Bolder font */
             text-transform: uppercase; 
-            font-size: 0.75rem; 
-            letter-spacing: 0.5px;
-            border-right: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.85rem; /* Larger font size */
+            letter-spacing: 0.8px;
+            border-right: 1px solid rgba(255,255,255,0.2);
+        }
+        /* Make the main category headers even more prominent */
+        .r1aa-table thead tr:first-child th {
+            font-size: 0.95rem;
+            padding: 18px 14px;
         }
         
         /* Table Body */
         .r1aa-table tbody td { 
-            padding: 12px 15px; 
+            padding: 14px 16px; 
             border-bottom: 1px solid #e2e8f0; 
             color: #334155; 
-            font-size: 0.85rem; 
+            font-size: 0.9rem; 
             text-align: center;
         }
         
@@ -122,10 +127,9 @@
             line-height: 1.4;
             border-right: 1px solid #e2e8f0 !important; 
             z-index: 5;
-            box-shadow: 4px 0 8px rgba(0,0,0,0.05); /* Subtle shadow for depth */
+            box-shadow: 4px 0 8px rgba(0,0,0,0.05);
             color: var(--primary);
         }
-        /* Ensure sticky column row colors match zebra striping */
         .r1aa-table tbody tr:nth-child(even) .col-sdo { background-color: var(--table-row-alt); }
         .r1aa-table tbody tr:hover .col-sdo { background-color: var(--table-row-hover); }
 
@@ -148,26 +152,26 @@
         .charts-container { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; margin-bottom: 35px; }
         .chart-card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); height: 380px; position: relative; }
 
-        /* PRINT STYLES - REVERT TO CLEAN BLACK/WHITE */
+        /* PRINT STYLES */
         @media print {
             .sidebar, .input-panel, .tool-btn, .nav-links { display: none !important; }
             .main, .content-area { overflow: visible; height: auto; display: block; padding: 0; background: white; }
             .charts-container, .dashboard-grid { display: none; }
             .table-wrapper { box-shadow: none; border: none; padding: 0; page-break-inside: avoid; border-radius: 0; }
-            .table-header-tools { display: none; } /* Hide title bar in print if redundant */
+            .table-header-tools { display: none; }
             .section-title { font-size: 1.2rem; border-bottom: 2px solid black; margin-bottom: 15px; display: block !important; }
             
-            /* Table Reset for Print */
             .r1aa-table { width: 100%; border: 1px solid #000; }
             .r1aa-table th, .r1aa-table td { 
                 border: 1px solid #000 !important; 
                 padding: 4px !important; 
                 color: #000 !important; 
-                background: none !important; /* Remove backgrounds */
+                background: none !important; 
                 font-size: 0.7rem !important;
+                font-weight: normal !important;
             }
-            .r1aa-table thead th { background: #ddd !important; -webkit-print-color-adjust: exact; } /* Light gray header */
-            .col-sdo { position: static !important; box-shadow: none !important; border-right: 1px solid #000 !important; width: auto !important; min-width: auto !important; }
+            .r1aa-table thead th { background: #ddd !important; font-weight: bold !important; -webkit-print-color-adjust: exact; }
+            .col-sdo { position: static !important; box-shadow: none !important; border-right: 1px solid #000 !important; width: auto !important; min-width: auto !important; color: #000 !important; }
             .col-action { display: none; }
         }
         @media (max-width: 1024px) { .charts-container { grid-template-columns: 1fr; } }
@@ -509,7 +513,7 @@
                 const tableId = `tbl-${category}-${sport}-${gender}`.replace(/[^a-zA-Z0-9]/g, '');
                 let cleanSport = sport.replace("(DEMO)", "").replace("(BOYS)", "").replace("(GIRLS)", "").trim();
                 let tableTitle = `${cleanSport} - ${gender}`; if(sport.includes("(DEMO)")) tableTitle += " (DEMO)";
-                let tableHTML = `<div class="table-wrapper"><div class="table-header-tools"><h3 style="margin:0;font-size:1.2rem;color:#000;text-transform:uppercase;font-weight:800;">${tableTitle}</h3><div><button class="tool-btn" onclick="window.print()"><i class="fas fa-print"></i> Print</button><button class="tool-btn" onclick="window.exportToExcel('${tableId}')"><i class="fas fa-file-excel"></i> Excel</button></div></div><div style="overflow-x:auto;"><table id="${tableId}" class="r1aa-table"><thead><tr><th rowspan="2" class="col-sdo">EVENT / DELEGATION</th>${subEvents.map(sub => `<th colspan="3" style="background:#e2e8f0;font-size:0.65rem;">${sub}</th>`).join('')}<th colspan="3" class="header-total" style="color:black;background:#e2e8f0;">TOTAL</th></tr><tr>${subEvents.map(() => `<th style="width:25px;">G</th><th style="width:25px;">S</th><th style="width:25px;">B</th>`).join('')}<th style="width:30px;border-left:2px solid #000;">G</th><th style="width:30px;">S</th><th style="width:30px;">B</th></tr></thead><tbody>`;
+                let tableHTML = `<div class="table-wrapper"><div class="table-header-tools"><h3 style="margin:0;font-size:1.1rem;color:var(--dark);text-transform:uppercase;font-weight:800;">${tableTitle}</h3><div><button class="tool-btn" onclick="window.print()"><i class="fas fa-print"></i> Print</button><button class="tool-btn" onclick="window.exportToExcel('${tableId}')"><i class="fas fa-file-excel"></i> Excel</button></div></div><div style="overflow-x:auto;"><table id="${tableId}" class="r1aa-table"><thead><tr><th rowspan="2" class="col-sdo">EVENT / DELEGATION</th>${subEvents.map(sub => `<th colspan="3" style="background:#e2e8f0;font-size:0.75rem;color:var(--dark);">${sub}</th>`).join('')}<th colspan="3" class="header-total" style="color:black;background:#e2e8f0;">TOTAL</th></tr><tr>${subEvents.map(() => `<th style="width:30px;">G</th><th style="width:30px;">S</th><th style="width:30px;">B</th>`).join('')}<th style="width:35px;border-left:2px solid #000;">G</th><th style="width:35px;">S</th><th style="width:35px;">B</th></tr></thead><tbody>`;
                 SDO_LIST.forEach(sdo => {
                     let rG=0, rS=0, rB=0; let rowHTML = `<tr><td class="col-sdo">${sdo}</td>`;
                     subEvents.forEach(sub => { let cG=0, cS=0, cB=0; GLOBAL_DATA.filter(d => d.category===category && d.event===sport && d.gender===gender && d.subEvent===sub && d.sdo===sdo).forEach(h => { if(h.medal==='GOLD')cG++; if(h.medal==='SILVER')cS++; if(h.medal==='BRONZE')cB++; }); rG+=cG; rS+=cS; rB+=cB; rowHTML += `<td>${cG||''}</td><td>${cS||''}</td><td style="border-right:1px solid #475569;">${cB||''}</td>`; });
@@ -535,10 +539,10 @@
             const generateTable = (title, sportList) => {
                 if(sportList.length === 0) return "";
                 let sdoTotals = {}; SDO_LIST.forEach(sdo => sdoTotals[sdo] = {G:0, S:0, B:0});
-                let html = `<div class="section-title" style="margin-top:30px;">${title}</div><div class="table-wrapper" style="overflow-x:auto;"><table class="r1aa-table"><thead><tr><th rowspan="2" class="col-sdo">EVENTS</th>`;
+                let html = `<div class="section-title" style="margin-top:30px;">${title}</div><div class="table-wrapper" style="overflow-x:auto;"><table class="r1aa-table"><thead><tr><th rowspan="2" class="col-sdo" style="min-width:320px;">EVENTS</th>`;
                 SDO_LIST.forEach(sdo => { html += `<th colspan="3">${sdo.replace(" City", "").replace("Pangasinan", "Pang")}</th>`; });
                 html += `</tr><tr>`;
-                SDO_LIST.forEach(() => { html += `<th style="width:25px;">G</th><th style="width:25px;">S</th><th style="width:25px;">B</th>`; });
+                SDO_LIST.forEach(() => { html += `<th style="width:30px;">G</th><th style="width:30px;">S</th><th style="width:30px;">B</th>`; });
                 html += `</tr></thead><tbody>`;
 
                 sportList.forEach(sport => {
@@ -553,7 +557,7 @@
                            
                            genders.forEach(gender => {
                                let displayLabel = `${sub} - ${gender}`;
-                               html += `<tr><td class="col-sdo" style="font-size:0.7rem;">${displayLabel}</td>`;
+                               html += `<tr><td class="col-sdo" style="font-size:0.85rem;">${displayLabel}</td>`;
                                SDO_LIST.forEach(sdo => {
                                    let g=0, s=0, b=0;
                                    GLOBAL_DATA.filter(d => d.category===category && d.event===sport && d.subEvent===sub && d.gender===gender && d.sdo===sdo)
@@ -576,7 +580,7 @@
                             let displayLabel = `${label} - ${gender}`;
                             if(sport.includes("(DEMO)")) displayLabel += " (DEMO)";
 
-                            html += `<tr><td class="col-sdo" style="font-size:0.7rem;">${displayLabel}</td>`;
+                            html += `<tr><td class="col-sdo" style="font-size:0.85rem;">${displayLabel}</td>`;
                             SDO_LIST.forEach(sdo => {
                                 let g=0, s=0, b=0;
                                 GLOBAL_DATA.filter(d => d.category === category && d.event === sport && d.gender === gender && d.sdo === sdo)
@@ -622,8 +626,8 @@
             let col1 = mode === 'REGULAR' ? 'ELEMENTARY' : 'PARA GAMES';
             let col2 = mode === 'REGULAR' ? 'SECONDARY' : '';
 
-            let html = `<div class="section-title">${title}</div><div class="table-wrapper"><table class="r1aa-table"><thead><tr><th rowspan="2" class="col-rank">RANK</th><th rowspan="2" class="col-sdo">DELEGATION</th><th colspan="3" style="background:#e2e8f0;">${col1}</th>`;
-            if(mode === 'REGULAR') html += `<th colspan="3" style="background:#e2e8f0;">${col2}</th>`;
+            let html = `<div class="section-title">${title}</div><div class="table-wrapper"><table class="r1aa-table"><thead><tr><th rowspan="2" class="col-rank">RANK</th><th rowspan="2" class="col-sdo">DELEGATION</th><th colspan="3" style="background:#e2e8f0;color:var(--dark);">${col1}</th>`;
+            if(mode === 'REGULAR') html += `<th colspan="3" style="background:#e2e8f0;color:var(--dark);">${col2}</th>`;
             html += `<th colspan="3" class="header-total" style="color:black;background:#e2e8f0;">TOTAL</th></tr><tr><th>G</th><th>S</th><th>B</th>`;
             if(mode === 'REGULAR') html += `<th>G</th><th>S</th><th>B</th>`;
             html += `<th style="border-left:2px solid #000;">G</th><th>S</th><th>B</th></tr></thead><tbody>`;
