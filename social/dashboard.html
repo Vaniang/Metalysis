@@ -56,23 +56,23 @@
         /* Workspace */
         .workspace { flex: 1; background: #cbd5e1; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 40px; overflow-y: auto; }
 
-        /* --- MASTER GRAPHIC CARD (11.25 x 11.25 inches @ 96dpi approx 1080px) --- */
+        /* --- MASTER GRAPHIC CARD (1080x1080) --- */
         .social-card {
-            width: 1080px; height: 1080px; /* High Res Square */
+            width: 1080px; height: 1080px; 
             background-color: white;
             background-image: url('assets/template_bg.jpg'); background-size: cover; background-position: center;
             position: relative; display: flex; flex-direction: column; 
             align-items: center; text-align: center; color: #1e3a8a;
             font-family: 'Montserrat', sans-serif; box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.5);
             border: 1px solid #ccc; overflow: hidden; flex-shrink: 0;
-            /* Scaled down to fit screen (0.55), but downloads at full 1080p */
+            /* Scaled for preview */
             transform: scale(0.55); transform-origin: top center; margin-bottom: -400px; margin-top: -80px;
         }
 
         /* CARD HEADER (Top Logo) */
         .card-header { width: 100%; height: 250px; display: flex; justify-content: center; align-items: center; margin-top: 30px; position: relative; z-index: 10; }
-        .header-logo-overlay { height: 200px; object-fit: contain; cursor: pointer; transition: 0.2s; border: 2px dashed transparent; }
-        .header-logo-overlay:hover { transform: scale(1.02); border-color: rgba(0,0,0,0.2); background: rgba(255,255,255,0.3); border-radius: 10px; }
+        .header-logo-overlay { height: 200px; object-fit: contain; cursor: pointer; transition: 0.2s; border: 2px dashed rgba(255,255,255,0.3); border-radius: 10px; }
+        .header-logo-overlay:hover { transform: scale(1.02); border-color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.1); }
 
         .congrats-banner {
             background: linear-gradient(90deg, #ea580c 0%, #dc2626 100%); color: white; width: 100%; padding: 15px 0;
@@ -117,26 +117,26 @@
         .tgt-head { display: grid; grid-template-columns: 0.5fr 3fr 1fr 1fr 1fr; background: #1e3a8a; color: white; padding: 20px; font-size: 1.5rem; font-weight: 700; }
         .tgt-row { display: grid; grid-template-columns: 0.5fr 3fr 1fr 1fr 1fr; padding: 15px 20px; border-bottom: 1px solid #e2e8f0; align-items: center; color: #1e3a8a; font-size: 1.6rem; font-weight: 600; }
 
-        /* CARD FOOTER (5 Logos + Note) */
+        /* CARD FOOTER */
         .card-footer { 
-            width: 100%; height: 200px; /* Taller footer */
-            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); 
+            width: 100%; height: 200px; 
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); 
             display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
             padding-bottom: 15px; z-index: 10;
         }
         .logos-row { display: flex; gap: 30px; margin-bottom: 10px; align-items: center; }
-        
         .footer-logo-box { 
-            height: 100px; min-width: 100px; /* Bigger logos */
+            height: 100px; min-width: 100px; 
             display: flex; align-items: center; justify-content: center; 
-            cursor: pointer; transition: 0.2s; border: 2px dashed transparent; padding: 5px; 
+            cursor: pointer; transition: 0.2s; 
+            border: 2px dashed rgba(255,255,255,0.3); /* Visible border for debugging */
+            border-radius: 8px; padding: 5px; 
         }
-        .footer-logo-box:hover { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.2); border-radius: 8px; }
+        .footer-logo-box:hover { border-color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.1); }
         .footer-logo-img { height: 100%; width: auto; max-width: 100%; object-fit: contain; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.4)); }
-        
-        .source-note { font-size: 0.9rem; color: rgba(255,255,255,0.7); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-top: 5px; }
+        .source-note { font-size: 0.9rem; color: rgba(255,255,255,0.8); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-top: 5px; }
 
-        /* CAPTION TOOLS */
+        /* TOOLS */
         .caption-container { width: 600px; background: white; padding: 25px; border-radius: 12px; margin-top: 20px; flex-shrink: 0; z-index: 50; }
         .caption-area { width: 100%; height: 100px; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: 'Segoe UI', sans-serif; font-size: 0.9rem; resize: none; background: #f8fafc; color: #334155; margin-bottom: 15px; }
         .action-row { display: flex; gap: 10px; }
@@ -370,7 +370,7 @@
             renderAwardsTable(); renderTallyTable();
         });
 
-        // --- NAV SWITCHING ---
+        // --- NAVIGATION ---
         window.switchMainView = (viewId) => {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             document.getElementById('nav-'+viewId).classList.add('active');
