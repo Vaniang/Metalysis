@@ -13,7 +13,10 @@
             --primary: #1e3a8a; --secondary: #3b82f6; --accent: #f59e0b;
             --light: #f8fafc; --white: #ffffff; --dark: #0f172a; 
             --danger: #ef4444; --success: #10b981;
-            --table-head-bg: var(--primary);
+            
+            /* Table Palette */
+            --table-head-bg: #1e3a8a; /* Primary Blue */
+            --table-sub-bg: #475569;  /* Slate for Sub-headers */
             --table-row-hover: #e2e8f0;
             --table-row-alt: #f8fafc;
         }
@@ -59,23 +62,14 @@
         .content-area { flex: 1; overflow-y: auto; padding: 40px; background: #f1f5f9; }
         .section-title { font-size: 1.8rem; font-weight: 800; margin-bottom: 25px; color: var(--dark); border-bottom: 4px solid var(--accent); display: inline-block; padding-bottom: 5px; letter-spacing: -0.5px; }
         
-        /* --- AESTHETIC TABLE STYLING --- */
+        /* --- TABLE STYLING --- */
         .table-wrapper { 
-            background: white; 
-            padding: 0; 
-            border-radius: 12px; 
+            background: white; padding: 0; border-radius: 12px; 
             box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); 
-            margin-bottom: 40px; 
-            border: 1px solid #e2e8f0; 
-            overflow: hidden; 
-            overflow-x: auto; 
+            margin-bottom: 40px; border: 1px solid #e2e8f0; overflow: hidden; overflow-x: auto; 
         }
         
-        .table-header-tools { 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 20px; 
-            background: #fff; border-bottom: 1px solid #e2e8f0; 
-        }
+        .table-header-tools { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: #fff; border-bottom: 1px solid #e2e8f0; }
         .table-header-tools h3 { margin: 0; font-size: 1.1rem; color: var(--dark); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
         
         .tool-btn { background: white; border: 1px solid #cbd5e1; padding: 8px 16px; border-radius: 6px; cursor: pointer; color: #475569; font-size: 0.85rem; margin-left: 8px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; }
@@ -83,51 +77,39 @@
 
         .r1aa-table { width: max-content; min-width: 100%; border-collapse: collapse; border-spacing: 0; font-family: 'Segoe UI', sans-serif; }
         
-        /* Table Header */
+        /* Main Headers */
         .r1aa-table thead th { 
-            background: var(--table-head-bg); 
-            color: white; 
-            padding: 16px 14px; 
-            font-weight: 700; 
-            text-transform: uppercase; 
-            font-size: 0.85rem; 
-            letter-spacing: 0.8px;
-            border-right: 1px solid rgba(255,255,255,0.2);
+            background: var(--table-head-bg); color: white; padding: 16px 14px; 
+            font-weight: 700; text-transform: uppercase; font-size: 0.9rem; 
+            letter-spacing: 0.8px; border-right: 1px solid rgba(255,255,255,0.2);
         }
-        .r1aa-table thead tr:first-child th { font-size: 0.95rem; padding: 18px 14px; }
-        
-        /* Table Body */
-        .r1aa-table tbody td { 
-            padding: 14px 16px; 
-            border-bottom: 1px solid #e2e8f0; 
-            color: #334155; 
-            font-size: 0.9rem; 
-            text-align: center;
+
+        /* Sub Headers (The fix for visibility) */
+        .th-sub {
+            background-color: var(--table-sub-bg) !important;
+            color: white !important;
+            font-size: 0.8rem !important;
+            font-weight: 600 !important;
+            letter-spacing: 0.5px;
         }
         
-        /* Zebra Striping & Hover */
+        .r1aa-table tbody td { padding: 14px 16px; border-bottom: 1px solid #e2e8f0; color: #334155; font-size: 0.9rem; text-align: center; }
         .r1aa-table tbody tr:nth-child(even) { background-color: var(--table-row-alt); }
         .r1aa-table tbody tr:hover { background-color: var(--table-row-hover); transition: background-color 0.2s; }
 
-        /* Sticky Column Beautification */
+        /* Sticky Column */
         .col-sdo { 
-            text-align: left !important; 
-            font-weight: 700; 
-            background: #fff; 
-            position: sticky; 
-            left: 0; 
-            width: 320px; min-width: 320px; max-width: 320px;
-            white-space: normal; line-height: 1.4;
-            border-right: 1px solid #e2e8f0 !important; 
-            z-index: 5;
-            box-shadow: 4px 0 8px rgba(0,0,0,0.05);
-            color: var(--primary);
+            text-align: left !important; font-weight: 700; background: #fff; 
+            position: sticky; left: 0; width: 320px; min-width: 320px; max-width: 320px;
+            white-space: normal; line-height: 1.4; border-right: 1px solid #e2e8f0 !important; 
+            z-index: 5; box-shadow: 4px 0 8px rgba(0,0,0,0.05); color: var(--primary);
         }
         .r1aa-table tbody tr:nth-child(even) .col-sdo { background-color: var(--table-row-alt); }
         .r1aa-table tbody tr:hover .col-sdo { background-color: var(--table-row-hover); }
 
         .col-rank { font-weight: 800; color: var(--dark); font-size: 1rem; }
         
+        /* Totals */
         .header-total { background: #0f172a !important; color: #fbbf24 !important; border-left: 2px solid rgba(255,255,255,0.2) !important; }
         .cell-total { border-left: 2px solid #cbd5e1 !important; font-weight: 800; background-color: #f1f5f9; color: var(--dark); font-size: 0.9rem; }
         .row-total { font-weight: 800; background-color: #e2e8f0 !important; color: var(--dark); text-transform: uppercase; }
@@ -143,22 +125,32 @@
         .charts-container { display: grid; grid-template-columns: 2fr 1fr; gap: 25px; margin-bottom: 35px; }
         .chart-card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); height: 380px; position: relative; }
 
-        /* PRINT STYLES */
+        /* --- PRINT STYLES (Blank Page Fix) --- */
         @media print {
-            .sidebar, .input-panel, .tool-btn, .nav-links { display: none !important; }
-            .main, .content-area { overflow: visible; height: auto; display: block; padding: 0; background: white; }
-            .charts-container, .dashboard-grid { display: none; }
-            .table-wrapper { box-shadow: none; border: none; padding: 0; page-break-inside: avoid; border-radius: 0; }
-            .table-header-tools { display: none; } /* Hide title bar */
-            .section-title { font-size: 1.2rem; border-bottom: 2px solid black; margin-bottom: 15px; display: block !important; }
-            
-            .r1aa-table { width: 100%; border: 1px solid #000; }
-            .r1aa-table th, .r1aa-table td { 
-                border: 1px solid #000 !important; padding: 4px !important; 
-                color: #000 !important; background: none !important; 
-                font-size: 0.7rem !important; font-weight: normal !important;
+            body, .main, .content-area { 
+                display: block !important; 
+                height: auto !important; 
+                overflow: visible !important; 
+                background: white !important;
+                margin: 0 !important; padding: 0 !important;
             }
-            .r1aa-table thead th { background: #ddd !important; font-weight: bold !important; -webkit-print-color-adjust: exact; }
+            .sidebar, .input-panel, .tool-btn, .nav-links, .table-header-tools, .charts-container, .dashboard-grid, .btn-delete-row { display: none !important; }
+            
+            .table-wrapper { box-shadow: none; border: none; padding: 0; page-break-inside: avoid; border-radius: 0; overflow: visible !important; }
+            .section-title { font-size: 1.2rem; border-bottom: 2px solid black; margin-bottom: 15px; display: block !important; color: black !important; }
+            
+            .r1aa-table { width: 100% !important; border: 1px solid #000; border-collapse: collapse; }
+            .r1aa-table th, .r1aa-table td, .th-sub { 
+                border: 1px solid #000 !important; 
+                padding: 4px !important; 
+                color: #000 !important; 
+                background-color: transparent !important; /* Force transparent for ink saving */
+                font-size: 9pt !important;
+                font-weight: normal !important;
+            }
+            /* Add subtle gray for headers in print for readability */
+            .r1aa-table thead th { background-color: #f0f0f0 !important; font-weight: bold !important; -webkit-print-color-adjust: exact; }
+            
             .col-sdo { position: static !important; box-shadow: none !important; border-right: 1px solid #000 !important; width: auto !important; min-width: auto !important; color: #000 !important; }
             .col-action { display: none; }
         }
@@ -517,7 +509,7 @@
                                 <thead>
                                     <tr>
                                         <th rowspan="2" class="col-sdo">EVENT / DELEGATION</th>
-                                        ${subEvents.map(sub => `<th colspan="3" style="background:#e2e8f0;font-size:0.65rem;">${sub}</th>`).join('')}
+                                        ${subEvents.map(sub => `<th colspan="3" class="th-sub">${sub}</th>`).join('')}
                                         <th colspan="3" class="header-total" style="color:black;background:#e2e8f0;">TOTAL</th>
                                     </tr>
                                     <tr>
@@ -673,9 +665,9 @@
                             <tr>
                                 <th rowspan="2" class="col-rank">RANK</th>
                                 <th rowspan="2" class="col-sdo">DELEGATION</th>
-                                <th colspan="3" style="background:#e2e8f0;">${col1}</th>`;
+                                <th colspan="3" class="th-sub">${col1}</th>`;
             
-            if(mode === 'REGULAR') html += `<th colspan="3" style="background:#e2e8f0;">${col2}</th>`;
+            if(mode === 'REGULAR') html += `<th colspan="3" class="th-sub">${col2}</th>`;
             html += `<th colspan="3" class="header-total" style="color:black;background:#e2e8f0;">TOTAL</th></tr><tr><th>G</th><th>S</th><th>B</th>`;
             if(mode === 'REGULAR') html += `<th>G</th><th>S</th><th>B</th>`;
             html += `<th style="border-left:2px solid #000;">G</th><th>S</th><th>B</th></tr></thead><tbody>`;
