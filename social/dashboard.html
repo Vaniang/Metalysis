@@ -13,7 +13,7 @@
             --primary: #1e3a8a; --secondary: #3b82f6; 
             --dark: #0f172a; --light: #f1f5f9; --white: #ffffff;
             --gold: #fbbf24; --silver: #cbd5e1; --bronze: #b45309;
-            --social-pink: #ec4899; /* Instagram/Social Vibe */
+            --social-pink: #ec4899;
         }
         * { box-sizing: border-box; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--light); margin: 0; display: flex; height: 100vh; overflow: hidden; color: #334155; }
@@ -22,7 +22,6 @@
         .sidebar { width: 260px; background: var(--dark); color: white; display: flex; flex-direction: column; flex-shrink: 0; }
         .brand { padding: 25px; font-size: 1.2rem; font-weight: 800; border-bottom: 1px solid #334155; display: flex; align-items: center; gap: 10px; letter-spacing: 1px; }
         .brand i { color: var(--social-pink); }
-        
         .nav-links { flex: 1; padding-top: 20px; }
         .nav-item { padding: 15px 25px; cursor: pointer; color: #94a3b8; font-weight: 600; display: flex; align-items: center; gap: 12px; transition: 0.2s; border-left: 4px solid transparent; }
         .nav-item:hover, .nav-item.active { background: #1e293b; color: white; border-left-color: var(--social-pink); }
@@ -40,67 +39,88 @@
         .feed-item { padding: 20px; border-bottom: 1px solid #f1f5f9; cursor: pointer; transition: 0.2s; position: relative; }
         .feed-item:hover { background: #f8fafc; }
         .feed-item.active { background: #ec48990d; border-left: 4px solid var(--social-pink); }
-        
         .feed-meta { font-size: 0.7rem; color: #94a3b8; margin-bottom: 5px; font-weight: 700; text-transform: uppercase; display: flex; align-items: center; gap: 6px; }
         .medal-dot { width: 8px; height: 8px; border-radius: 50%; }
         .feed-name { font-weight: 700; color: var(--dark); font-size: 1rem; margin-bottom: 4px; }
         .feed-sdo { font-size: 0.85rem; color: #64748b; }
 
-        /* RIGHT: WORKSPACE (Card Generator) */
+        /* RIGHT: WORKSPACE */
         .workspace { flex: 1; background: #f1f5f9; display: flex; flex-direction: column; align-items: center; padding: 40px; overflow-y: auto; }
         
-        /* THE GRAPHIC CARD (To be screenshotted) */
+        /* --- BRANDED SOCIAL CARD --- */
         .social-card {
             width: 500px; height: 500px;
+            /* Default dark gradient fallback if image fails load */
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-            border-radius: 0; /* Square for Instagram */
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             position: relative;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             text-align: center;
             color: white;
             font-family: 'Montserrat', sans-serif;
             margin-bottom: 30px;
-            border: 10px solid white;
             overflow: hidden;
             flex-shrink: 0;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         }
-        
-        /* Card Elements */
-        .card-bg-text { position: absolute; font-size: 180px; font-weight: 900; opacity: 0.03; color: white; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-10deg); white-space: nowrap; pointer-events: none; }
-        .medal-icon-lg { font-size: 70px; margin-bottom: 20px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.3)); }
-        
-        .card-category { font-family: 'Oswald', sans-serif; font-size: 1.2rem; letter-spacing: 3px; text-transform: uppercase; opacity: 0.8; margin-bottom: 5px; }
-        .card-event { font-family: 'Oswald', sans-serif; font-size: 1.8rem; font-weight: 700; text-transform: uppercase; color: white; margin-bottom: 20px; line-height: 1.1; max-width: 90%; }
-        
-        .card-name-box { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); padding: 15px 30px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); width: 80%; }
-        .card-name { font-size: 1.8rem; font-weight: 800; margin-bottom: 5px; }
-        .card-sdo { font-size: 1rem; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
-        
-        .card-footer { position: absolute; bottom: 20px; font-size: 0.7rem; letter-spacing: 2px; opacity: 0.6; text-transform: uppercase; }
 
-        /* Card Themes */
-        .theme-GOLD { border-color: #fbbf24; } 
-        .theme-GOLD .medal-icon-lg { color: #fbbf24; }
+        /* Background Images (Watermarks) */
+        .bg-logo-r1aa {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 400px; height: 400px;
+            background-image: url('assets/r1aa_logo.png'); /* Reads your custom logo */
+            background-size: contain; background-repeat: no-repeat; background-position: center;
+            opacity: 0.15; /* Watermark effect */
+            filter: grayscale(100%);
+            z-index: 0;
+        }
+
+        /* Corner Logos */
+        .logo-top-left { position: absolute; top: 20px; left: 20px; width: 60px; height: 60px; z-index: 2; }
+        .logo-top-right { position: absolute; top: 20px; right: 20px; width: 60px; height: 60px; z-index: 2; }
+        .logo-img { width: 100%; height: 100%; object-fit: contain; }
+
+        /* Card Content Layer */
+        .card-content { z-index: 2; position: relative; width: 100%; display: flex; flex-direction: column; align-items: center; }
+
+        /* Elements */
+        .card-category { font-family: 'Oswald', sans-serif; font-size: 1.1rem; letter-spacing: 3px; text-transform: uppercase; opacity: 0.9; margin-bottom: 5px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .card-event { font-family: 'Oswald', sans-serif; font-size: 1.8rem; font-weight: 700; text-transform: uppercase; color: white; margin-bottom: 25px; line-height: 1.1; max-width: 90%; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        
+        .medal-icon-lg { font-size: 80px; margin-bottom: 25px; filter: drop-shadow(0 4px 6px rgba(0,0,0,0.5)); }
+        
+        .card-name-box { 
+            background: rgba(255,255,255,0.1); 
+            backdrop-filter: blur(15px); /* Glassmorphism */
+            padding: 20px 0; 
+            width: 100%;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            margin-bottom: 30px;
+        }
+        .card-name { font-size: 2.2rem; font-weight: 900; margin-bottom: 5px; text-transform: uppercase; line-height: 1; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+        .card-sdo { font-size: 1.1rem; font-weight: 600; text-transform: uppercase; letter-spacing: 2px; }
+        
+        .card-footer { position: absolute; bottom: 0; width: 100%; background: rgba(0,0,0,0.3); padding: 10px; font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; z-index: 2; }
+
+        /* Themes (Medal Colors) */
+        .theme-GOLD .medal-icon-lg { color: #fbbf24; } 
         .theme-GOLD .card-name { color: #fbbf24; }
-        
-        .theme-SILVER { border-color: #cbd5e1; } 
-        .theme-SILVER .medal-icon-lg { color: #cbd5e1; }
-        .theme-SILVER .card-name { color: #cbd5e1; }
-        
-        .theme-BRONZE { border-color: #d97706; } 
+        .theme-GOLD { border: 4px solid #fbbf24; }
+
+        .theme-SILVER .medal-icon-lg { color: #e2e8f0; }
+        .theme-SILVER .card-name { color: #e2e8f0; }
+        .theme-SILVER { border: 4px solid #e2e8f0; }
+
         .theme-BRONZE .medal-icon-lg { color: #d97706; }
         .theme-BRONZE .card-name { color: #d97706; }
+        .theme-BRONZE { border: 4px solid #d97706; }
 
         /* Tools Panel */
         .tools-panel { width: 500px; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-        .tools-title { font-size: 0.9rem; font-weight: 700; color: #475569; margin-bottom: 15px; display: flex; justify-content: space-between; }
+        .tools-title { font-size: 0.9rem; font-weight: 700; color: #475569; margin-bottom: 15px; }
         .caption-area { width: 100%; height: 120px; padding: 15px; border: 1px solid #e2e8f0; border-radius: 8px; font-family: 'Segoe UI', sans-serif; font-size: 0.9rem; resize: none; background: #f8fafc; color: #334155; margin-bottom: 15px; }
-        .caption-area:focus { outline: none; border-color: var(--secondary); background: white; }
-        
         .btn-copy { width: 100%; padding: 12px; background: var(--dark); color: white; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.2s; }
         .btn-copy:hover { background: #1e293b; }
-        .btn-copy i { font-size: 1rem; }
 
         /* Tally View (Hidden) */
         #tallyView { display: none; padding: 40px; width: 100%; overflow-y: auto; }
@@ -115,15 +135,9 @@
     <aside class="sidebar">
         <div class="brand"><i class="fas fa-hashtag"></i> R1AA SOCIAL</div>
         <div class="nav-links">
-            <div class="nav-item active" onclick="switchView('feed')" id="nav-feed">
-                <i class="fas fa-bolt"></i> Live Feed & Graphics
-            </div>
-            <div class="nav-item" onclick="switchView('tally')" id="nav-tally">
-                <i class="fas fa-list-ol"></i> Official Tally
-            </div>
-            <div class="nav-item" id="logoutBtn" style="margin-top: auto;">
-                <i class="fas fa-sign-out-alt"></i> Sign Out
-            </div>
+            <div class="nav-item active" onclick="switchView('feed')" id="nav-feed"><i class="fas fa-bolt"></i> Live Feed & Graphics</div>
+            <div class="nav-item" onclick="switchView('tally')" id="nav-tally"><i class="fas fa-list-ol"></i> Official Tally</div>
+            <div class="nav-item" id="logoutBtn" style="margin-top: auto;"><i class="fas fa-sign-out-alt"></i> Sign Out</div>
         </div>
     </aside>
 
@@ -145,30 +159,30 @@
 
             <div class="workspace">
                 <div id="socialCard" class="social-card theme-GOLD">
-                    <div class="card-bg-text">R1AA 2026</div>
+                    <div class="bg-logo-r1aa"></div>
                     
-                    <div class="card-category" id="cardCategory">SECONDARY • BOYS</div>
-                    <div class="card-event" id="cardEvent">100M DASH</div>
-                    
-                    <i class="fas fa-medal medal-icon-lg"></i>
-                    
-                    <div class="card-name-box">
-                        <div class="card-name" id="cardName">JUAN DELA CRUZ</div>
-                        <div class="card-sdo" id="cardSDO">ILOCOS NORTE</div>
+                    <div class="logo-top-left"><img src="assets/r1aa_logo.png" class="logo-img" onerror="this.style.display='none'"></div>
+                    <div class="logo-top-right"><img src="assets/host_logo.png" class="logo-img" onerror="this.style.display='none'"></div>
+
+                    <div class="card-content">
+                        <div class="card-category" id="cardCategory">CATEGORY</div>
+                        <div class="card-event" id="cardEvent">EVENT NAME</div>
+                        
+                        <i class="fas fa-medal medal-icon-lg"></i>
+                        
+                        <div class="card-name-box">
+                            <div class="card-name" id="cardName">ATHLETE NAME</div>
+                            <div class="card-sdo" id="cardSDO">DELEGATION</div>
+                        </div>
                     </div>
                     
                     <div class="card-footer">OFFICIAL RESULT • R1AA 2026</div>
                 </div>
 
                 <div class="tools-panel">
-                    <div class="tools-title">
-                        <span>CAPTION GENERATOR</span>
-                        <span style="font-weight:400; font-size:0.8rem; color:#94a3b8;">Click feed item to generate</span>
-                    </div>
+                    <div class="tools-title">CAPTION GENERATOR</div>
                     <textarea id="captionText" class="caption-area" readonly>Waiting for selection...</textarea>
-                    <button class="btn-copy" onclick="copyCaption()">
-                        <i class="far fa-copy"></i> Copy Caption to Clipboard
-                    </button>
+                    <button class="btn-copy" onclick="copyCaption()"><i class="far fa-copy"></i> Copy Caption</button>
                     <p style="text-align:center; margin-top:15px; font-size:0.8rem; color:#64748b;">
                         <i class="fas fa-camera"></i> <strong>Pro Tip:</strong> Use Snipping Tool to capture the card above.
                     </p>
@@ -219,7 +233,6 @@
                 const data = doc.data();
                 GLOBAL_DATA.push(data);
                 
-                // Determine Colors
                 let color = data.medal === 'GOLD' ? '#fbbf24' : data.medal === 'SILVER' ? '#94a3b8' : '#b45309';
                 let medalIcon = data.medal === 'GOLD' ? '🥇' : data.medal === 'SILVER' ? '🥈' : '🥉';
 
@@ -246,7 +259,6 @@
                 container.appendChild(div);
             });
 
-            // Auto-select the newest result
             if(GLOBAL_DATA.length > 0) {
                 const firstItem = container.firstChild;
                 firstItem.classList.add('active');
@@ -259,18 +271,15 @@
         function generateCard(data) {
             const card = document.getElementById('socialCard');
             
-            // 1. Update Text
             document.getElementById('cardCategory').innerText = `${data.category} • ${data.gender}`;
             document.getElementById('cardEvent').innerText = data.event + (data.subEvent ? ` (${data.subEvent})` : "");
             document.getElementById('cardName').innerText = data.athleteName || "ATHLETE NAME";
             document.getElementById('cardSDO').innerText = data.sdo;
 
-            // 2. Update Theme (Border Colors)
             card.className = `social-card theme-${data.medal}`;
 
-            // 3. Generate Caption
             const medalEmoji = data.medal === 'GOLD' ? '🥇' : data.medal === 'SILVER' ? '🥈' : '🥉';
-            const hashtags = `#R1AA2026 #OneRegionOneGoal #${data.sdo.replace(/\s/g, '')} #ParaGames2026`;
+            const hashtags = `#R1AA2026 #OneRegionOneGoal #${data.sdo.replace(/\s/g, '')}`;
             
             const caption = `${medalEmoji} ${data.medal} MEDAL ALERT!\n\nHuge congratulations to ${data.athleteName || "our athlete"} from ${data.sdo} for securing the ${data.medal} medal in ${data.event} - ${data.subEvent || ""} (${data.category})!\n\nYour hard work has paid off! We are so proud of you! 👏💪\n\n${hashtags}`;
             
