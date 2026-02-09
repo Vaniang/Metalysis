@@ -54,7 +54,6 @@
         .input-label { display: block; font-size: 0.7rem; font-weight: 700; color: #64748b; margin-bottom: 4px; text-transform: uppercase; }
         .c-input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; font-size: 0.9rem; }
         .btn-action { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; margin-top: 5px; font-size: 0.8rem; transition: 0.2s; }
-        .btn-red { background: #dc2626; }
         .btn-upload { background: #475569; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-upload:hover { background: #334155; }
         .design-group { background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
@@ -76,8 +75,13 @@
             align-items: center; text-align: center; color: #1e3a8a;
             font-family: 'Montserrat', sans-serif; box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.5);
             border: 1px solid #ccc; overflow: hidden; flex-shrink: 0;
-            transform: scale(0.55); transform-origin: top center; margin-bottom: -400px; margin-top: 40px; 
-            padding-bottom: 100px; 
+            
+            /* VIEWPORT SCALING */
+            transform: scale(0.55); 
+            transform-origin: top center; 
+            margin-bottom: -400px; 
+            margin-top: 40px; 
+            padding-bottom: 120px; /* Extra space for watermark */
         }
 
         /* HEADER */
@@ -140,7 +144,7 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
         }
         .p-medal-icon { 
-            width: 70px; height: 70px; /* Big Medal */
+            width: 70px; height: 70px; 
             border-radius: 50%; 
             display: flex; align-items: center; justify-content: center; 
             margin-right: 20px; 
@@ -150,19 +154,8 @@
             flex-shrink: 0;
         }
         .p-details { flex: 1; text-align: center; }
-        
-        /* Adjusted for wrapping text (Doubles/Teams) */
-        .p-name { 
-            font-size: 2rem; font-weight: 900; 
-            text-transform: uppercase; line-height: 1.1; 
-            color: #1e3a8a; 
-            white-space: pre-wrap; /* Allows line breaks */
-        }
-        .p-sdo { 
-            font-size: 1.2rem; font-weight: 600; 
-            text-transform: uppercase; color: #dc2626; 
-            margin-top: 5px;
-        }
+        .p-name { font-size: 2rem; font-weight: 900; text-transform: uppercase; line-height: 1.1; color: #1e3a8a; white-space: pre-wrap; }
+        .p-sdo { font-size: 1.2rem; font-weight: 600; text-transform: uppercase; color: #dc2626; margin-top: 5px; }
 
         .photo-frame { width: 85%; height: 380px; background: white; padding: 15px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; overflow: hidden; transform: rotate(-1deg); margin-bottom: 30px; }
         .team-photo { width: 100%; height: 100%; object-fit: cover; }
@@ -180,6 +173,23 @@
         .tally-graphic-table { width: 90%; background: rgba(255,255,255,0.95); border-radius: 15px; overflow: hidden; font-family: 'Oswald', sans-serif; box-shadow: 0 15px 30px rgba(0,0,0,0.3); margin-top: 10px; }
         .tgt-head { display: grid; grid-template-columns: 0.5fr 3fr 1fr 1fr 1fr; background: #1e3a8a; color: white; padding: 20px; font-size: 1.5rem; font-weight: 700; }
         .tgt-row { display: grid; grid-template-columns: 0.5fr 3fr 1fr 1fr 1fr; padding: 15px 20px; border-bottom: 1px solid #e2e8f0; align-items: center; color: #1e3a8a; font-size: 1.6rem; font-weight: 600; }
+
+        /* WATERMARK / SOURCE NOTE */
+        .watermark-source {
+            position: absolute;
+            bottom: 40px;
+            width: 100%;
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            font-weight: 800;
+            color: #1e3a8a; 
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.8;
+            z-index: 10;
+            text-shadow: 0 2px 10px rgba(255,255,255,0.9);
+        }
 
         /* Tools */
         .caption-container { width: 600px; background: white; padding: 25px; border-radius: 12px; margin-top: 20px; flex-shrink: 0; z-index: 50; }
@@ -262,9 +272,8 @@
                                 
                                 <div style="display:flex; gap:10px;">
                                     <button class="btn-action" onclick="window.addPodiumWinner()">Add Winner</button>
-                                    <button class="btn-action btn-red" onclick="window.clearPodium()">Clear All</button>
+                                    <button class="btn-action btn-red" style="background:#dc2626;" onclick="window.clearPodium()">Clear All</button>
                                 </div>
-                                <div style="font-size:0.7rem; color:#64748b; margin-top:5px;">For doubles/trios, type names separated by comma or slash.</div>
                             </div>
                             
                             <div class="design-title" style="margin-top:15px;">Recent Results</div>
@@ -367,6 +376,8 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="watermark-source">Source: Game Results and Tabulation Committee</div>
                 </div>
 
                 <div class="caption-container">
@@ -555,17 +566,31 @@
             container.innerHTML = "";
             
             const colors = { 'GOLD': '#fbbf24', 'SILVER': '#cbd5e1', 'BRONZE': '#b45309' };
+            const medals = { 'GOLD': '1st', 'SILVER': '2nd', 'BRONZE': '3rd' };
             
+            // Manual Sort: Gold, Silver, Bronze
+            const rankOrder = { 'GOLD': 1, 'SILVER': 2, 'BRONZE': 3 };
+            podiumList.sort((a,b) => rankOrder[a.rank] - rankOrder[b.rank]);
+
             podiumList.forEach(w => {
                 const color = colors[w.rank] || '#ccc';
+                const medalText = medals[w.rank] || '';
+                
                 container.innerHTML += `
                 <div class="winner-card" style="border-left: 15px solid ${color};">
                     <div class="p-medal-icon" style="background: ${color};"><i class="fas fa-medal"></i></div>
-                    <div class="p-details"><div class="p-name">${w.name}</div><div class="p-sdo">${w.sdo}</div></div>
+                    <div class="p-details">
+                        <div class="p-name">${w.name}</div>
+                        <div class="p-sdo">${w.sdo}</div>
+                    </div>
                 </div>`;
             });
             
-            document.getElementById('captionText').value = `OFFICIAL RESULT: ${document.getElementById('m-event').value}\n#R1AA2026`;
+            // CAPTION UPDATE
+            let caption = `🏆 OFFICIAL RESULT | ${document.getElementById('m-event').value}\n\nExcellence in motion! A huge congratulations to our winners!\n\n`;
+            podiumList.forEach(w => caption += `${w.rank === 'GOLD' ? '🥇' : w.rank === 'SILVER' ? '🥈' : '🥉'} ${w.rank}: ${w.name} (${w.sdo})\n`);
+            caption += `\n#R1AA2026 #Champions #GoldStandard`;
+            document.getElementById('captionText').value = caption;
         };
 
         // Render from DB Click (Legacy support)
@@ -586,17 +611,18 @@
                 podiumList.push({ rank: m.medal, name: m.athleteName, sdo: m.sdo });
             });
             
-            // Sort Gold > Silver > Bronze
-            const rankOrder = { 'GOLD': 1, 'SILVER': 2, 'BRONZE': 3 };
-            podiumList.sort((a,b) => rankOrder[a.rank] - rankOrder[b.rank]);
-            
             window.renderPodiumList();
         };
 
         window.renderVictory = () => {
-            document.getElementById('dispVictName').innerText = document.getElementById('victName').value;
-            document.getElementById('dispVictRank').innerText = document.getElementById('victRank').value;
-            document.getElementById('captionText').value = `CONGRATULATIONS ${document.getElementById('victName').value}!\nAward: ${document.getElementById('victRank').value}\n#R1AA2026 #TopPerformer`;
+            const name = document.getElementById('victName').value;
+            const rank = document.getElementById('victRank').value;
+            document.getElementById('dispVictName').innerText = name;
+            document.getElementById('dispVictRank').innerText = rank;
+            
+            // CAPTION
+            const caption = `🌟 SPOTLIGHT MOMENT! Hats off to ${name} for an incredible performance, securing ${rank}! Truly inspiring! 🙌 #R1AA2026 #Victory`;
+            document.getElementById('captionText').value = caption;
         };
 
         window.renderMatch = () => {
@@ -607,24 +633,30 @@
             const scoreB = document.getElementById('scoreB').value;
 
             document.getElementById('dispMatchEvent').innerText = event;
-            document.getElementById('pEvent').innerText = event;
+            document.getElementById('pEvent').innerText = event; // Use main event title space
             document.getElementById('dispA').innerText = teamA;
             document.getElementById('dispScoreA').innerText = scoreA;
             document.getElementById('dispB').innerText = teamB;
             document.getElementById('dispScoreB').innerText = scoreB;
             
-            document.getElementById('captionText').value = `GAME RESULT | ${event}\n${teamA}: ${scoreA} vs ${teamB}: ${scoreB}\n#R1AA2026`;
+            // CAPTION
+            const caption = `🔥 ACTION UPDATE! The dust has settled on the ${event} court! ${teamA} vs ${teamB} gave it their all. \n\nFinal Score: ${scoreA} - ${scoreB} 🏀🏐⚽ \n\n#R1AA2026 #GameDay`;
+            document.getElementById('captionText').value = caption;
         };
 
         window.renderTallyGraphic = () => {
             const title = document.getElementById('tallyTitle').value;
             document.getElementById('dispTallyTitle').innerText = title;
+            
             let tally = {}; GLOBAL_DATA.forEach(d => { if(!tally[d.sdo]) tally[d.sdo]={G:0,S:0,B:0}; tally[d.sdo][d.medal.charAt(0)]++; });
             const sorted = Object.keys(tally).sort((a,b) => tally[b].G - tally[a].G).slice(0,8);
             let html = `<div class="tgt-head"><div>#</div><div>SDO</div><div>G</div><div>S</div><div>B</div></div>`;
             sorted.forEach((sdo,i) => { html += `<div class="tgt-row"><div>${i+1}</div><div style="text-align:left">${sdo}</div><div>${tally[sdo].G}</div><div>${tally[sdo].S}</div><div>${tally[sdo].B}</div></div>`; });
             document.getElementById('tallyGraphicContent').innerHTML = html;
-            document.getElementById('captionText').value = `${title}\n\n#R1AA2026 #MedalTally`;
+            
+            // CAPTION
+            const caption = `📊 MEDAL UPDATE! Here is the current standing for the R1AA 2026! 🥇 Who is leading the pack? Check it out! #R1AA2026 #MedalTally`;
+            document.getElementById('captionText').value = caption;
         };
 
         window.downloadCard = () => {
