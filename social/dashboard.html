@@ -57,7 +57,6 @@
         .input-label { display: block; font-size: 0.7rem; font-weight: 700; color: #64748b; margin-bottom: 3px; text-transform: uppercase; }
         .c-input { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px; font-family: inherit; font-size: 0.85rem; }
         .c-range { width: 100%; cursor: pointer; accent-color: var(--primary); }
-        .c-color { width: 100%; height: 35px; padding: 0; border: none; cursor: pointer; }
         
         .btn-action { width: 100%; padding: 10px; background: var(--primary); color: white; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; margin-top: 5px; font-size: 0.8rem; }
         .btn-upload { background: #334155; display: flex; align-items: center; justify-content: center; gap: 8px; }
@@ -121,7 +120,7 @@
         .team-photo { width: 100%; height: 100%; object-fit: cover; }
         .victory-details { display: flex; align-items: center; width: 90%; justify-content: center; gap: 30px; background: rgba(255,255,255,0.9); padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); margin-top: 20px; }
         .sdo-logo-lg { width: 130px; height: 130px; object-fit: contain; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3)); }
-        .victory-sdo-name { font-family: 'Oswald', sans-serif; font-size: 4rem; font-weight: 900; color: #dc2626; line-height: 1; text-transform: uppercase; }
+        .victory-sdo-name { font-family: 'Oswald', sans-serif; font-size: 3.5rem; font-weight: 900; color: #dc2626; line-height: 1; text-transform: uppercase; }
         .victory-rank { font-family: 'Oswald', sans-serif; font-size: 2.5rem; font-weight: 800; color: #fbbf24; text-shadow: 2px 2px 0 #b45309; text-transform: uppercase; }
 
         /* Match */
@@ -136,7 +135,7 @@
         .tgt-head { display: grid; grid-template-columns: 0.5fr 3fr 1fr 1fr 1fr; background: #1e3a8a; color: white; padding: 20px; font-size: 1.5rem; font-weight: 700; }
         .tgt-row { display: grid; grid-template-columns: 0.5fr 3fr 1fr 1fr 1fr; padding: 15px 20px; border-bottom: 1px solid #e2e8f0; align-items: center; color: #1e3a8a; font-size: 1.6rem; font-weight: 600; }
 
-        /* FOOTER (5 Logos) */
+        /* FOOTER */
         .card-footer { 
             width: 100%; height: 220px; flex-shrink: 0; margin-top: auto;
             background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); 
@@ -263,24 +262,6 @@
                     </div>
 
                     <div class="design-group">
-                        <div class="design-title">Visibility</div>
-                        <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
-                            <input type="checkbox" checked onchange="toggleElement('card-footer-el', this.checked)"> Show Footer Logos
-                        </label>
-                        <label style="display:flex; align-items:center; gap:10px; cursor:pointer; margin-top:10px;">
-                            <input type="checkbox" checked onchange="toggleElement('card-banner-el', this.checked)"> Show "Congratulations" Banner
-                        </label>
-                    </div>
-
-                    <div class="design-group">
-                        <div class="design-title">Colors</div>
-                        <label class="input-label">Event/Winner Color</label>
-                        <input type="color" class="c-color" value="#1e3a8a" oninput="updateColor(this.value, 'primary')">
-                        <label class="input-label">Accent Color</label>
-                        <input type="color" class="c-color" value="#dc2626" oninput="updateColor(this.value, 'accent')">
-                    </div>
-
-                    <div class="design-group">
                         <div class="design-title">Customization</div>
                         <button class="btn-action btn-upload" onclick="triggerUpload('upload-template')"><i class="fas fa-image"></i> Upload Custom BG</button>
                     </div>
@@ -328,7 +309,7 @@
                         </div>
                     </div>
 
-                    <div class="card-footer" id="card-footer-el">
+                    <div class="card-footer">
                         <div class="logos-row">
                             <div class="footer-logo-box" onclick="triggerUpload('upload-deped')"><img src="assets/deped_logo.png" class="footer-logo-img" id="img-deped" onerror="this.style.opacity='0'"></div>
                             <div class="footer-logo-box" onclick="triggerUpload('upload-bagongp')"><img src="assets/bagongp_logo.png" class="footer-logo-img" id="img-bagongp" onerror="this.style.opacity='0'"></div>
@@ -396,22 +377,6 @@
             if(el === 'banner') document.getElementById('card-banner-el').style.transform = `translateY(${val}px)`;
             if(el === 'text') document.getElementById('text-group-el').style.transform = `translateY(${val}px)`;
             if(el === 'content') document.getElementById('visual-group-el').style.transform = `translateY(${val}px)`;
-        };
-
-        window.updateColor = (val, type) => {
-            const root = document.documentElement;
-            if(type === 'primary') {
-                root.style.setProperty('--primary', val);
-                document.querySelectorAll('.p-name, .victory-sdo-name, .team-name-lg').forEach(el => el.style.color = val);
-            }
-            if(type === 'accent') {
-                document.querySelectorAll('.p-sdo, .victory-rank').forEach(el => el.style.color = val);
-            }
-        };
-
-        window.toggleElement = (id, show) => {
-            const el = document.getElementById(id);
-            if(el) el.style.display = show ? 'flex' : 'none';
         };
 
         // --- MANUAL DATA RENDER ---
@@ -510,7 +475,6 @@
             document.getElementById('captionText').value = `${document.getElementById('tallyTitle').value}\n\n#R1AA2026`;
         };
 
-        // --- UTILS ---
         window.triggerUpload = (id) => document.getElementById(id).click();
         window.updateImage = (input, targetId) => {
             if (input.files && input.files[0]) {
