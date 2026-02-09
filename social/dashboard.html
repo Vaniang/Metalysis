@@ -54,6 +54,7 @@
         .input-label { display: block; font-size: 0.7rem; font-weight: 700; color: #64748b; margin-bottom: 4px; text-transform: uppercase; }
         .c-input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; font-size: 0.9rem; }
         .btn-action { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; margin-top: 5px; font-size: 0.8rem; transition: 0.2s; }
+        .btn-red { background: #dc2626; }
         .btn-upload { background: #475569; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-upload:hover { background: #334155; }
         .design-group { background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
@@ -122,7 +123,7 @@
             text-shadow: 2px 2px 0px #b45309; margin-top: 0px; margin-bottom: 25px; 
         }
 
-        /* NEW LAYOUT: Vertical Podium with Bigger Medals and Centered Text */
+        /* NEW PODIUM LAYOUT - Stacked & Flexible */
         .podium-container { 
             display: flex; 
             flex-direction: column; 
@@ -139,17 +140,29 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
         }
         .p-medal-icon { 
-            width: 70px; height: 70px; /* BIGGER MEDALS */
+            width: 70px; height: 70px; /* Big Medal */
             border-radius: 50%; 
             display: flex; align-items: center; justify-content: center; 
             margin-right: 20px; 
-            font-size: 2.5rem; /* BIGGER ICON FONT */
+            font-size: 2.5rem; 
             color: white;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            flex-shrink: 0;
         }
-        .p-details { flex: 1; text-align: center; /* CENTERED TEXT */ }
-        .p-name { font-size: 2rem; font-weight: 900; text-transform: uppercase; line-height: 1; color: #1e3a8a; }
-        .p-sdo { font-size: 1.2rem; font-weight: 600; text-transform: uppercase; color: #dc2626; }
+        .p-details { flex: 1; text-align: center; }
+        
+        /* Adjusted for wrapping text (Doubles/Teams) */
+        .p-name { 
+            font-size: 2rem; font-weight: 900; 
+            text-transform: uppercase; line-height: 1.1; 
+            color: #1e3a8a; 
+            white-space: pre-wrap; /* Allows line breaks */
+        }
+        .p-sdo { 
+            font-size: 1.2rem; font-weight: 600; 
+            text-transform: uppercase; color: #dc2626; 
+            margin-top: 5px;
+        }
 
         .photo-frame { width: 85%; height: 380px; background: white; padding: 15px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; overflow: hidden; transform: rotate(-1deg); margin-bottom: 30px; }
         .team-photo { width: 100%; height: 100%; object-fit: cover; }
@@ -229,14 +242,31 @@
                     <div class="panel-content">
                         <div id="ctrl-podium" class="panel-section active">
                             <div class="design-group">
-                                <div class="design-title">Manual Input</div>
-                                <div class="input-group"><label class="input-label">Event Name</label><input type="text" class="c-input" id="m-event" oninput="window.manualPodiumRender()"></div>
-                                <div class="input-group"><label class="input-label">Category</label><input type="text" class="c-input" id="m-cat" oninput="window.manualPodiumRender()"></div>
-                                <div class="input-group"><label class="input-label">GOLD</label><input type="text" class="c-input" id="m-gold-name" placeholder="Name"><input type="text" class="c-input" id="m-gold-sdo" placeholder="SDO" style="margin-top:2px" oninput="window.manualPodiumRender()"></div>
-                                <div class="input-group"><label class="input-label">SILVER</label><input type="text" class="c-input" id="m-silver-name" placeholder="Name"><input type="text" class="c-input" id="m-silver-sdo" placeholder="SDO" style="margin-top:2px" oninput="window.manualPodiumRender()"></div>
-                                <div class="input-group"><label class="input-label">BRONZE</label><input type="text" class="c-input" id="m-bronze-name" placeholder="Name"><input type="text" class="c-input" id="m-bronze-sdo" placeholder="SDO" style="margin-top:2px" oninput="window.manualPodiumRender()"></div>
-                                <button class="btn-action" onclick="window.manualPodiumRender()">Update Card</button>
+                                <div class="design-title">Event Info</div>
+                                <div class="input-group"><label class="input-label">Event Name</label><input type="text" class="c-input" id="m-event" oninput="window.updatePodiumTitle()"></div>
+                                <div class="input-group"><label class="input-label">Category</label><input type="text" class="c-input" id="m-cat" oninput="window.updatePodiumTitle()"></div>
                             </div>
+                            
+                            <div class="design-group">
+                                <div class="design-title">Add Winner to Podium</div>
+                                <div class="input-group">
+                                    <label class="input-label">Medal Rank</label>
+                                    <select class="c-input" id="add-rank">
+                                        <option value="GOLD">Gold</option>
+                                        <option value="SILVER">Silver</option>
+                                        <option value="BRONZE">Bronze</option>
+                                    </select>
+                                </div>
+                                <div class="input-group"><label class="input-label">Name / Team / Duo</label><input type="text" class="c-input" id="add-name" placeholder="E.g. Juan Dela Cruz / Team A"></div>
+                                <div class="input-group"><label class="input-label">SDO / Affiliation</label><input type="text" class="c-input" id="add-sdo" placeholder="E.g. Ilocos Norte"></div>
+                                
+                                <div style="display:flex; gap:10px;">
+                                    <button class="btn-action" onclick="window.addPodiumWinner()">Add Winner</button>
+                                    <button class="btn-action btn-red" onclick="window.clearPodium()">Clear All</button>
+                                </div>
+                                <div style="font-size:0.7rem; color:#64748b; margin-top:5px;">For doubles/trios, type names separated by comma or slash.</div>
+                            </div>
+                            
                             <div class="design-title" style="margin-top:15px;">Recent Results</div>
                             <div id="feedContainer">Loading...</div>
                         </div>
@@ -323,7 +353,8 @@
                             </div>
                             
                             <div id="layoutMatch" class="card-layout">
-                                <div class="event-name-lg" id="dispMatchEvent" style="display:none;">EVENT</div> <div class="match-score-box">
+                                <div class="event-name-lg" id="dispMatchEvent" style="display:none;">EVENT</div>
+                                <div class="match-score-box">
                                     <div class="team-box"><div class="team-logo-ph" onclick="window.triggerUpload('upload-teamA')" id="boxA"><img src="" id="img-teamA" style="width:100%;height:100%;object-fit:cover;display:none;"><span id="ph-A">A</span></div><div class="team-name-lg" id="dispA">TEAM A</div><div class="score-text" id="dispScoreA">00</div></div>
                                     <div class="vs-text" style="font-size:4rem;color:#fbbf24;font-weight:900">VS</div>
                                     <div class="team-box"><div class="team-logo-ph" onclick="window.triggerUpload('upload-teamB')" id="boxB"><img src="" id="img-teamB" style="width:100%;height:100%;object-fit:cover;display:none;"><span id="ph-B">B</span></div><div class="team-name-lg" id="dispB">TEAM B</div><div class="score-text" id="dispScoreB">00</div></div>
@@ -404,7 +435,7 @@
         const firebaseConfig = { apiKey: "AIzaSyDfhfZ_c8wbTTviu4MrhvbRknqzyBkzI_s", authDomain: "metalysis-f38ef.firebaseapp.com", projectId: "metalysis-f38ef", storageBucket: "metalysis-f38ef.firebasestorage.app", messagingSenderId: "666983988939", appId: "1:666983988939:web:f70937a2572ed08015a54e", measurementId: "G-96ZPLMV4J7" };
         const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app);
 
-        // --- EXPOSE FUNCTIONS TO WINDOW ---
+        // --- NAVIGATION ---
         window.switchMainView = (viewId) => {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             document.getElementById('nav-'+viewId).classList.add('active');
@@ -419,6 +450,7 @@
             document.getElementById('panel-'+tab).classList.add('active');
         };
 
+        // --- EDITOR LOGIC ---
         window.updateBannerText = (val) => document.getElementById('congrats-banner').innerText = val;
         
         window.moveElement = (el, val) => {
@@ -466,7 +498,7 @@
             Object.values(GROUPED_DATA).forEach(group => {
                 const div = document.createElement('div'); div.className = 'feed-item';
                 div.innerHTML = `<div class="feed-meta">${group.meta.category}</div><div class="feed-title">${group.meta.event}</div>`;
-                div.onclick = () => window.renderPodium(group);
+                div.onclick = () => window.renderPodiumFromDB(group);
                 container.appendChild(div);
             });
             window.renderAwardsTable(); renderTallyTable();
@@ -489,53 +521,76 @@
             else banner.innerText = "CONGRATULATIONS!";
         };
 
-        window.renderPodium = (group) => {
+        // --- NEW PODIUM LOGIC ---
+        let podiumList = [];
+
+        window.updatePodiumTitle = () => {
+            document.getElementById('pEvent').innerText = document.getElementById('m-event').value || "EVENT";
+            document.getElementById('pCategory').innerText = document.getElementById('m-cat').value || "CATEGORY";
+        };
+
+        window.addPodiumWinner = () => {
+            const rank = document.getElementById('add-rank').value;
+            const name = document.getElementById('add-name').value;
+            const sdo = document.getElementById('add-sdo').value;
+            
+            if(!name || !sdo) return alert("Please enter Name/Team and SDO");
+            
+            podiumList.push({ rank, name, sdo });
+            window.renderPodiumList();
+            
+            // Clear inputs
+            document.getElementById('add-name').value = "";
+            document.getElementById('add-sdo').value = "";
+        };
+
+        window.clearPodium = () => {
+            podiumList = [];
+            window.renderPodiumList();
+        };
+
+        window.renderPodiumList = () => {
+            window.switchMode('podium');
+            const container = document.getElementById('winnerBars');
+            container.innerHTML = "";
+            
+            const colors = { 'GOLD': '#fbbf24', 'SILVER': '#cbd5e1', 'BRONZE': '#b45309' };
+            
+            podiumList.forEach(w => {
+                const color = colors[w.rank] || '#ccc';
+                container.innerHTML += `
+                <div class="winner-card" style="border-left: 15px solid ${color};">
+                    <div class="p-medal-icon" style="background: ${color};"><i class="fas fa-medal"></i></div>
+                    <div class="p-details"><div class="p-name">${w.name}</div><div class="p-sdo">${w.sdo}</div></div>
+                </div>`;
+            });
+            
+            document.getElementById('captionText').value = `OFFICIAL RESULT: ${document.getElementById('m-event').value}\n#R1AA2026`;
+        };
+
+        // Render from DB Click (Legacy support)
+        window.renderPodiumFromDB = (group) => {
             window.switchMode('podium');
             document.getElementById('pEvent').innerText = group.meta.event;
             document.getElementById('pCategory').innerText = `${group.meta.subEvent||''} ${group.meta.category} ${group.meta.gender}`;
-            const bars = document.getElementById('winnerBars'); bars.innerHTML = "";
-            const gold = group.medals.find(m => m.medal === 'GOLD'); const silver = group.medals.find(m => m.medal === 'SILVER'); const bronze = group.medals.find(m => m.medal === 'BRONZE');
             
-            if(gold) bars.innerHTML += `
-                <div class="winner-card" style="border-left: 15px solid #fbbf24;">
-                    <div class="p-medal-icon" style="background: #fbbf24;"><i class="fas fa-medal"></i></div>
-                    <div class="p-details"><div class="p-name">${gold.athleteName}</div><div class="p-sdo">${gold.sdo}</div></div>
-                </div>`;
-            if(silver) bars.innerHTML += `
-                <div class="winner-card" style="border-left: 15px solid #cbd5e1;">
-                    <div class="p-medal-icon" style="background: #cbd5e1;"><i class="fas fa-medal"></i></div>
-                    <div class="p-details"><div class="p-name">${silver.athleteName}</div><div class="p-sdo">${silver.sdo}</div></div>
-                </div>`;
-            if(bronze) bars.innerHTML += `
-                <div class="winner-card" style="border-left: 15px solid #b45309;">
-                    <div class="p-medal-icon" style="background: #b45309;"><i class="fas fa-medal"></i></div>
-                    <div class="p-details"><div class="p-name">${bronze.athleteName}</div><div class="p-sdo">${bronze.sdo}</div></div>
-                </div>`;
-            document.getElementById('captionText').value = `OFFICIAL RESULT: ${group.meta.event}\n#R1AA2026`;
-        };
-
-        window.manualPodiumRender = () => {
-            document.getElementById('pEvent').innerText = document.getElementById('m-event').value || "EVENT";
-            document.getElementById('pCategory').innerText = document.getElementById('m-cat').value || "CATEGORY";
-            const bars = document.getElementById('winnerBars'); bars.innerHTML = "";
-            const gN = document.getElementById('m-gold-name').value; const gS = document.getElementById('m-gold-sdo').value;
-            if(gN) bars.innerHTML += `
-                <div class="winner-card" style="border-left: 15px solid #fbbf24;">
-                    <div class="p-medal-icon" style="background: #fbbf24;"><i class="fas fa-medal"></i></div>
-                    <div class="p-details"><div class="p-name">${gN}</div><div class="p-sdo">${gS}</div></div>
-                </div>`;
-            const sN = document.getElementById('m-silver-name').value; const sS = document.getElementById('m-silver-sdo').value;
-            if(sN) bars.innerHTML += `
-                <div class="winner-card" style="border-left: 15px solid #cbd5e1;">
-                    <div class="p-medal-icon" style="background: #cbd5e1;"><i class="fas fa-medal"></i></div>
-                    <div class="p-details"><div class="p-name">${sN}</div><div class="p-sdo">${sS}</div></div>
-                </div>`;
-            const bN = document.getElementById('m-bronze-name').value; const bS = document.getElementById('m-bronze-sdo').value;
-            if(bN) bars.innerHTML += `
-                <div class="winner-card" style="border-left: 15px solid #b45309;">
-                    <div class="p-medal-icon" style="background: #b45309;"><i class="fas fa-medal"></i></div>
-                    <div class="p-details"><div class="p-name">${bN}</div><div class="p-sdo">${bS}</div></div>
-                </div>`;
+            // Auto-populate manual inputs for editing
+            document.getElementById('m-event').value = group.meta.event;
+            document.getElementById('m-cat').value = `${group.meta.subEvent||''} ${group.meta.category} ${group.meta.gender}`;
+            
+            // Clear existing list
+            podiumList = [];
+            
+            // Convert group.medals to podiumList format
+            group.medals.forEach(m => {
+                podiumList.push({ rank: m.medal, name: m.athleteName, sdo: m.sdo });
+            });
+            
+            // Sort Gold > Silver > Bronze
+            const rankOrder = { 'GOLD': 1, 'SILVER': 2, 'BRONZE': 3 };
+            podiumList.sort((a,b) => rankOrder[a.rank] - rankOrder[b.rank]);
+            
+            window.renderPodiumList();
         };
 
         window.renderVictory = () => {
@@ -551,7 +606,8 @@
             const teamB = document.getElementById('nameB').value;
             const scoreB = document.getElementById('scoreB').value;
 
-            document.getElementById('pEvent').innerText = event; // Use main event title space
+            document.getElementById('dispMatchEvent').innerText = event;
+            document.getElementById('pEvent').innerText = event;
             document.getElementById('dispA').innerText = teamA;
             document.getElementById('dispScoreA').innerText = scoreA;
             document.getElementById('dispB').innerText = teamB;
@@ -563,7 +619,6 @@
         window.renderTallyGraphic = () => {
             const title = document.getElementById('tallyTitle').value;
             document.getElementById('dispTallyTitle').innerText = title;
-            
             let tally = {}; GLOBAL_DATA.forEach(d => { if(!tally[d.sdo]) tally[d.sdo]={G:0,S:0,B:0}; tally[d.sdo][d.medal.charAt(0)]++; });
             const sorted = Object.keys(tally).sort((a,b) => tally[b].G - tally[a].G).slice(0,8);
             let html = `<div class="tgt-head"><div>#</div><div>SDO</div><div>G</div><div>S</div><div>B</div></div>`;
