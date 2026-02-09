@@ -81,10 +81,10 @@
             transform-origin: top center; 
             margin-bottom: -400px; 
             margin-top: 40px; 
-            padding-bottom: 100px; /* Space at bottom for background */
+            padding-bottom: 100px; 
         }
 
-        /* HEADER (Restored) */
+        /* HEADER */
         .card-header { width: 100%; height: 260px; display: flex; justify-content: center; align-items: center; padding-top: 40px; position: relative; z-index: 10; flex-shrink: 0; }
         .header-logo-overlay { height: 180px; object-fit: contain; cursor: pointer; border: 2px dashed rgba(255,255,255,0.3); border-radius: 10px; transition: 0.2s; }
         .header-logo-overlay:hover { transform: scale(1.02); border-color: white; background: rgba(255,255,255,0.1); }
@@ -118,7 +118,7 @@
 
         /* Typography */
         .event-name-lg { font-family: 'Oswald', sans-serif; font-size: 4rem; font-weight: 800; text-transform: uppercase; color: #fbbf24; -webkit-text-stroke: 2px #b45309; text-shadow: 3px 3px 0px #b45309; margin-bottom: 5px; line-height: 1.1; }
-        .category-text { font-family: 'Montserrat', sans-serif; font-size: 1.5rem; font-weight: 700; text-transform: uppercase; letter-spacing: 4px; color: white; margin-bottom: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .category-text { font-family: 'Montserrat', sans-serif; font-size: 1.5rem; font-weight: 700; text-transform: uppercase; letter-spacing: 4px; color: white; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 
         /* Tally Title */
         .tally-title-custom { 
@@ -137,6 +137,7 @@
 
         .photo-frame { width: 85%; height: 380px; background: white; padding: 15px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; overflow: hidden; transform: rotate(-1deg); margin-bottom: 30px; }
         .team-photo { width: 100%; height: 100%; object-fit: cover; }
+        
         .victory-details { display: flex; align-items: center; width: 95%; justify-content: center; gap: 20px; background: rgba(255,255,255,0.95); padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         .sdo-logo-lg { width: 120px; height: 120px; object-fit: contain; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3)); }
         .victory-sdo-name { font-family: 'Oswald', sans-serif; font-size: 3rem; font-weight: 900; color: #dc2626; line-height: 1.1; text-transform: uppercase; }
@@ -146,7 +147,7 @@
         .team-box { display: flex; flex-direction: column; align-items: center; width: 40%; }
         .team-logo-ph { width: 160px; height: 160px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: white; border: 4px solid white; overflow: hidden; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
         .team-name-lg { font-family: 'Oswald', sans-serif; font-size: 1.8rem; color: white; text-transform: uppercase; margin-top: 15px; text-shadow: 0 3px 6px rgba(0,0,0,0.6); line-height: 1.1; }
-        .score-text { font-family: 'Oswald', sans-serif; font-size: 6rem; color: #fbbf24; font-weight: 900; text-shadow: 0 5px 15px rgba(0,0,0,0.6); line-height: 1; margin-top: 5px; }
+        .score-text { font-family: 'Oswald', sans-serif; font-size: 7rem; color: #fbbf24; font-weight: 900; text-shadow: 0 5px 15px rgba(0,0,0,0.6); line-height: 1; margin-top: 5px; }
 
         .tally-graphic-table { width: 90%; background: rgba(255,255,255,0.95); border-radius: 15px; overflow: hidden; font-family: 'Oswald', sans-serif; box-shadow: 0 15px 30px rgba(0,0,0,0.3); margin-top: 10px; }
         .tgt-head { display: grid; grid-template-columns: 0.5fr 3fr 1fr 1fr 1fr; background: #1e3a8a; color: white; padding: 20px; font-size: 1.5rem; font-weight: 700; }
@@ -234,8 +235,10 @@
 
                         <div id="ctrl-match" class="panel-section">
                             <div class="input-group"><label class="input-label">Event</label><input type="text" class="c-input" id="matchEvent" value="BASKETBALL SEC BOYS" oninput="renderMatch()"></div>
-                            <div class="input-group"><label class="input-label">Team A</label><input type="text" class="c-input" id="nameA" value="ILOCOS NORTE" oninput="renderMatch()"><input type="number" class="c-input" id="scoreA" value="86" style="margin-top:5px;" oninput="renderMatch()"></div>
-                            <div class="input-group"><label class="input-label">Team B</label><input type="text" class="c-input" id="nameB" value="LA UNION" oninput="renderMatch()"><input type="number" class="c-input" id="scoreB" value="82" style="margin-top:5px;" oninput="renderMatch()"></div>
+                            <div class="input-group"><label class="input-label">Team A</label><input type="text" class="c-input" id="nameA" value="ILOCOS NORTE" oninput="renderMatch()"></div>
+                            <div class="input-group"><label class="input-label">Score A</label><input type="number" class="c-input" id="scoreA" value="86" oninput="renderMatch()"></div>
+                            <div class="input-group"><label class="input-label">Team B</label><input type="text" class="c-input" id="nameB" value="LA UNION" oninput="renderMatch()"></div>
+                            <div class="input-group"><label class="input-label">Score B</label><input type="number" class="c-input" id="scoreB" value="82" oninput="renderMatch()"></div>
                         </div>
 
                         <div id="ctrl-tally" class="panel-section">
@@ -475,7 +478,7 @@
         };
 
         window.renderPodium = (group) => {
-            switchMode('podium');
+            switchMode({currentTarget: document.querySelector('button[onclick*="podium"]')}, 'podium');
             document.getElementById('pEvent').innerText = group.meta.event;
             document.getElementById('pCategory').innerText = `${group.meta.subEvent||''} ${group.meta.category} ${group.meta.gender}`;
             const bars = document.getElementById('winnerBars'); bars.innerHTML = "";
@@ -501,21 +504,40 @@
         window.renderVictory = () => {
             document.getElementById('dispVictName').innerText = document.getElementById('victName').value;
             document.getElementById('dispVictRank').innerText = document.getElementById('victRank').value;
+            
+            // Auto-update caption
+            document.getElementById('captionText').value = `CONGRATULATIONS ${document.getElementById('victName').value}!\nAward: ${document.getElementById('victRank').value}\n#R1AA2026 #TopPerformer`;
         };
 
         window.renderMatch = () => {
-            document.getElementById('dispMatchEvent').innerText = document.getElementById('matchEvent').value;
-            document.getElementById('dispA').innerText = document.getElementById('nameA').value; document.getElementById('dispScoreA').innerText = document.getElementById('scoreA').value;
-            document.getElementById('dispB').innerText = document.getElementById('nameB').value; document.getElementById('dispScoreB').innerText = document.getElementById('scoreB').value;
+            const event = document.getElementById('matchEvent').value;
+            const teamA = document.getElementById('nameA').value;
+            const scoreA = document.getElementById('scoreA').value;
+            const teamB = document.getElementById('nameB').value;
+            const scoreB = document.getElementById('scoreB').value;
+
+            document.getElementById('dispMatchEvent').innerText = event;
+            document.getElementById('dispA').innerText = teamA;
+            document.getElementById('dispScoreA').innerText = scoreA;
+            document.getElementById('dispB').innerText = teamB;
+            document.getElementById('dispScoreB').innerText = scoreB;
+            
+            // Auto-update caption
+            document.getElementById('captionText').value = `GAME RESULT | ${event}\n${teamA}: ${scoreA} vs ${teamB}: ${scoreB}\n#R1AA2026`;
         };
 
         window.renderTallyGraphic = () => {
-            document.getElementById('dispTallyTitle').innerText = document.getElementById('tallyTitle').value;
+            const title = document.getElementById('tallyTitle').value;
+            document.getElementById('dispTallyTitle').innerText = title;
+            
             let tally = {}; GLOBAL_DATA.forEach(d => { if(!tally[d.sdo]) tally[d.sdo]={G:0,S:0,B:0}; tally[d.sdo][d.medal.charAt(0)]++; });
             const sorted = Object.keys(tally).sort((a,b) => tally[b].G - tally[a].G).slice(0,8);
             let html = `<div class="tgt-head"><div>#</div><div>SDO</div><div>G</div><div>S</div><div>B</div></div>`;
             sorted.forEach((sdo,i) => { html += `<div class="tgt-row"><div>${i+1}</div><div style="text-align:left">${sdo}</div><div>${tally[sdo].G}</div><div>${tally[sdo].S}</div><div>${tally[sdo].B}</div></div>`; });
             document.getElementById('tallyGraphicContent').innerHTML = html;
+            
+            // Auto-update caption
+            document.getElementById('captionText').value = `${title}\n\n#R1AA2026 #MedalTally`;
         };
 
         window.downloadCard = () => {
