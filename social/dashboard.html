@@ -75,7 +75,12 @@
             align-items: center; text-align: center; color: #1e3a8a;
             font-family: 'Montserrat', sans-serif; box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.5);
             border: 1px solid #ccc; overflow: hidden; flex-shrink: 0;
-            transform: scale(0.55); transform-origin: top center; margin-bottom: -400px; margin-top: 40px; 
+            
+            /* VIEWPORT SCALING */
+            transform: scale(0.55); 
+            transform-origin: top center; 
+            margin-bottom: -400px; 
+            margin-top: 40px; 
             padding-bottom: 100px; 
         }
 
@@ -170,20 +175,20 @@
 </head>
 <body>
 
-    <input type="file" id="upload-template" accept="image/*" style="display:none" onchange="updateImage(this, 'card-bg')">
-    <input type="file" id="upload-header" accept="image/*" style="display:none" onchange="updateImage(this, 'img-header')">
-    <input type="file" id="upload-teamA" accept="image/*" style="display:none" onchange="updateImage(this, 'img-teamA')">
-    <input type="file" id="upload-teamB" accept="image/*" style="display:none" onchange="updateImage(this, 'img-teamB')">
-    <input type="file" id="upload-team-photo" accept="image/*" style="display:none" onchange="updateImage(this, 'img-team-photo')">
-    <input type="file" id="upload-sdo-logo" accept="image/*" style="display:none" onchange="updateImage(this, 'img-sdo-logo')">
+    <input type="file" id="upload-template" accept="image/*" style="display:none" onchange="window.updateImage(this, 'card-bg')">
+    <input type="file" id="upload-header" accept="image/*" style="display:none" onchange="window.updateImage(this, 'img-header')">
+    <input type="file" id="upload-teamA" accept="image/*" style="display:none" onchange="window.updateImage(this, 'img-teamA')">
+    <input type="file" id="upload-teamB" accept="image/*" style="display:none" onchange="window.updateImage(this, 'img-teamB')">
+    <input type="file" id="upload-team-photo" accept="image/*" style="display:none" onchange="window.updateImage(this, 'img-team-photo')">
+    <input type="file" id="upload-sdo-logo" accept="image/*" style="display:none" onchange="window.updateImage(this, 'img-sdo-logo')">
 
     <aside class="sidebar">
         <div class="brand"><i class="fas fa-hashtag"></i> R1AA SOCIAL</div>
         <div class="nav-links">
-            <div class="nav-item active" onclick="switchMainView('viewGraphics')" id="nav-viewGraphics"><i class="fas fa-bolt"></i> Graphic Generator</div>
-            <div class="nav-item" onclick="switchMainView('viewUpdates')" id="nav-viewUpdates"><i class="fas fa-newspaper"></i> PILUpdates</div>
-            <div class="nav-item" onclick="switchMainView('viewAwards')" id="nav-viewAwards"><i class="fas fa-medal"></i> Awards List</div>
-            <div class="nav-item" onclick="switchMainView('viewTally')" id="nav-viewTally"><i class="fas fa-list-ol"></i> Official Tally</div>
+            <div class="nav-item active" onclick="window.switchMainView('viewGraphics')" id="nav-viewGraphics"><i class="fas fa-bolt"></i> Graphic Generator</div>
+            <div class="nav-item" onclick="window.switchMainView('viewUpdates')" id="nav-viewUpdates"><i class="fas fa-newspaper"></i> PILUpdates</div>
+            <div class="nav-item" onclick="window.switchMainView('viewAwards')" id="nav-viewAwards"><i class="fas fa-medal"></i> Awards List</div>
+            <div class="nav-item" onclick="window.switchMainView('viewTally')" id="nav-viewTally"><i class="fas fa-list-ol"></i> Official Tally</div>
             <div class="nav-item" id="logoutBtn" style="margin-top: auto;"><i class="fas fa-sign-out-alt"></i> Sign Out</div>
         </div>
     </aside>
@@ -193,16 +198,16 @@
         <div id="viewGraphics" class="view-section active">
             <div class="control-panel">
                 <div class="cp-tabs">
-                    <div class="cp-tab active" onclick="switchTab('data')" id="tab-data">DATA ENTRY</div>
-                    <div class="cp-tab" onclick="switchTab('design')" id="tab-design">THEME EDITOR</div>
+                    <div class="cp-tab active" onclick="window.switchTab('data')" id="tab-data">DATA ENTRY</div>
+                    <div class="cp-tab" onclick="window.switchTab('design')" id="tab-design">THEME EDITOR</div>
                 </div>
 
                 <div id="panel-data" class="panel-tab-content active">
                     <div class="mode-switcher">
-                        <button class="mode-btn active" onclick="switchMode('podium')"><i class="fas fa-trophy"></i> PODIUM</button>
-                        <button class="mode-btn" onclick="switchMode('victory')"><i class="fas fa-star"></i> VICTORY</button>
-                        <button class="mode-btn" onclick="switchMode('match')"><i class="fas fa-basketball-ball"></i> MATCH</button>
-                        <button class="mode-btn" onclick="switchMode('tally')"><i class="fas fa-chart-bar"></i> TALLY</button>
+                        <button class="mode-btn active" onclick="window.switchMode('podium')"><i class="fas fa-trophy"></i> PODIUM</button>
+                        <button class="mode-btn" onclick="window.switchMode('victory')"><i class="fas fa-star"></i> VICTORY</button>
+                        <button class="mode-btn" onclick="window.switchMode('match')"><i class="fas fa-basketball-ball"></i> MATCH</button>
+                        <button class="mode-btn" onclick="window.switchMode('tally')"><i class="fas fa-chart-bar"></i> TALLY</button>
                     </div>
                     
                     <div class="panel-content">
@@ -302,7 +307,7 @@
                             </div>
                             
                             <div id="layoutMatch" class="card-layout">
-                                <div class="match-score-box">
+                                <div class="event-name-lg" id="dispMatchEvent" style="display:none;">EVENT</div> <div class="match-score-box">
                                     <div class="team-box"><div class="team-logo-ph" onclick="window.triggerUpload('upload-teamA')" id="boxA"><img src="" id="img-teamA" style="width:100%;height:100%;object-fit:cover;display:none;"><span id="ph-A">A</span></div><div class="team-name-lg" id="dispA">TEAM A</div><div class="score-text" id="dispScoreA">00</div></div>
                                     <div class="vs-text" style="font-size:4rem;color:#fbbf24;font-weight:900">VS</div>
                                     <div class="team-box"><div class="team-logo-ph" onclick="window.triggerUpload('upload-teamB')" id="boxB"><img src="" id="img-teamB" style="width:100%;height:100%;object-fit:cover;display:none;"><span id="ph-B">B</span></div><div class="team-name-lg" id="dispB">TEAM B</div><div class="score-text" id="dispScoreB">00</div></div>
@@ -383,7 +388,7 @@
         const firebaseConfig = { apiKey: "AIzaSyDfhfZ_c8wbTTviu4MrhvbRknqzyBkzI_s", authDomain: "metalysis-f38ef.firebaseapp.com", projectId: "metalysis-f38ef", storageBucket: "metalysis-f38ef.firebasestorage.app", messagingSenderId: "666983988939", appId: "1:666983988939:web:f70937a2572ed08015a54e", measurementId: "G-96ZPLMV4J7" };
         const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app);
 
-        // --- EXPOSE FUNCTIONS TO WINDOW ---
+        // --- NAVIGATION ---
         window.switchMainView = (viewId) => {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             document.getElementById('nav-'+viewId).classList.add('active');
@@ -398,6 +403,7 @@
             document.getElementById('panel-'+tab).classList.add('active');
         };
 
+        // --- EDITOR LOGIC ---
         window.updateBannerText = (val) => document.getElementById('congrats-banner').innerText = val;
         
         window.moveElement = (el, val) => {
@@ -505,7 +511,7 @@
             const teamB = document.getElementById('nameB').value;
             const scoreB = document.getElementById('scoreB').value;
 
-            document.getElementById('dispMatchEvent').innerText = event;
+            document.getElementById('pEvent').innerText = event; // Use main event title space
             document.getElementById('dispA').innerText = teamA;
             document.getElementById('dispScoreA').innerText = scoreA;
             document.getElementById('dispB').innerText = teamB;
@@ -536,6 +542,7 @@
         };
         window.copyCaption = () => { document.getElementById('captionText').select(); document.execCommand('copy'); alert("Copied!"); };
 
+        // --- NEWS/LISTS ---
         window.generateSmartNews = () => {
             const vals = ['Who','What','Where','When','Why'].map(id => document.getElementById('pil'+id).value);
             const tone = document.getElementById('pilTone').value;
