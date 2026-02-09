@@ -75,12 +75,7 @@
             align-items: center; text-align: center; color: #1e3a8a;
             font-family: 'Montserrat', sans-serif; box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.5);
             border: 1px solid #ccc; overflow: hidden; flex-shrink: 0;
-            
-            /* VIEWPORT SCALING */
-            transform: scale(0.55); 
-            transform-origin: top center; 
-            margin-bottom: -400px; 
-            margin-top: 40px; 
+            transform: scale(0.55); transform-origin: top center; margin-bottom: -400px; margin-top: 40px; 
             padding-bottom: 100px; 
         }
 
@@ -127,13 +122,33 @@
             text-shadow: 2px 2px 0px #b45309; margin-top: 0px; margin-bottom: 25px; 
         }
 
-        /* Layouts */
-        .podium-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 90%; justify-items: center; }
-        .winner-card-gold { grid-column: span 2; width: 100%; background: rgba(255, 255, 255, 0.95); padding: 20px 30px; border-radius: 15px; border-left: 15px solid #fbbf24; display: flex; flex-direction: column; align-items: center; margin-bottom: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-        .winner-card-sub { width: 100%; background: rgba(255, 255, 255, 0.9); padding: 15px 20px; border-radius: 15px; display: flex; flex-direction: column; align-items: center; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        .border-silver { border-left: 10px solid #94a3b8; } .border-bronze { border-left: 10px solid #b45309; }
-        .p-name { font-size: 2.5rem; font-weight: 900; text-transform: uppercase; line-height: 1; color: #1e3a8a; }
-        .p-sdo { font-size: 1.5rem; font-weight: 600; text-transform: uppercase; color: #dc2626; border-top: 2px solid #e2e8f0; padding-top: 5px; width: 100%; }
+        /* NEW LAYOUT: Vertical Podium with Medals */
+        .podium-container { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px; 
+            width: 90%; 
+        }
+        .winner-card { 
+            width: 100%; 
+            background: rgba(255, 255, 255, 0.95); 
+            padding: 15px 20px; 
+            border-radius: 15px; 
+            display: flex; 
+            align-items: center; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
+        }
+        .p-medal-icon { 
+            width: 50px; height: 50px; 
+            border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            margin-right: 20px; 
+            font-size: 1.8rem; color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .p-details { flex: 1; text-align: left; }
+        .p-name { font-size: 2rem; font-weight: 900; text-transform: uppercase; line-height: 1; color: #1e3a8a; }
+        .p-sdo { font-size: 1.2rem; font-weight: 600; text-transform: uppercase; color: #dc2626; }
 
         .photo-frame { width: 85%; height: 380px; background: white; padding: 15px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; overflow: hidden; transform: rotate(-1deg); margin-bottom: 30px; }
         .team-photo { width: 100%; height: 100%; object-fit: cover; }
@@ -388,7 +403,7 @@
         const firebaseConfig = { apiKey: "AIzaSyDfhfZ_c8wbTTviu4MrhvbRknqzyBkzI_s", authDomain: "metalysis-f38ef.firebaseapp.com", projectId: "metalysis-f38ef", storageBucket: "metalysis-f38ef.firebasestorage.app", messagingSenderId: "666983988939", appId: "1:666983988939:web:f70937a2572ed08015a54e", measurementId: "G-96ZPLMV4J7" };
         const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app);
 
-        // --- NAVIGATION ---
+        // --- EXPOSE FUNCTIONS TO WINDOW ---
         window.switchMainView = (viewId) => {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
             document.getElementById('nav-'+viewId).classList.add('active');
@@ -403,7 +418,6 @@
             document.getElementById('panel-'+tab).classList.add('active');
         };
 
-        // --- EDITOR LOGIC ---
         window.updateBannerText = (val) => document.getElementById('congrats-banner').innerText = val;
         
         window.moveElement = (el, val) => {
@@ -480,9 +494,22 @@
             document.getElementById('pCategory').innerText = `${group.meta.subEvent||''} ${group.meta.category} ${group.meta.gender}`;
             const bars = document.getElementById('winnerBars'); bars.innerHTML = "";
             const gold = group.medals.find(m => m.medal === 'GOLD'); const silver = group.medals.find(m => m.medal === 'SILVER'); const bronze = group.medals.find(m => m.medal === 'BRONZE');
-            if(gold) bars.innerHTML += `<div class="winner-card-gold"><div class="p-name">${gold.athleteName}</div><div class="p-sdo">${gold.sdo}</div></div>`;
-            if(silver) bars.innerHTML += `<div class="winner-card-sub border-silver"><div class="p-name" style="font-size:1.5rem">${silver.athleteName}</div><div class="p-sdo" style="font-size:0.9rem">${silver.sdo}</div></div>`;
-            if(bronze) bars.innerHTML += `<div class="winner-card-sub border-bronze"><div class="p-name" style="font-size:1.5rem">${bronze.athleteName}</div><div class="p-sdo" style="font-size:0.9rem">${bronze.sdo}</div></div>`;
+            
+            if(gold) bars.innerHTML += `
+                <div class="winner-card" style="border-left: 15px solid #fbbf24;">
+                    <div class="p-medal-icon" style="background: #fbbf24;"><i class="fas fa-medal"></i></div>
+                    <div class="p-details"><div class="p-name">${gold.athleteName}</div><div class="p-sdo">${gold.sdo}</div></div>
+                </div>`;
+            if(silver) bars.innerHTML += `
+                <div class="winner-card" style="border-left: 15px solid #cbd5e1;">
+                    <div class="p-medal-icon" style="background: #cbd5e1;"><i class="fas fa-medal"></i></div>
+                    <div class="p-details"><div class="p-name">${silver.athleteName}</div><div class="p-sdo">${silver.sdo}</div></div>
+                </div>`;
+            if(bronze) bars.innerHTML += `
+                <div class="winner-card" style="border-left: 15px solid #b45309;">
+                    <div class="p-medal-icon" style="background: #b45309;"><i class="fas fa-medal"></i></div>
+                    <div class="p-details"><div class="p-name">${bronze.athleteName}</div><div class="p-sdo">${bronze.sdo}</div></div>
+                </div>`;
             document.getElementById('captionText').value = `OFFICIAL RESULT: ${group.meta.event}\n#R1AA2026`;
         };
 
@@ -491,11 +518,23 @@
             document.getElementById('pCategory').innerText = document.getElementById('m-cat').value || "CATEGORY";
             const bars = document.getElementById('winnerBars'); bars.innerHTML = "";
             const gN = document.getElementById('m-gold-name').value; const gS = document.getElementById('m-gold-sdo').value;
-            if(gN) bars.innerHTML += `<div class="winner-card-gold"><div class="p-name">${gN}</div><div class="p-sdo">${gS}</div></div>`;
+            if(gN) bars.innerHTML += `
+                <div class="winner-card" style="border-left: 15px solid #fbbf24;">
+                    <div class="p-medal-icon" style="background: #fbbf24;"><i class="fas fa-medal"></i></div>
+                    <div class="p-details"><div class="p-name">${gN}</div><div class="p-sdo">${gS}</div></div>
+                </div>`;
             const sN = document.getElementById('m-silver-name').value; const sS = document.getElementById('m-silver-sdo').value;
-            if(sN) bars.innerHTML += `<div class="winner-card-sub border-silver"><div class="p-name" style="font-size:1.5rem">${sN}</div><div class="p-sdo" style="font-size:0.9rem">${sS}</div></div>`;
+            if(sN) bars.innerHTML += `
+                <div class="winner-card" style="border-left: 15px solid #cbd5e1;">
+                    <div class="p-medal-icon" style="background: #cbd5e1;"><i class="fas fa-medal"></i></div>
+                    <div class="p-details"><div class="p-name">${sN}</div><div class="p-sdo">${sS}</div></div>
+                </div>`;
             const bN = document.getElementById('m-bronze-name').value; const bS = document.getElementById('m-bronze-sdo').value;
-            if(bN) bars.innerHTML += `<div class="winner-card-sub border-bronze"><div class="p-name" style="font-size:1.5rem">${bN}</div><div class="p-sdo" style="font-size:0.9rem">${bS}</div></div>`;
+            if(bN) bars.innerHTML += `
+                <div class="winner-card" style="border-left: 15px solid #b45309;">
+                    <div class="p-medal-icon" style="background: #b45309;"><i class="fas fa-medal"></i></div>
+                    <div class="p-details"><div class="p-name">${bN}</div><div class="p-sdo">${bS}</div></div>
+                </div>`;
         };
 
         window.renderVictory = () => {
