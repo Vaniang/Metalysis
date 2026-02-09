@@ -122,7 +122,7 @@
             text-shadow: 2px 2px 0px #b45309; margin-top: 0px; margin-bottom: 25px; 
         }
 
-        /* NEW LAYOUT: Vertical Podium with Medals */
+        /* NEW LAYOUT: Vertical Podium with Bigger Medals and Centered Text */
         .podium-container { 
             display: flex; 
             flex-direction: column; 
@@ -139,14 +139,15 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
         }
         .p-medal-icon { 
-            width: 50px; height: 50px; 
+            width: 70px; height: 70px; /* BIGGER MEDALS */
             border-radius: 50%; 
             display: flex; align-items: center; justify-content: center; 
             margin-right: 20px; 
-            font-size: 1.8rem; color: white;
+            font-size: 2.5rem; /* BIGGER ICON FONT */
+            color: white;
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
-        .p-details { flex: 1; text-align: left; }
+        .p-details { flex: 1; text-align: center; /* CENTERED TEXT */ }
         .p-name { font-size: 2rem; font-weight: 900; text-transform: uppercase; line-height: 1; color: #1e3a8a; }
         .p-sdo { font-size: 1.2rem; font-weight: 600; text-transform: uppercase; color: #dc2626; }
 
