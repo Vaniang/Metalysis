@@ -65,7 +65,7 @@
         /* --- WORKSPACE --- */
         .workspace { flex: 1; background: #cbd5e1; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 40px; overflow-y: auto; }
 
-        /* --- MASTER CARD DESIGN (1080x1080) --- */
+        /* --- MASTER CARD DESIGN --- */
         .social-card {
             width: 1080px; height: 1080px; 
             background-color: white;
@@ -147,7 +147,7 @@
         .team-box { display: flex; flex-direction: column; align-items: center; width: 40%; }
         .team-logo-ph { width: 160px; height: 160px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 3rem; color: white; border: 4px solid white; overflow: hidden; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
         .team-name-lg { font-family: 'Oswald', sans-serif; font-size: 1.8rem; color: white; text-transform: uppercase; margin-top: 15px; text-shadow: 0 3px 6px rgba(0,0,0,0.6); line-height: 1.1; }
-        .score-text { font-family: 'Oswald', sans-serif; font-size: 7rem; color: #fbbf24; font-weight: 900; text-shadow: 0 5px 15px rgba(0,0,0,0.6); line-height: 1; margin-top: 5px; }
+        .score-text { font-family: 'Oswald', sans-serif; font-size: 6rem; color: #fbbf24; font-weight: 900; text-shadow: 0 5px 15px rgba(0,0,0,0.6); line-height: 1; margin-top: 5px; }
 
         .tally-graphic-table { width: 90%; background: rgba(255,255,255,0.95); border-radius: 15px; overflow: hidden; font-family: 'Oswald', sans-serif; box-shadow: 0 15px 30px rgba(0,0,0,0.3); margin-top: 10px; }
         .tgt-head { display: grid; grid-template-columns: 0.5fr 3fr 1fr 1fr 1fr; background: #1e3a8a; color: white; padding: 20px; font-size: 1.5rem; font-weight: 700; }
@@ -478,7 +478,7 @@
         };
 
         window.renderPodium = (group) => {
-            switchMode({currentTarget: document.querySelector('button[onclick*="podium"]')}, 'podium');
+            switchMode('podium');
             document.getElementById('pEvent').innerText = group.meta.event;
             document.getElementById('pCategory').innerText = `${group.meta.subEvent||''} ${group.meta.category} ${group.meta.gender}`;
             const bars = document.getElementById('winnerBars'); bars.innerHTML = "";
