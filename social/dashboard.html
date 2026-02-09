@@ -12,6 +12,7 @@
         :root { 
             --primary: #1e3a8a; --secondary: #3b82f6; 
             --dark: #0f172a; --light: #f1f5f9; --white: #ffffff;
+            --gold: #fbbf24; --silver: #cbd5e1; --bronze: #b45309;
             --social-pink: #ec4899;
         }
         * { box-sizing: border-box; }
@@ -31,16 +32,16 @@
         /* --- VIEW 1: GRAPHIC BUILDER --- */
         #viewGraphics { display: flex; width: 100%; height: 100%; }
         
-        .control-panel { width: 380px; background: white; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; z-index: 10; }
+        .control-panel { width: 400px; background: white; border-right: 1px solid #e2e8f0; display: flex; flex-direction: column; z-index: 10; }
         
-        /* Tabs for Control Panel */
+        /* Tabs */
         .cp-tabs { display: flex; border-bottom: 1px solid #e2e8f0; }
         .cp-tab { flex: 1; padding: 15px; text-align: center; cursor: pointer; font-weight: 700; font-size: 0.8rem; color: #64748b; background: #f8fafc; }
         .cp-tab.active { background: white; color: var(--primary); border-bottom: 3px solid var(--primary); }
 
-        /* Mode Switcher (Sub-tab) */
-        .mode-switcher { display: grid; grid-template-columns: repeat(4, 1fr); margin: 10px; gap: 5px; }
-        .mode-btn { border: 1px solid #e2e8f0; background: white; padding: 10px 5px; cursor: pointer; font-size: 0.7rem; font-weight: 700; color: #64748b; border-radius: 6px; display: flex; flex-direction: column; align-items: center; gap: 3px; transition: 0.2s; }
+        /* Mode Switcher */
+        .mode-switcher { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; padding: 10px; border-bottom: 1px solid #f1f5f9; }
+        .mode-btn { border: 1px solid #e2e8f0; background: white; padding: 10px 2px; cursor: pointer; font-size: 0.65rem; font-weight: 700; color: #64748b; border-radius: 6px; display: flex; flex-direction: column; align-items: center; gap: 3px; transition: 0.2s; }
         .mode-btn:hover { background: #eff6ff; border-color: var(--primary); }
         .mode-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
         
@@ -48,31 +49,30 @@
         .panel-section { display: none; }
         .panel-section.active { display: block; }
 
-        /* Design Controls */
+        /* Controls UI */
         .design-group { background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
-        .design-title { font-size: 0.75rem; font-weight: 800; color: #334155; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .design-title { font-size: 0.75rem; font-weight: 800; color: #334155; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; }
         
-        /* Inputs */
-        .input-group { margin-bottom: 15px; }
-        .input-label { display: block; font-size: 0.75rem; font-weight: 700; color: #64748b; margin-bottom: 5px; text-transform: uppercase; }
-        .c-input { width: 100%; padding: 10px; border: 1px solid #cbd5e1; border-radius: 6px; font-family: inherit; font-size: 0.9rem; }
-        .c-range { width: 100%; cursor: pointer; }
-        .c-color { width: 100%; height: 40px; padding: 0; border: none; cursor: pointer; }
+        .input-group { margin-bottom: 10px; }
+        .input-label { display: block; font-size: 0.7rem; font-weight: 700; color: #64748b; margin-bottom: 3px; text-transform: uppercase; }
+        .c-input { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 4px; font-family: inherit; font-size: 0.85rem; }
+        .c-range { width: 100%; cursor: pointer; accent-color: var(--primary); }
         
-        .btn-action { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; margin-top: 5px; }
+        .btn-action { width: 100%; padding: 10px; background: var(--primary); color: white; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; margin-top: 5px; font-size: 0.8rem; }
         .btn-upload { background: #334155; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .btn-upload:hover { background: #1e293b; }
+        .feed-item { padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 8px; cursor: pointer; font-size: 0.8rem; background: white; }
+        .feed-item:hover { background: #eff6ff; border-color: var(--primary); }
 
-        /* Workspace */
+        /* --- WORKSPACE --- */
         .workspace { flex: 1; background: #cbd5e1; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 40px; overflow-y: auto; }
 
-        /* --- MASTER GRAPHIC CARD --- */
+        /* --- MASTER CARD (1080x1080) --- */
         .social-card {
             width: 1080px; height: 1080px; 
             background-color: white;
-            /* DEFAULT TEMPLATE - User can override this */
             background-image: url('assets/template_bg.jpg'); background-size: cover; background-position: center;
-            position: relative; display: flex; flex-direction: column; 
+            position: relative; 
+            display: flex; flex-direction: column; 
             align-items: center; text-align: center; color: #1e3a8a;
             font-family: 'Montserrat', sans-serif; box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.5);
             border: 1px solid #ccc; overflow: hidden; flex-shrink: 0;
@@ -80,60 +80,62 @@
         }
 
         /* HEADER */
-        .card-header { width: 100%; height: 250px; display: flex; justify-content: center; align-items: center; margin-top: 30px; position: relative; z-index: 10; flex-shrink: 0; }
-        .header-logo-overlay { height: 200px; object-fit: contain; cursor: pointer; transition: 0.2s; border: 2px dashed rgba(255,255,255,0.3); border-radius: 10px; }
-        .header-logo-overlay:hover { transform: scale(1.02); border-color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.1); }
-
+        .card-header { width: 100%; height: 250px; display: flex; justify-content: center; align-items: center; margin-top: 30px; position: relative; z-index: 10; flex-shrink: 0; transition: transform 0.2s; }
+        .header-logo-overlay { height: 200px; object-fit: contain; cursor: pointer; border: 2px dashed rgba(255,255,255,0.3); border-radius: 10px; }
+        
         .congrats-banner {
             background: linear-gradient(90deg, #ea580c 0%, #dc2626 100%); color: white; width: 100%; padding: 15px 0;
             font-family: 'Oswald', sans-serif; font-size: 3.5rem; font-weight: 900; text-transform: uppercase; letter-spacing: 3px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2); text-shadow: 3px 3px 0px rgba(0,0,0,0.2); margin-top: -20px; z-index: 5; flex-shrink: 0;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); text-shadow: 3px 3px 0px rgba(0,0,0,0.2); margin-top: -20px; z-index: 5; flex-shrink: 0; transition: transform 0.2s;
         }
 
-        /* MAIN CONTENT - Dynamic Padding Controlled by JS */
+        /* CONTENT */
         .card-content { 
             flex: 1; width: 100%; 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            padding: 20px; z-index: 5;
-            padding-top: 20px; /* Editable */
+            padding: 20px; z-index: 5; overflow: hidden;
         }
         
+        /* Groups for Moving */
+        .text-group { width: 100%; transition: transform 0.2s; }
+        .visual-group { width: 100%; display: flex; justify-content: center; transition: transform 0.2s; margin-top: 20px; }
+
         .card-layout { display: none; width: 100%; flex-direction: column; align-items: center; }
         .card-layout.active { display: flex; }
 
         /* Typography */
         .event-name-lg { font-family: 'Oswald', sans-serif; font-size: 4rem; font-weight: 800; text-transform: uppercase; color: #fbbf24; -webkit-text-stroke: 2px #b45309; text-shadow: 3px 3px 0px #b45309; margin-bottom: 5px; line-height: 1.1; }
-        .category-text { font-family: 'Montserrat', sans-serif; font-size: 1.5rem; font-weight: 700; text-transform: uppercase; letter-spacing: 4px; color: white; margin-bottom: 30px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .category-text { font-family: 'Montserrat', sans-serif; font-size: 1.5rem; font-weight: 700; text-transform: uppercase; letter-spacing: 4px; color: white; margin-bottom: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 
-        /* Podium Layout */
+        /* Layouts */
         .podium-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 90%; justify-items: center; }
         .winner-card-gold { grid-column: span 2; width: 100%; background: rgba(255, 255, 255, 0.95); padding: 20px 30px; border-radius: 15px; border-left: 15px solid #fbbf24; display: flex; flex-direction: column; align-items: center; position: relative; margin-bottom: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
         .winner-card-sub { width: 100%; background: rgba(255, 255, 255, 0.9); padding: 15px 20px; border-radius: 15px; display: flex; flex-direction: column; align-items: center; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .border-silver { border-left: 10px solid #94a3b8; } .border-bronze { border-left: 10px solid #b45309; }
-        .p-name { font-size: 2.5rem; font-weight: 900; text-transform: uppercase; line-height: 1; color: #1e3a8a; }
-        .p-sdo { font-size: 1.5rem; font-weight: 600; text-transform: uppercase; color: #dc2626; border-top: 2px solid #e2e8f0; padding-top: 5px; width: 100%; }
+        .p-name { font-size: 2.2rem; font-weight: 900; text-transform: uppercase; line-height: 1; color: #1e3a8a; }
+        .p-sdo { font-size: 1.3rem; font-weight: 600; text-transform: uppercase; color: #dc2626; border-top: 2px solid #e2e8f0; padding-top: 5px; width: 100%; }
 
-        /* Victory Layout */
-        .photo-frame { width: 85%; height: 450px; background: white; padding: 15px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 30px; transform: rotate(-1deg); }
+        /* Victory */
+        .photo-frame { width: 85%; height: 420px; background: white; padding: 15px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; overflow: hidden; transform: rotate(-1deg); }
         .team-photo { width: 100%; height: 100%; object-fit: cover; }
-        .victory-details { display: flex; align-items: center; width: 90%; justify-content: center; gap: 30px; background: rgba(255,255,255,0.9); padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        .sdo-logo-lg { width: 150px; height: 150px; object-fit: contain; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3)); }
-        .victory-sdo-name { font-family: 'Oswald', sans-serif; font-size: 4rem; font-weight: 900; color: #dc2626; line-height: 1; text-transform: uppercase; }
-        .victory-rank { font-family: 'Oswald', sans-serif; font-size: 3rem; font-weight: 800; color: #fbbf24; text-shadow: 2px 2px 0 #b45309; text-transform: uppercase; }
+        .victory-details { display: flex; align-items: center; width: 90%; justify-content: center; gap: 30px; background: rgba(255,255,255,0.9); padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); margin-top: 20px; }
+        .sdo-logo-lg { width: 130px; height: 130px; object-fit: contain; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3)); }
+        .victory-sdo-name { font-family: 'Oswald', sans-serif; font-size: 3.5rem; font-weight: 900; color: #dc2626; line-height: 1; text-transform: uppercase; }
+        .victory-rank { font-family: 'Oswald', sans-serif; font-size: 2.5rem; font-weight: 800; color: #fbbf24; text-shadow: 2px 2px 0 #b45309; text-transform: uppercase; }
 
-        /* Match Layout */
-        .match-score-box { display: flex; align-items: center; justify-content: space-around; width: 100%; margin-top: 30px; background: rgba(0,0,0,0.3); padding: 40px; border-radius: 30px; backdrop-filter: blur(10px); border: 2px solid rgba(255,255,255,0.2); }
+        /* Match */
+        .match-score-box { display: flex; align-items: center; justify-content: space-around; width: 100%; background: rgba(0,0,0,0.3); padding: 40px; border-radius: 30px; backdrop-filter: blur(10px); border: 2px solid rgba(255,255,255,0.2); }
         .team-box { display: flex; flex-direction: column; align-items: center; width: 35%; }
         .team-logo-ph { width: 200px; height: 200px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 4rem; color: white; border: 5px solid white; overflow: hidden; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
         .team-name-lg { font-family: 'Oswald', sans-serif; font-size: 2.5rem; color: white; text-transform: uppercase; margin-top: 20px; text-shadow: 0 3px 6px rgba(0,0,0,0.6); }
         .score-text { font-family: 'Oswald', sans-serif; font-size: 8rem; color: #fbbf24; font-weight: 900; text-shadow: 0 5px 15px rgba(0,0,0,0.6); }
 
-        /* Tally Layout */
+        /* Tally */
         .tally-graphic-table { width: 90%; background: rgba(255,255,255,0.95); border-radius: 15px; overflow: hidden; font-family: 'Oswald', sans-serif; box-shadow: 0 15px 30px rgba(0,0,0,0.3); }
         .tgt-head { display: grid; grid-template-columns: 0.5fr 3fr 1fr 1fr 1fr; background: #1e3a8a; color: white; padding: 20px; font-size: 1.5rem; font-weight: 700; }
         .tgt-row { display: grid; grid-template-columns: 0.5fr 3fr 1fr 1fr 1fr; padding: 15px 20px; border-bottom: 1px solid #e2e8f0; align-items: center; color: #1e3a8a; font-size: 1.6rem; font-weight: 600; }
 
-        /* FOOTER (5 Logos) */
+        /* FOOTER */
         .card-footer { 
             width: 100%; height: 220px; flex-shrink: 0; margin-top: auto;
             background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); 
@@ -144,7 +146,7 @@
         .footer-logo-box { height: 110px; min-width: 110px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; border: 2px dashed rgba(255,255,255,0.3); border-radius: 8px; padding: 5px; }
         .footer-logo-box:hover { border-color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.1); }
         .footer-logo-img { height: 100%; width: auto; max-width: 100%; object-fit: contain; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.4)); }
-        .source-note { font-family: 'Montserrat', sans-serif; font-size: 0.9rem; color: rgba(255,255,255,0.8); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-top: 5px; }
+        .source-note { font-family: 'Montserrat', sans-serif; font-size: 0.9rem; color: rgba(255,255,255,0.9); font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-top: 5px; }
 
         /* Tools */
         .caption-container { width: 600px; background: white; padding: 25px; border-radius: 12px; margin-top: 20px; flex-shrink: 0; z-index: 50; }
@@ -153,21 +155,19 @@
         .action-btn { flex: 1; padding: 12px; border-radius: 8px; border: none; font-weight: 700; cursor: pointer; }
         .btn-dl { background: var(--primary); color: white; } .btn-copy { background: #e2e8f0; color: #334155; }
 
-        /* Other Views (Hidden) */
+        /* OTHER VIEWS */
         #viewUpdates, #viewAwards, #viewTally { display: none; padding: 40px; width: 100%; overflow-y: auto; background: #f1f5f9; }
     </style>
 </head>
 <body>
 
     <input type="file" id="upload-template" accept="image/*" style="display:none" onchange="updateImage(this, 'card-bg')">
-    
     <input type="file" id="upload-header" accept="image/*" style="display:none" onchange="updateImage(this, 'img-header')">
     <input type="file" id="upload-deped" accept="image/*" style="display:none" onchange="updateImage(this, 'img-deped')">
     <input type="file" id="upload-bagongp" accept="image/*" style="display:none" onchange="updateImage(this, 'img-bagongp')">
     <input type="file" id="upload-region1" accept="image/*" style="display:none" onchange="updateImage(this, 'img-region1')">
     <input type="file" id="upload-lgu" accept="image/*" style="display:none" onchange="updateImage(this, 'img-lgu')">
     <input type="file" id="upload-sdo" accept="image/*" style="display:none" onchange="updateImage(this, 'img-sdo')">
-    
     <input type="file" id="upload-teamA" accept="image/*" style="display:none" onchange="updateImage(this, 'img-teamA')">
     <input type="file" id="upload-teamB" accept="image/*" style="display:none" onchange="updateImage(this, 'img-teamB')">
     <input type="file" id="upload-team-photo" accept="image/*" style="display:none" onchange="updateImage(this, 'img-team-photo')">
@@ -193,29 +193,42 @@
                     <div class="cp-tab" onclick="switchTab('design')" id="tab-design">THEME EDITOR</div>
                 </div>
 
-                <div id="panel-data" style="display:block;">
+                <div id="panel-data">
                     <div class="mode-switcher">
                         <button class="mode-btn active" onclick="switchMode('podium')"><i class="fas fa-trophy"></i> PODIUM</button>
                         <button class="mode-btn" onclick="switchMode('victory')"><i class="fas fa-star"></i> VICTORY</button>
                         <button class="mode-btn" onclick="switchMode('match')"><i class="fas fa-basketball-ball"></i> MATCH</button>
                         <button class="mode-btn" onclick="switchMode('tally')"><i class="fas fa-chart-bar"></i> TALLY</button>
                     </div>
+                    
                     <div class="panel-content">
                         <div id="ctrl-podium" class="panel-section active">
-                            <div style="font-size:0.8rem; color:#94a3b8; margin-bottom:10px;">Select Result:</div>
+                            <div class="design-group">
+                                <div class="design-title">Manual Input</div>
+                                <div class="input-group"><label class="input-label">Event Name</label><input type="text" class="c-input" id="m-event" oninput="manualPodiumRender()"></div>
+                                <div class="input-group"><label class="input-label">Category</label><input type="text" class="c-input" id="m-cat" oninput="manualPodiumRender()"></div>
+                                <div class="input-group"><label class="input-label">GOLD (Name / SDO)</label><input type="text" class="c-input" id="m-gold-name" placeholder="Name"><input type="text" class="c-input" id="m-gold-sdo" placeholder="SDO" style="margin-top:2px" oninput="manualPodiumRender()"></div>
+                                <div class="input-group"><label class="input-label">SILVER</label><input type="text" class="c-input" id="m-silver-name" placeholder="Name"><input type="text" class="c-input" id="m-silver-sdo" placeholder="SDO" style="margin-top:2px" oninput="manualPodiumRender()"></div>
+                                <div class="input-group"><label class="input-label">BRONZE</label><input type="text" class="c-input" id="m-bronze-name" placeholder="Name"><input type="text" class="c-input" id="m-bronze-sdo" placeholder="SDO" style="margin-top:2px" oninput="manualPodiumRender()"></div>
+                                <button class="btn-action" onclick="manualPodiumRender()">Update Card</button>
+                            </div>
+                            <div class="design-title" style="margin-top:15px;">Recent Database Results</div>
                             <div id="feedContainer">Loading...</div>
                         </div>
+
                         <div id="ctrl-victory" class="panel-section">
                             <div class="input-group"><label class="input-label">SDO Name</label><input type="text" class="c-input" id="victName" value="SDO PANGASINAN II" oninput="renderVictory()"></div>
                             <div class="input-group"><label class="input-label">Rank</label><input type="text" class="c-input" id="victRank" value="2ND RUNNER UP" oninput="renderVictory()"></div>
                             <button class="btn-action btn-upload" onclick="triggerUpload('upload-team-photo')"><i class="fas fa-camera"></i> Upload Photo</button>
                             <button class="btn-action btn-upload" onclick="triggerUpload('upload-sdo-logo')"><i class="fas fa-image"></i> Upload SDO Logo</button>
                         </div>
+
                         <div id="ctrl-match" class="panel-section">
                             <div class="input-group"><label class="input-label">Event</label><input type="text" class="c-input" id="matchEvent" value="BASKETBALL SEC BOYS" oninput="renderMatch()"></div>
-                            <div class="input-group"><label class="input-label">Team A</label><input type="text" class="c-input" id="nameA" value="ILOCOS NORTE" oninput="renderMatch()"><input type="number" class="c-input" id="scoreA" value="86" oninput="renderMatch()"></div>
-                            <div class="input-group"><label class="input-label">Team B</label><input type="text" class="c-input" id="nameB" value="LA UNION" oninput="renderMatch()"><input type="number" class="c-input" id="scoreB" value="82" oninput="renderMatch()"></div>
+                            <div class="input-group"><label class="input-label">Team A</label><input type="text" class="c-input" id="nameA" value="ILOCOS NORTE" oninput="renderMatch()"><input type="number" class="c-input" id="scoreA" value="86" style="margin-top:5px;" oninput="renderMatch()"></div>
+                            <div class="input-group"><label class="input-label">Team B</label><input type="text" class="c-input" id="nameB" value="LA UNION" oninput="renderMatch()"><input type="number" class="c-input" id="scoreB" value="82" style="margin-top:5px;" oninput="renderMatch()"></div>
                         </div>
+
                         <div id="ctrl-tally" class="panel-section">
                             <div class="input-group"><label class="input-label">Title</label><select class="c-input" id="tallyTitle" onchange="renderTallyGraphic()"><option>OVERALL MEDAL TALLY</option><option>PARTIAL OFFICIAL RESULT</option></select></div>
                             <button class="btn-action" onclick="renderTallyGraphic()">Refresh Data</button>
@@ -225,77 +238,78 @@
 
                 <div id="panel-design" style="display:none; padding:20px;">
                     <div class="design-group">
-                        <div class="design-title">Background Template</div>
-                        <button class="btn-action btn-upload" onclick="triggerUpload('upload-template')"><i class="fas fa-image"></i> Upload Custom Design</button>
-                        <div style="font-size:0.7rem; color:#64748b; margin-top:5px;">Supports 1080x1080 JPG/PNG</div>
+                        <div class="design-title">Layout Position (Move Up/Down)</div>
+                        
+                        <div class="input-group">
+                            <label class="input-label">Header Logo Position</label>
+                            <input type="range" class="c-range" min="-50" max="50" value="0" oninput="moveElement('header', this.value)">
+                        </div>
+                        
+                        <div class="input-group">
+                            <label class="input-label">Banner Position</label>
+                            <input type="range" class="c-range" min="-50" max="50" value="0" oninput="moveElement('banner', this.value)">
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label">Event Title / Text</label>
+                            <input type="range" class="c-range" min="-50" max="50" value="0" oninput="moveElement('text', this.value)">
+                        </div>
+
+                        <div class="input-group">
+                            <label class="input-label">Main Content (Podium/Photo)</label>
+                            <input type="range" class="c-range" min="-50" max="50" value="0" oninput="moveElement('content', this.value)">
+                        </div>
                     </div>
 
                     <div class="design-group">
-                        <div class="design-title">Text Layout</div>
-                        <label class="input-label">Content Vertical Position</label>
-                        <input type="range" class="c-range" min="0" max="100" value="20" oninput="updateLayout(this.value, 'paddingTop')">
-                        <div style="font-size:0.7rem; color:#64748b; margin-top:5px;">Move text up/down to fit empty space.</div>
-                    </div>
-
-                    <div class="design-group">
-                        <div class="design-title">Colors</div>
-                        <label class="input-label">Event/Winner Color</label>
-                        <input type="color" class="c-color" value="#1e3a8a" oninput="updateColor(this.value, 'primary')">
-                        <label class="input-label">Accent Color</label>
-                        <input type="color" class="c-color" value="#dc2626" oninput="updateColor(this.value, 'accent')">
-                    </div>
-
-                    <div class="design-group">
-                        <div class="design-title">Visibility</div>
-                        <label style="display:flex; align-items:center; gap:10px; cursor:pointer;">
-                            <input type="checkbox" checked onchange="toggleElement('footer-row', this.checked)"> Show Footer Logos
-                        </label>
-                        <label style="display:flex; align-items:center; gap:10px; cursor:pointer; margin-top:10px;">
-                            <input type="checkbox" checked onchange="toggleElement('congrats-banner', this.checked)"> Show "Congratulations" Banner
-                        </label>
+                        <div class="design-title">Customization</div>
+                        <button class="btn-action btn-upload" onclick="triggerUpload('upload-template')"><i class="fas fa-image"></i> Upload Custom BG</button>
                     </div>
                 </div>
             </div>
 
             <div class="workspace">
                 <div id="socialCard" class="social-card">
-                    <div class="card-header">
+                    <div class="card-header" id="card-header-el">
                         <img src="assets/r1aa_logo.png" class="header-logo-overlay editable-logo" id="img-header" onclick="triggerUpload('upload-header')" onerror="this.style.opacity='0'">
                     </div>
                     
-                    <div class="congrats-banner" id="congrats-banner">CONGRATULATIONS!</div>
+                    <div class="congrats-banner" id="card-banner-el">CONGRATULATIONS!</div>
                     
-                    <div class="card-content" id="cardContent">
-                        <div id="layoutPodium" class="card-layout active">
+                    <div class="card-content">
+                        <div id="text-group-el" class="text-group">
                             <div class="event-name-lg" id="pEvent">EVENT NAME</div>
                             <div class="category-text" id="pCategory">CATEGORY</div>
-                            <div class="podium-container" id="winnerBars"></div>
                         </div>
-                        <div id="layoutVictory" class="card-layout">
-                            <div class="photo-frame"><img src="" id="img-team-photo" class="team-photo" style="display:none; width:100%; height:100%; object-fit:cover;"></div>
-                            <div class="victory-details">
-                                <img src="" id="img-sdo-logo" class="sdo-logo-lg" style="display:none;">
-                                <div class="victory-text">
-                                    <div class="victory-sdo-name" id="dispVictName">SDO NAME</div>
-                                    <div class="victory-rank" id="dispVictRank">RANK</div>
+
+                        <div id="visual-group-el" class="visual-group">
+                            <div id="layoutPodium" class="card-layout active">
+                                <div class="podium-container" id="winnerBars"></div>
+                            </div>
+                            <div id="layoutVictory" class="card-layout">
+                                <div class="photo-frame"><img src="" id="img-team-photo" class="team-photo" style="display:none; width:100%; height:100%; object-fit:cover;"></div>
+                                <div class="victory-details">
+                                    <img src="" id="img-sdo-logo" class="sdo-logo-lg" style="display:none;">
+                                    <div class="victory-text">
+                                        <div class="victory-sdo-name" id="dispVictName">SDO NAME</div>
+                                        <div class="victory-rank" id="dispVictRank">RANK</div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div id="layoutMatch" class="card-layout">
-                            <div class="event-name-lg" id="dispMatchEvent">EVENT</div>
-                            <div class="match-score-box">
-                                <div class="team-box"><div class="team-logo-ph" onclick="triggerUpload('upload-teamA')" id="boxA"><img src="" id="img-teamA" style="width:100%;height:100%;object-fit:cover;display:none;"><span id="ph-A">A</span></div><div class="team-name-lg" id="dispA">TEAM A</div><div class="score-text" id="dispScoreA">00</div></div>
-                                <div class="vs-text" style="font-size:4rem;color:#fbbf24;font-weight:900">VS</div>
-                                <div class="team-box"><div class="team-logo-ph" onclick="triggerUpload('upload-teamB')" id="boxB"><img src="" id="img-teamB" style="width:100%;height:100%;object-fit:cover;display:none;"><span id="ph-B">B</span></div><div class="team-name-lg" id="dispB">TEAM B</div><div class="score-text" id="dispScoreB">00</div></div>
+                            <div id="layoutMatch" class="card-layout">
+                                <div class="match-score-box">
+                                    <div class="team-box"><div class="team-logo-ph" onclick="triggerUpload('upload-teamA')" id="boxA"><img src="" id="img-teamA" style="width:100%;height:100%;object-fit:cover;display:none;"><span id="ph-A">A</span></div><div class="team-name-lg" id="dispA">TEAM A</div><div class="score-text" id="dispScoreA">00</div></div>
+                                    <div class="vs-text" style="font-size:4rem;color:#fbbf24;font-weight:900">VS</div>
+                                    <div class="team-box"><div class="team-logo-ph" onclick="triggerUpload('upload-teamB')" id="boxB"><img src="" id="img-teamB" style="width:100%;height:100%;object-fit:cover;display:none;"><span id="ph-B">B</span></div><div class="team-name-lg" id="dispB">TEAM B</div><div class="score-text" id="dispScoreB">00</div></div>
+                                </div>
                             </div>
-                        </div>
-                        <div id="layoutTally" class="card-layout">
-                            <div class="event-name-lg" id="dispTallyTitle">MEDAL TALLY</div>
-                            <div class="tally-graphic-table" id="tallyGraphicContent"></div>
+                            <div id="layoutTally" class="card-layout">
+                                <div class="tally-graphic-table" id="tallyGraphicContent"></div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="card-footer" id="footer-row">
+                    <div class="card-footer">
                         <div class="logos-row">
                             <div class="footer-logo-box" onclick="triggerUpload('upload-deped')"><img src="assets/deped_logo.png" class="footer-logo-img" id="img-deped" onerror="this.style.opacity='0'"></div>
                             <div class="footer-logo-box" onclick="triggerUpload('upload-bagongp')"><img src="assets/bagongp_logo.png" class="footer-logo-img" id="img-bagongp" onerror="this.style.opacity='0'"></div>
@@ -320,8 +334,18 @@
 
         <div id="viewUpdates" style="display:none; padding:40px;">
             <div class="pil-container">
-                <div class="pil-title"><i class="fas fa-newspaper"></i> PILUpdates</div>
-                <textarea id="pilOutput" class="pil-output"></textarea>
+                <div class="design-title" style="font-size:1.5rem; margin-bottom:20px;">PILUpdates Generator</div>
+                <div class="pil-grid">
+                    <div class="pil-full"><label class="input-label">TONE</label><select id="pilTone" class="c-input"><option value="hype">🔥 Hype</option><option value="formal">🏛️ Formal</option><option value="story">📖 Story</option></select></div>
+                    <div><label class="input-label">WHO</label><input type="text" id="pilWho" class="c-input"></div>
+                    <div><label class="input-label">WHAT</label><input type="text" id="pilWhat" class="c-input"></div>
+                    <div><label class="input-label">WHERE</label><input type="text" id="pilWhere" class="c-input"></div>
+                    <div><label class="input-label">WHEN</label><input type="text" id="pilWhen" class="c-input"></div>
+                    <div class="pil-full"><label class="input-label">WHY/HOW</label><textarea id="pilWhy" class="c-input" style="height:70px;"></textarea></div>
+                </div>
+                <button class="btn-action" onclick="generateSmartNews()">GENERATE</button>
+                <textarea id="pilOutput" class="pil-output" style="margin-top:20px;height:150px;" readonly></textarea>
+                <button class="action-btn btn-copy" onclick="copyPil()" style="margin-top:10px; width:auto;">COPY TEXT</button>
             </div>
         </div>
         
@@ -333,16 +357,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { getAuth, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
         import { getFirestore, collection, onSnapshot, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // Initialize Firebase (Keep your existing config)
+        // CONFIG (Same as before)
         const firebaseConfig = { apiKey: "AIzaSyDfhfZ_c8wbTTviu4MrhvbRknqzyBkzI_s", authDomain: "metalysis-f38ef.firebaseapp.com", projectId: "metalysis-f38ef", storageBucket: "metalysis-f38ef.firebasestorage.app", messagingSenderId: "666983988939", appId: "1:666983988939:web:f70937a2572ed08015a54e", measurementId: "G-96ZPLMV4J7" };
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+        const app = initializeApp(firebaseConfig); const auth = getAuth(app); const db = getFirestore(app);
 
-        // --- THEME EDITOR LOGIC ---
+        // --- EDITOR LOGIC ---
         window.switchTab = (tab) => {
             document.querySelectorAll('.cp-tab').forEach(t => t.classList.remove('active'));
             document.getElementById('tab-'+tab).classList.add('active');
@@ -350,50 +372,32 @@
             document.getElementById('panel-design').style.display = tab === 'design' ? 'block' : 'none';
         };
 
-        window.updateLayout = (val, prop) => {
-            if(prop === 'paddingTop') document.getElementById('cardContent').style.paddingTop = val + 'px';
+        window.moveElement = (el, val) => {
+            if(el === 'header') document.getElementById('card-header-el').style.transform = `translateY(${val}px)`;
+            if(el === 'banner') document.getElementById('card-banner-el').style.transform = `translateY(${val}px)`;
+            if(el === 'text') document.getElementById('text-group-el').style.transform = `translateY(${val}px)`;
+            if(el === 'content') document.getElementById('visual-group-el').style.transform = `translateY(${val}px)`;
         };
 
-        window.updateColor = (val, type) => {
-            const root = document.documentElement;
-            if(type === 'primary') {
-                root.style.setProperty('--primary', val);
-                document.querySelectorAll('.p-name, .victory-sdo-name, .team-name-lg').forEach(el => el.style.color = val);
-            }
-            if(type === 'accent') {
-                document.querySelectorAll('.p-sdo, .victory-rank').forEach(el => el.style.color = val);
-            }
+        // --- MANUAL DATA RENDER ---
+        window.manualPodiumRender = () => {
+            switchMode('podium');
+            document.getElementById('pEvent').innerText = document.getElementById('m-event').value || "EVENT NAME";
+            document.getElementById('pCategory').innerText = document.getElementById('m-cat').value || "CATEGORY";
+            
+            const bars = document.getElementById('winnerBars'); bars.innerHTML = "";
+            const gN = document.getElementById('m-gold-name').value; const gS = document.getElementById('m-gold-sdo').value;
+            const sN = document.getElementById('m-silver-name').value; const sS = document.getElementById('m-silver-sdo').value;
+            const bN = document.getElementById('m-bronze-name').value; const bS = document.getElementById('m-bronze-sdo').value;
+
+            if(gN) bars.innerHTML += `<div class="winner-card-gold"><div class="p-name">${gN}</div><div class="p-sdo">${gS}</div></div>`;
+            if(sN) bars.innerHTML += `<div class="winner-card-sub border-silver"><div class="p-name" style="font-size:1.5rem">${sN}</div><div class="p-sdo" style="font-size:0.9rem">${sS}</div></div>`;
+            if(bN) bars.innerHTML += `<div class="winner-card-sub border-bronze"><div class="p-name" style="font-size:1.5rem">${bN}</div><div class="p-sdo" style="font-size:0.9rem">${bS}</div></div>`;
+            document.getElementById('captionText').value = `OFFICIAL RESULT: ${document.getElementById('m-event').value}\n\n#R1AA2026`;
         };
 
-        window.toggleElement = (id, show) => {
-            document.getElementById(id).style.visibility = show ? 'visible' : 'hidden';
-        };
-
-        // --- IMAGE UPLOAD LOGIC ---
-        window.triggerUpload = (id) => document.getElementById(id).click();
-        window.updateImage = (input, targetId) => {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    if(targetId === 'card-bg') {
-                        document.getElementById('socialCard').style.backgroundImage = `url(${e.target.result})`;
-                    } else {
-                        const img = document.getElementById(targetId);
-                        img.src = e.target.result; img.style.display='block'; img.style.opacity='1';
-                        if(img.nextElementSibling && img.nextElementSibling.tagName === 'SPAN') img.nextElementSibling.style.display='none';
-                    }
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        };
-
-        // --- STANDARD LOGIC (Modes, Renderers, Firebase) ---
-        // (Keep the same logic from previous standard version for renderPodium, renderVictory, etc.)
-        // This includes switchMode, renderMatch, renderTallyGraphic, downloadCard, copyCaption
-        
-        // RE-INSERTING KEY JS FUNCTIONS FOR COMPLETENESS:
+        // --- EXISTING LOGIC ---
         let GLOBAL_DATA = [], GROUPED_DATA = {};
-        
         const q = query(collection(db, "game_results"), orderBy("timestamp", "desc"));
         onSnapshot(q, (snapshot) => {
             const container = document.getElementById('feedContainer'); container.innerHTML = ""; GLOBAL_DATA = []; GROUPED_DATA = {};
@@ -411,6 +415,11 @@
             });
         });
 
+        window.switchMainView = (viewId) => {
+            ['viewGraphics', 'viewUpdates', 'viewAwards', 'viewTally'].forEach(id => document.getElementById(id).style.display = 'none');
+            document.getElementById(viewId).style.display = (viewId === 'viewGraphics') ? 'flex' : 'block';
+        };
+
         window.switchMode = (mode) => {
             document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active')); event.currentTarget.classList.add('active');
             document.querySelectorAll('.panel-section').forEach(p => p.classList.remove('active')); document.getElementById('ctrl-'+mode).classList.add('active');
@@ -419,28 +428,32 @@
             else if(mode === 'victory') document.getElementById('layoutVictory').classList.add('active');
             else if(mode === 'match') document.getElementById('layoutMatch').classList.add('active');
             else if(mode === 'tally') { document.getElementById('layoutTally').classList.add('active'); renderTallyGraphic(); }
+            
+            const banner = document.getElementById('card-banner-el');
+            if(mode === 'match') { renderMatch(); banner.innerText = "GAME RESULT"; }
+            else if(mode === 'victory') { renderVictory(); banner.innerText = "TOP PERFORMERS"; }
+            else if(mode === 'tally') banner.innerText = "MEDAL UPDATE";
+            else banner.innerText = "CONGRATULATIONS!";
         };
 
         window.renderPodium = (group) => {
-            switchMode({currentTarget: document.querySelector('button[onclick*="podium"]')}, 'podium'); // Hack to reuse switchMode logic or just manually set
-            document.getElementById('layoutPodium').classList.add('active'); // Ensure visibility
-            
+            switchMode('podium');
             document.getElementById('pEvent').innerText = group.meta.event;
-            document.getElementById('pCategory').innerText = `${group.meta.subEvent||''} ${group.meta.category} ${group.meta.gender}`;
+            document.getElementById('pCategory').innerText = `${group.meta.subEvent || ''} - ${group.meta.category} ${group.meta.gender}`;
             const bars = document.getElementById('winnerBars'); bars.innerHTML = "";
             const gold = group.medals.find(m => m.medal === 'GOLD');
             const silver = group.medals.find(m => m.medal === 'SILVER');
             const bronze = group.medals.find(m => m.medal === 'BRONZE');
-            
             if(gold) bars.innerHTML += `<div class="winner-card-gold"><div class="p-name">${gold.athleteName}</div><div class="p-sdo">${gold.sdo}</div></div>`;
             if(silver) bars.innerHTML += `<div class="winner-card-sub border-silver"><div class="p-name" style="font-size:1.5rem">${silver.athleteName}</div><div class="p-sdo" style="font-size:0.9rem">${silver.sdo}</div></div>`;
             if(bronze) bars.innerHTML += `<div class="winner-card-sub border-bronze"><div class="p-name" style="font-size:1.5rem">${bronze.athleteName}</div><div class="p-sdo" style="font-size:0.9rem">${bronze.sdo}</div></div>`;
-            document.getElementById('captionText').value = `OFFICIAL RESULT: ${group.meta.event}\n#R1AA2026`;
+            document.getElementById('captionText').value = `OFFICIAL RESULT: ${group.meta.event}\n\n#R1AA2026`;
         };
 
         window.renderVictory = () => {
             document.getElementById('dispVictName').innerText = document.getElementById('victName').value;
             document.getElementById('dispVictRank').innerText = document.getElementById('victRank').value;
+            document.getElementById('captionText').value = `CONGRATULATIONS ${document.getElementById('victName').value}!\n\n#R1AA2026`;
         };
 
         window.renderMatch = () => {
@@ -449,31 +462,41 @@
             document.getElementById('dispScoreA').innerText = document.getElementById('scoreA').value;
             document.getElementById('dispB').innerText = document.getElementById('nameB').value;
             document.getElementById('dispScoreB').innerText = document.getElementById('scoreB').value;
+            document.getElementById('captionText').value = `GAME UPDATE: ${document.getElementById('nameA').value} vs ${document.getElementById('nameB').value}\n\n#R1AA2026`;
         };
 
         window.renderTallyGraphic = () => {
             document.getElementById('dispTallyTitle').innerText = document.getElementById('tallyTitle').value;
             let tally = {}; GLOBAL_DATA.forEach(d => { if(!tally[d.sdo]) tally[d.sdo]={G:0,S:0,B:0}; tally[d.sdo][d.medal.charAt(0)]++; });
-            const sorted = Object.keys(tally).sort((a,b) => tally[b].G - tally[a].G).slice(0,8);
+            const sorted = Object.keys(tally).sort((a,b) => tally[b].G - tally[a].G).slice(0, 8);
             let html = `<div class="tgt-head"><div>#</div><div>SDO</div><div>G</div><div>S</div><div>B</div></div>`;
-            sorted.forEach((sdo,i) => { html += `<div class="tgt-row"><div>${i+1}</div><div style="text-align:left">${sdo}</div><div>${tally[sdo].G}</div><div>${tally[sdo].S}</div><div>${tally[sdo].B}</div></div>`; });
+            sorted.forEach((sdo, i) => { html += `<div class="tgt-row"><div>${i+1}</div><div style="text-align:left">${sdo}</div><div>${tally[sdo].G}</div><div>${tally[sdo].S}</div><div>${tally[sdo].B}</div></div>`; });
             document.getElementById('tallyGraphicContent').innerHTML = html;
+            document.getElementById('captionText').value = `${document.getElementById('tallyTitle').value}\n\n#R1AA2026`;
+        };
+
+        window.triggerUpload = (id) => document.getElementById(id).click();
+        window.updateImage = (input, targetId) => {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    if(targetId === 'card-bg') { document.getElementById('socialCard').style.backgroundImage = `url(${e.target.result})`; } 
+                    else { const img = document.getElementById(targetId); img.src = e.target.result; img.style.display='block'; img.style.opacity='1'; }
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
         };
 
         window.downloadCard = () => {
             const card = document.getElementById('socialCard');
-            card.style.transform = "scale(1)"; card.style.margin = "0";
+            card.style.transform = "scale(1)"; card.style.marginTop="0"; card.style.marginBottom="0";
             html2canvas(card, { scale: 2, useCORS: true }).then(c => {
                 const link = document.createElement('a'); link.download = `R1AA_Graphic.png`; link.href = c.toDataURL(); link.click();
                 card.style.transform = "scale(0.55)"; card.style.marginBottom="-400px"; card.style.marginTop="-80px";
             });
         };
-        
-        window.switchMainView = (viewId) => {
-            ['viewGraphics','viewUpdates','viewAwards','viewTally'].forEach(id => document.getElementById(id).style.display='none');
-            document.getElementById(viewId).style.display = (viewId === 'viewGraphics') ? 'flex' : 'block';
-        };
 
+        window.copyCaption = () => { document.getElementById('captionText').select(); document.execCommand('copy'); alert("Copied!"); };
         document.getElementById('logoutBtn').addEventListener('click', () => { signOut(auth).then(() => window.location.href = "../index.html"); });
     </script>
 </body>
