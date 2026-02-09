@@ -81,19 +81,17 @@
             transform-origin: top center; 
             margin-bottom: -400px; 
             margin-top: 40px; 
-            padding-bottom: 100px; /* Space at bottom for background to show */
+            padding-bottom: 100px; /* Space at bottom */
         }
 
-        /* HEADER */
-        .card-header { width: 100%; height: 260px; display: flex; justify-content: center; align-items: center; padding-top: 40px; position: relative; z-index: 10; flex-shrink: 0; }
-        .header-logo-overlay { height: 180px; object-fit: contain; cursor: pointer; border: 2px dashed rgba(255,255,255,0.3); border-radius: 10px; transition: 0.2s; }
-        .header-logo-overlay:hover { transform: scale(1.02); border-color: white; background: rgba(255,255,255,0.1); }
+        /* HEADER & FOOTER REMOVED IN THIS VERSION */
+        /* Only Banner remains */
 
         .congrats-banner {
             background: linear-gradient(90deg, #ea580c 0%, #dc2626 100%); color: white; width: 100%; padding: 15px 0;
             font-family: 'Oswald', sans-serif; font-size: 3.5rem; font-weight: 900; text-transform: uppercase; letter-spacing: 3px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2); text-shadow: 3px 3px 0px rgba(0,0,0,0.2); 
-            margin-top: 30px; z-index: 5; flex-shrink: 0; transition: transform 0.2s;
+            margin-top: 50px; z-index: 5; flex-shrink: 0; transition: transform 0.2s;
         }
 
         /* CONTENT */
@@ -110,7 +108,7 @@
             display: flex; 
             justify-content: center; 
             transition: transform 0.2s; 
-            margin-top: 35px;
+            margin-top: 20px;
         }
 
         .card-layout { display: none; width: 100%; flex-direction: column; align-items: center; }
@@ -118,7 +116,7 @@
 
         /* Typography */
         .event-name-lg { font-family: 'Oswald', sans-serif; font-size: 4rem; font-weight: 800; text-transform: uppercase; color: #fbbf24; -webkit-text-stroke: 2px #b45309; text-shadow: 3px 3px 0px #b45309; margin-bottom: 5px; line-height: 1.1; }
-        .category-text { font-family: 'Montserrat', sans-serif; font-size: 1.5rem; font-weight: 700; text-transform: uppercase; letter-spacing: 4px; color: white; margin-bottom: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .category-text { font-family: 'Montserrat', sans-serif; font-size: 1.5rem; font-weight: 700; text-transform: uppercase; letter-spacing: 4px; color: white; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 
         /* Tally Title */
         .tally-title-custom { 
@@ -128,29 +126,67 @@
         }
 
         /* Layouts */
-        .podium-container { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; width: 90%; justify-items: center; }
+        .podium-container { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; width: 90%; justify-items: center; }
         .winner-card-gold { grid-column: span 2; width: 100%; background: rgba(255, 255, 255, 0.95); padding: 20px 30px; border-radius: 15px; border-left: 15px solid #fbbf24; display: flex; flex-direction: column; align-items: center; margin-bottom: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
         .winner-card-sub { width: 100%; background: rgba(255, 255, 255, 0.9); padding: 15px 20px; border-radius: 15px; display: flex; flex-direction: column; align-items: center; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
         .border-silver { border-left: 10px solid #94a3b8; } .border-bronze { border-left: 10px solid #b45309; }
         .p-name { font-size: 2.5rem; font-weight: 900; text-transform: uppercase; line-height: 1; color: #1e3a8a; }
         .p-sdo { font-size: 1.5rem; font-weight: 600; text-transform: uppercase; color: #dc2626; border-top: 2px solid #e2e8f0; padding-top: 5px; width: 100%; }
 
-        .photo-frame { width: 85%; height: 420px; background: white; padding: 15px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; overflow: hidden; transform: rotate(-1deg); margin-bottom: 30px; }
+        /* Victory - ADJUSTED FOR FIT */
+        .photo-frame { 
+            width: 90%; height: 380px; /* Reduced height to fit */
+            background: white; padding: 15px; 
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4); 
+            display: flex; align-items: center; justify-content: center; 
+            overflow: hidden; transform: rotate(-1deg); margin-bottom: 25px; 
+        }
         .team-photo { width: 100%; height: 100%; object-fit: cover; }
         
-        /* UPDATED VICTORY DETAILS */
-        .victory-details { display: flex; align-items: center; width: 95%; justify-content: center; gap: 20px; background: rgba(255,255,255,0.9); padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        .sdo-logo-lg { width: 130px; height: 130px; object-fit: contain; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3)); }
-        .victory-text { display: flex; flex-direction: column; text-align: center; }
-        .victory-sdo-name { font-family: 'Oswald', sans-serif; font-size: 3.2rem; font-weight: 900; color: #dc2626; line-height: 1.1; text-transform: uppercase; }
-        .victory-rank { font-family: 'Oswald', sans-serif; font-size: 2.5rem; font-weight: 800; color: #fbbf24; text-shadow: 2px 2px 0 #b45309; text-transform: uppercase; line-height: 1.1; }
+        .victory-details { 
+            display: flex; align-items: center; width: 95%; 
+            justify-content: center; gap: 20px; 
+            background: rgba(255,255,255,0.95); padding: 20px; 
+            border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); 
+        }
+        .sdo-logo-lg { width: 120px; height: 120px; object-fit: contain; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3)); }
+        
+        .victory-text { display: flex; flex-direction: column; text-align: left; }
+        .victory-sdo-name { 
+            font-family: 'Oswald', sans-serif; font-size: 3rem; /* Smaller to fit */
+            font-weight: 900; color: #dc2626; line-height: 1; text-transform: uppercase; 
+        }
+        .victory-rank { 
+            font-family: 'Oswald', sans-serif; font-size: 2rem; /* Smaller to fit */
+            font-weight: 800; color: #fbbf24; text-shadow: 1px 1px 0 #b45309; 
+            text-transform: uppercase; margin-top: 5px;
+        }
 
-        /* UPDATED MATCH SCORE BOX */
-        .match-score-box { display: flex; align-items: center; justify-content: space-around; width: 100%; background: rgba(0,0,0,0.3); padding: 25px; border-radius: 30px; backdrop-filter: blur(10px); border: 2px solid rgba(255,255,255,0.2); margin-top: 10px; }
-        .team-box { display: flex; flex-direction: column; align-items: center; width: 35%; }
-        .team-logo-ph { width: 200px; height: 200px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 4rem; color: white; border: 5px solid white; overflow: hidden; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
-        .team-name-lg { font-family: 'Oswald', sans-serif; font-size: 2.5rem; color: white; text-transform: uppercase; margin-top: 20px; text-shadow: 0 3px 6px rgba(0,0,0,0.6); }
-        .score-text { font-family: 'Oswald', sans-serif; font-size: 8rem; color: #fbbf24; font-weight: 900; text-shadow: 0 5px 15px rgba(0,0,0,0.6); }
+        /* Match - ADJUSTED FOR FIT */
+        .match-score-box { 
+            display: flex; align-items: center; justify-content: space-between; 
+            width: 95%; background: rgba(0,0,0,0.3); padding: 20px; 
+            border-radius: 25px; backdrop-filter: blur(10px); 
+            border: 2px solid rgba(255,255,255,0.2); margin-top: 10px; 
+        }
+        .team-box { display: flex; flex-direction: column; align-items: center; width: 40%; }
+        .team-logo-ph { 
+            width: 160px; height: 160px; /* Reduced */
+            background: rgba(255,255,255,0.2); border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            font-size: 3rem; color: white; border: 4px solid white; 
+            overflow: hidden; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.3); 
+        }
+        .team-name-lg { 
+            font-family: 'Oswald', sans-serif; font-size: 1.8rem; /* Adjusted */
+            color: white; text-transform: uppercase; margin-top: 15px; 
+            text-shadow: 0 3px 6px rgba(0,0,0,0.6); line-height: 1.1;
+        }
+        .score-text { 
+            font-family: 'Oswald', sans-serif; font-size: 6rem; /* Adjusted */
+            color: #fbbf24; font-weight: 900; text-shadow: 0 5px 15px rgba(0,0,0,0.6); 
+            line-height: 1; margin-top: 5px;
+        }
 
         .tally-graphic-table { width: 90%; background: rgba(255,255,255,0.95); border-radius: 15px; overflow: hidden; font-family: 'Oswald', sans-serif; box-shadow: 0 15px 30px rgba(0,0,0,0.3); margin-top: 10px; }
         .tgt-head { display: grid; grid-template-columns: 0.5fr 3fr 1fr 1fr 1fr; background: #1e3a8a; color: white; padding: 20px; font-size: 1.5rem; font-weight: 700; }
@@ -180,7 +216,6 @@
 <body>
 
     <input type="file" id="upload-template" accept="image/*" style="display:none" onchange="updateImage(this, 'card-bg')">
-    <input type="file" id="upload-header" accept="image/*" style="display:none" onchange="updateImage(this, 'img-header')">
     <input type="file" id="upload-teamA" accept="image/*" style="display:none" onchange="updateImage(this, 'img-teamA')">
     <input type="file" id="upload-teamB" accept="image/*" style="display:none" onchange="updateImage(this, 'img-teamB')">
     <input type="file" id="upload-team-photo" accept="image/*" style="display:none" onchange="updateImage(this, 'img-team-photo')">
@@ -260,7 +295,6 @@
                         </div>
                         <div class="design-group">
                             <div class="design-title">Layout Position (Move Up/Down)</div>
-                            <div class="input-group"><label class="input-label">Header</label><input type="range" class="c-range" min="-50" max="50" value="0" oninput="moveElement('header', this.value)"></div>
                             <div class="input-group"><label class="input-label">Banner</label><input type="range" class="c-range" min="-50" max="50" value="0" oninput="moveElement('banner', this.value)"></div>
                             <div class="input-group"><label class="input-label">Text</label><input type="range" class="c-range" min="-50" max="50" value="0" oninput="moveElement('text', this.value)"></div>
                             <div class="input-group"><label class="input-label">Content</label><input type="range" class="c-range" min="-50" max="50" value="0" oninput="moveElement('content', this.value)"></div>
@@ -280,9 +314,6 @@
 
             <div class="workspace">
                 <div id="socialCard" class="social-card">
-                    <div class="card-header" id="card-header-el">
-                        <img src="assets/r1aa_logo.png" class="header-logo-overlay editable-logo" id="img-header" onclick="triggerUpload('upload-header')" onerror="this.style.opacity='0'">
-                    </div>
                     
                     <div class="congrats-banner" id="congrats-banner">CONGRATULATIONS!</div>
                     
@@ -409,7 +440,6 @@
         window.updateBannerText = (val) => document.getElementById('congrats-banner').innerText = val;
         
         window.moveElement = (el, val) => {
-            if(el === 'header') document.getElementById('card-header-el').style.transform = `translateY(${val}px)`;
             if(el === 'banner') document.getElementById('congrats-banner').style.transform = `translateY(${val}px)`;
             if(el === 'text') document.getElementById('text-group-el').style.transform = `translateY(${val}px)`;
             if(el === 'content') document.getElementById('visual-group-el').style.transform = `translateY(${val}px)`;
