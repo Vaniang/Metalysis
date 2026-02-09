@@ -159,7 +159,6 @@
 
         .photo-frame { width: 85%; height: 380px; background: white; padding: 15px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; overflow: hidden; transform: rotate(-1deg); margin-bottom: 30px; }
         .team-photo { width: 100%; height: 100%; object-fit: cover; }
-        
         .victory-details { display: flex; align-items: center; width: 95%; justify-content: center; gap: 20px; background: rgba(255,255,255,0.95); padding: 20px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         .sdo-logo-lg { width: 120px; height: 120px; object-fit: contain; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3)); }
         .victory-sdo-name { font-family: 'Oswald', sans-serif; font-size: 3rem; font-weight: 900; color: #dc2626; line-height: 1.1; text-transform: uppercase; }
@@ -175,6 +174,23 @@
         .tgt-head { display: grid; grid-template-columns: 0.5fr 3fr 1fr 1fr 1fr; background: #1e3a8a; color: white; padding: 20px; font-size: 1.5rem; font-weight: 700; }
         .tgt-row { display: grid; grid-template-columns: 0.5fr 3fr 1fr 1fr 1fr; padding: 15px 20px; border-bottom: 1px solid #e2e8f0; align-items: center; color: #1e3a8a; font-size: 1.6rem; font-weight: 600; }
 
+        /* WATERMARK / SOURCE NOTE */
+        .watermark-source {
+            position: absolute;
+            bottom: 40px;
+            width: 100%;
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1rem;
+            font-weight: 800;
+            color: #1e3a8a; 
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.8;
+            z-index: 10;
+            text-shadow: 0 2px 10px rgba(255,255,255,0.9);
+        }
+
         /* Tools */
         .caption-container { width: 600px; background: white; padding: 25px; border-radius: 12px; margin-top: 20px; flex-shrink: 0; z-index: 50; }
         .caption-area { width: 100%; height: 150px; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-family: 'Segoe UI', sans-serif; font-size: 0.9rem; resize: none; background: #f8fafc; color: #334155; margin-bottom: 15px; line-height: 1.5; }
@@ -187,7 +203,7 @@
         .pil-container { width: 100%; max-width: 800px; background: white; border-radius: 16px; padding: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .pil-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
         .pil-full { grid-column: span 2; }
-        .pil-output { width: 100%; height: 150px; border: none; background: #f8fafc; padding: 15px; border-radius: 12px; margin-top: 20px; resize: none; font-size: 1rem; color: #334155; }
+        .pil-output { width: 100%; height: 250px; border: none; background: #f8fafc; padding: 15px; border-radius: 12px; margin-top: 20px; resize: none; font-size: 1rem; color: #334155; line-height: 1.6; }
         .section-header { width: 100%; max-width: 1000px; font-size: 1.8rem; font-weight: 800; color: #1e3a8a; margin-bottom: 20px; border-bottom: 2px solid #e2e8f0; padding-bottom: 10px; }
         .controls-bar { width: 100%; max-width: 1000px; display: flex; gap: 10px; margin-bottom: 20px; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
         .data-table-container { width: 100%; max-width: 1000px; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
@@ -256,7 +272,7 @@
                                 
                                 <div style="display:flex; gap:10px;">
                                     <button class="btn-action" onclick="window.addPodiumWinner()">Add Winner</button>
-                                    <button class="btn-action btn-red" style="background:#dc2626;" onclick="window.clearPodium()">Clear All</button>
+                                    <button class="btn-action btn-dl" style="background:#dc2626;" onclick="window.clearPodium()">Clear All</button>
                                 </div>
                             </div>
                             
@@ -360,6 +376,8 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="watermark-source">Source: Game Results and Tabulation Committee</div>
                 </div>
 
                 <div class="caption-container">
@@ -385,7 +403,7 @@
                     <div class="pil-full"><label class="input-label">WHY/HOW</label><textarea id="pilWhy" class="c-input" style="height:70px;"></textarea></div>
                 </div>
                 <button class="btn-action" onclick="window.generateSmartNews()">GENERATE</button>
-                <textarea id="pilOutput" class="pil-output" style="margin-top:20px;height:150px;" readonly></textarea>
+                <textarea id="pilOutput" class="pil-output" style="margin-top:20px;" readonly></textarea>
                 <button class="action-btn btn-copy" onclick="window.copyPil()" style="margin-top:10px; width:auto;">COPY TEXT</button>
             </div>
         </div>
@@ -651,15 +669,35 @@
         };
         window.copyCaption = () => { document.getElementById('captionText').select(); document.execCommand('copy'); alert("Copied!"); };
 
-        // --- NEWS/LISTS ---
+        // --- SMART NEWS ENGINE ---
         window.generateSmartNews = () => {
-            const vals = ['Who','What','Where','When','Why'].map(id => document.getElementById('pil'+id).value);
             const tone = document.getElementById('pilTone').value;
-            let text = "";
-            if(tone === 'hype') text = `🔥 BREAKING: ${vals[1].toUpperCase()}!\n\n${vals[0]} has done it ${vals[2]}! ${vals[4]}.\n\n#R1AA2026`;
-            else text = `NEWS UPDATE | ${vals[2]}\n\n${vals[0]} ${vals[1]} ${vals[3]}.\n\n${vals[4]}.\n\n#R1AA2026`;
-            document.getElementById('pilOutput').value = text;
+            const who = document.getElementById('pilWho').value.trim();
+            const what = document.getElementById('pilWhat').value.trim();
+            const where = document.getElementById('pilWhere').value.trim();
+            const when = document.getElementById('pilWhen').value.trim();
+            const why = document.getElementById('pilWhy').value.trim();
+
+            if (!who || !what) { alert("Please fill at least 'Who' and 'What' fields."); return; }
+
+            let headline = "";
+            let body = "";
+            let hashtags = "\n\n#R1AA2026 #Region1 #SportsExcellence";
+
+            if (tone === 'hype') {
+                headline = `🔥 BREAKING: ${what.toUpperCase()}! 🔥`;
+                body = `The crowd roared as ${who} absolutely DOMINATED the scene! 💥 It all went down at ${where}, and let me tell you, it was LEGENDARY. \n\n${why ? `Highlight of the day: ${why} 🚀` : ''} \n\nWitnessing history in the making! Let's go! 💪`;
+            } else if (tone === 'formal') {
+                headline = `OFFICIAL UPDATE | ${what}`;
+                body = `[${where.toUpperCase()}] – In a significant development for the R1AA 2026, ${who} has successfully secured a pivotal victory in ${what}. \n\nThe event, which took place ${when}, showcased exceptional skill and sportsmanship. ${why ? `According to officials, ${why}.` : ''} \n\nCongratulations to all participants for a well-fought competition.`;
+            } else if (tone === 'story') {
+                headline = `✨ A Moment to Remember: ${what}`;
+                body = `Under the bright lights of ${where}, a story unfolded that we won't soon forget. ${who} stepped up and delivered a performance full of heart and grit. ❤️ \n\nIt happened ${when}, but the feeling is still in the air. ${why} \n\nThis is what sports is all about – passion, dedication, and the thrill of the game.`;
+            }
+
+            document.getElementById('pilOutput').value = `${headline}\n\n${body}${hashtags}`;
         };
+        
         window.copyPil = () => { document.getElementById('pilOutput').select(); document.execCommand('copy'); alert("Copied!"); };
 
         window.renderAwardsTable = () => {
