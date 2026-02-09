@@ -31,7 +31,7 @@
 
         /* --- 4. VIEW CONTAINERS --- */
         .view-section { display: none; width: 100%; height: 100%; overflow: hidden; }
-        .view-section.active { display: flex; } /* Default flex for layout */
+        .view-section.active { display: flex; }
 
         /* --- 5. GRAPHIC BUILDER (Split View) --- */
         #viewGraphics { flex-direction: row; }
@@ -60,6 +60,13 @@
         .btn-action { width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 6px; font-weight: 700; cursor: pointer; margin-top: 5px; font-size: 0.8rem; transition: 0.2s; }
         .btn-upload { background: #475569; display: flex; align-items: center; justify-content: center; gap: 8px; }
         .btn-upload:hover { background: #334155; }
+        
+        .design-group { background: #f8fafc; border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .design-title { font-size: 0.75rem; font-weight: 800; color: #334155; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; }
+        .c-range { width: 100%; cursor: pointer; accent-color: var(--primary); }
+
+        .feed-item { padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; margin-bottom: 8px; cursor: pointer; font-size: 0.8rem; background: white; transition:0.2s; }
+        .feed-item:hover { background: #eff6ff; border-color: var(--primary); }
 
         /* Workspace & Canvas */
         .workspace { flex: 1; background: #cbd5e1; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 40px; overflow-y: auto; }
@@ -70,47 +77,30 @@
             background-color: white;
             background-image: url('assets/template_bg.jpg'); background-size: cover; background-position: center;
             position: relative; 
-            display: flex; flex-direction: column; /* THE SANDWICH */
+            display: flex; flex-direction: column; 
             align-items: center; text-align: center; color: #1e3a8a;
             font-family: 'Montserrat', sans-serif; box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.5);
             border: 1px solid #ccc; overflow: hidden; flex-shrink: 0;
             transform: scale(0.55); transform-origin: top center; margin-bottom: -400px; margin-top: -80px;
         }
 
-        /* HEADER (Fixed) */
-        .card-header { width: 100%; height: 260px; display: flex; justify-content: center; align-items: center; padding-top: 40px; position: relative; z-index: 10; flex-shrink: 0; }
-        .header-logo-overlay { height: 180px; object-fit: contain; cursor: pointer; border: 2px dashed rgba(255,255,255,0.3); border-radius: 10px; transition: 0.2s; }
-        .header-logo-overlay:hover { transform: scale(1.02); border-color: white; background: rgba(255,255,255,0.1); }
-
         .congrats-banner {
             background: linear-gradient(90deg, #ea580c 0%, #dc2626 100%); color: white; width: 100%; padding: 15px 0;
             font-family: 'Oswald', sans-serif; font-size: 3.5rem; font-weight: 900; text-transform: uppercase; letter-spacing: 3px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.2); text-shadow: 3px 3px 0px rgba(0,0,0,0.2); 
-            margin-top: -20px; z-index: 5; flex-shrink: 0; /* No shrink */
+            margin-top: 20px; z-index: 5; flex-shrink: 0; transition: transform 0.2s;
         }
 
-        /* CONTENT (Fills Space) */
+        /* CONTENT (Full Area) */
         .card-content { 
             flex: 1; width: 100%; 
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
-            padding: 20px; z-index: 5; overflow: hidden;
+            padding: 40px; z-index: 5; overflow: hidden;
         }
         .text-group, .visual-group { width: 100%; transition: transform 0.2s; }
+        
         .card-layout { display: none; width: 100%; flex-direction: column; align-items: center; }
         .card-layout.active { display: flex; }
-
-        /* FOOTER (Fixed at Bottom) */
-        .card-footer { 
-            width: 100%; height: 220px; 
-            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); 
-            display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
-            padding-bottom: 25px; z-index: 10; flex-shrink: 0; margin-top: auto;
-        }
-        .logos-row { display: flex; gap: 30px; margin-bottom: 10px; align-items: center; }
-        .footer-logo-box { height: 110px; min-width: 110px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 2px dashed rgba(255,255,255,0.3); border-radius: 8px; padding: 5px; background: rgba(255,255,255,0.05); }
-        .footer-logo-box:hover { border-color: white; background: rgba(255,255,255,0.2); }
-        .footer-logo-img { height: 100%; width: auto; max-width: 100%; object-fit: contain; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.4)); }
-        .source-note { font-family: 'Montserrat', sans-serif; font-size: 0.9rem; color: rgba(255,255,255,0.9); font-weight: 600; letter-spacing: 1px; text-transform: uppercase; margin-top: 5px; }
 
         /* Typography */
         .event-name-lg { font-family: 'Oswald', sans-serif; font-size: 4rem; font-weight: 800; text-transform: uppercase; color: #fbbf24; -webkit-text-stroke: 2px #b45309; text-shadow: 3px 3px 0px #b45309; margin-bottom: 5px; line-height: 1.1; }
@@ -127,8 +117,8 @@
         /* Victory */
         .photo-frame { width: 85%; height: 420px; background: white; padding: 15px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; overflow: hidden; transform: rotate(-1deg); margin-bottom: 30px; }
         .team-photo { width: 100%; height: 100%; object-fit: cover; }
-        .victory-details { display: flex; align-items: center; width: 90%; justify-content: center; gap: 30px; background: rgba(255,255,255,0.9); padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        .sdo-logo-lg { width: 130px; height: 130px; object-fit: contain; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3)); }
+        .victory-details { display: flex; align-items: center; width: 90%; justify-content: center; gap: 30px; background: rgba(255,255,255,0.9); padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        .sdo-logo-lg { width: 130px; height: 130px; object-fit: contain; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3)); background: #eee; }
         .victory-sdo-name { font-family: 'Oswald', sans-serif; font-size: 4rem; font-weight: 900; color: #dc2626; line-height: 1; text-transform: uppercase; }
         .victory-rank { font-family: 'Oswald', sans-serif; font-size: 3rem; font-weight: 800; color: #fbbf24; text-shadow: 2px 2px 0 #b45309; text-transform: uppercase; }
 
@@ -175,12 +165,6 @@
 <body>
 
     <input type="file" id="upload-template" accept="image/*" style="display:none" onchange="updateImage(this, 'card-bg')">
-    <input type="file" id="upload-header" accept="image/*" style="display:none" onchange="updateImage(this, 'img-header')">
-    <input type="file" id="upload-deped" accept="image/*" style="display:none" onchange="updateImage(this, 'img-deped')">
-    <input type="file" id="upload-bagongp" accept="image/*" style="display:none" onchange="updateImage(this, 'img-bagongp')">
-    <input type="file" id="upload-region1" accept="image/*" style="display:none" onchange="updateImage(this, 'img-region1')">
-    <input type="file" id="upload-lgu" accept="image/*" style="display:none" onchange="updateImage(this, 'img-lgu')">
-    <input type="file" id="upload-sdo" accept="image/*" style="display:none" onchange="updateImage(this, 'img-sdo')">
     <input type="file" id="upload-teamA" accept="image/*" style="display:none" onchange="updateImage(this, 'img-teamA')">
     <input type="file" id="upload-teamB" accept="image/*" style="display:none" onchange="updateImage(this, 'img-teamB')">
     <input type="file" id="upload-team-photo" accept="image/*" style="display:none" onchange="updateImage(this, 'img-team-photo')">
@@ -190,8 +174,8 @@
         <div class="brand"><i class="fas fa-hashtag"></i> R1AA SOCIAL</div>
         <div class="nav-links">
             <div class="nav-item active" onclick="switchMainView('viewGraphics')" id="nav-viewGraphics"><i class="fas fa-bolt"></i> Graphic Generator</div>
-            <div class="nav-item" onclick="switchMainView('viewUpdates')" id="nav-viewUpdates"><i class="fas fa-newspaper"></i> PILUpdates Generator</div>
-            <div class="nav-item" onclick="switchMainView('viewAwards')" id="nav-viewAwards"><i class="fas fa-medal"></i> Athlete Awards List</div>
+            <div class="nav-item" onclick="switchMainView('viewUpdates')" id="nav-viewUpdates"><i class="fas fa-newspaper"></i> PILUpdates</div>
+            <div class="nav-item" onclick="switchMainView('viewAwards')" id="nav-viewAwards"><i class="fas fa-medal"></i> Awards List</div>
             <div class="nav-item" onclick="switchMainView('viewTally')" id="nav-viewTally"><i class="fas fa-list-ol"></i> Official Tally</div>
             <div class="nav-item" id="logoutBtn" style="margin-top: auto;"><i class="fas fa-sign-out-alt"></i> Sign Out</div>
         </div>
@@ -220,7 +204,7 @@
                                 <div class="design-title">Manual Input</div>
                                 <div class="input-group"><label class="input-label">Event Name</label><input type="text" class="c-input" id="m-event" oninput="manualPodiumRender()"></div>
                                 <div class="input-group"><label class="input-label">Category</label><input type="text" class="c-input" id="m-cat" oninput="manualPodiumRender()"></div>
-                                <div class="input-group"><label class="input-label">GOLD</label><input type="text" class="c-input" id="m-gold-name" placeholder="Name"><input type="text" class="c-input" id="m-gold-sdo" placeholder="SDO" style="margin-top:2px" oninput="manualPodiumRender()"></div>
+                                <div class="input-group"><label class="input-label">GOLD (Name / SDO)</label><input type="text" class="c-input" id="m-gold-name" placeholder="Name"><input type="text" class="c-input" id="m-gold-sdo" placeholder="SDO" style="margin-top:2px" oninput="manualPodiumRender()"></div>
                                 <div class="input-group"><label class="input-label">SILVER</label><input type="text" class="c-input" id="m-silver-name" placeholder="Name"><input type="text" class="c-input" id="m-silver-sdo" placeholder="SDO" style="margin-top:2px" oninput="manualPodiumRender()"></div>
                                 <div class="input-group"><label class="input-label">BRONZE</label><input type="text" class="c-input" id="m-bronze-name" placeholder="Name"><input type="text" class="c-input" id="m-bronze-sdo" placeholder="SDO" style="margin-top:2px" oninput="manualPodiumRender()"></div>
                                 <button class="btn-action" onclick="manualPodiumRender()">Update Card</button>
@@ -238,8 +222,8 @@
 
                         <div id="ctrl-match" class="panel-section">
                             <div class="input-group"><label class="input-label">Event</label><input type="text" class="c-input" id="matchEvent" value="BASKETBALL SEC BOYS" oninput="renderMatch()"></div>
-                            <div class="input-group"><label class="input-label">Team A</label><input type="text" class="c-input" id="nameA" value="ILOCOS NORTE" oninput="renderMatch()"><input type="number" class="c-input" id="scoreA" value="86" oninput="renderMatch()"></div>
-                            <div class="input-group"><label class="input-label">Team B</label><input type="text" class="c-input" id="nameB" value="LA UNION" oninput="renderMatch()"><input type="number" class="c-input" id="scoreB" value="82" oninput="renderMatch()"></div>
+                            <div class="input-group"><label class="input-label">Team A</label><input type="text" class="c-input" id="nameA" value="ILOCOS NORTE" oninput="renderMatch()"><input type="number" class="c-input" id="scoreA" value="86" style="margin-top:5px;" oninput="renderMatch()"></div>
+                            <div class="input-group"><label class="input-label">Team B</label><input type="text" class="c-input" id="nameB" value="LA UNION" oninput="renderMatch()"><input type="number" class="c-input" id="scoreB" value="82" style="margin-top:5px;" oninput="renderMatch()"></div>
                         </div>
 
                         <div id="ctrl-tally" class="panel-section">
@@ -252,16 +236,15 @@
                 <div id="panel-design" class="panel-tab-content">
                     <div class="panel-content">
                         <div class="design-group">
-                            <div class="design-title">Layout Position</div>
-                            <div class="input-group"><label class="input-label">Header</label><input type="range" class="c-range" min="-50" max="50" value="0" oninput="moveElement('header', this.value)"></div>
+                            <div class="design-title">Layout Position (Move Up/Down)</div>
                             <div class="input-group"><label class="input-label">Banner</label><input type="range" class="c-range" min="-50" max="50" value="0" oninput="moveElement('banner', this.value)"></div>
-                            <div class="input-group"><label class="input-label">Text</label><input type="range" class="c-range" min="-50" max="50" value="0" oninput="moveElement('text', this.value)"></div>
-                            <div class="input-group"><label class="input-label">Content</label><input type="range" class="c-range" min="-50" max="50" value="0" oninput="moveElement('content', this.value)"></div>
+                            <div class="input-group"><label class="input-label">Event Title</label><input type="range" class="c-range" min="-50" max="50" value="0" oninput="moveElement('text', this.value)"></div>
+                            <div class="input-group"><label class="input-label">Main Content</label><input type="range" class="c-range" min="-50" max="50" value="0" oninput="moveElement('content', this.value)"></div>
                         </div>
                         <div class="design-group">
                             <div class="design-title">Visibility</div>
                             <label style="display:flex;align-items:center;gap:10px;font-size:0.8rem;margin-bottom:10px;"><input type="checkbox" checked onchange="toggleElement('congrats-banner', this.checked)"> Show Banner</label>
-                            <label style="display:flex;align-items:center;gap:10px;font-size:0.8rem;"><input type="checkbox" checked onchange="toggleElement('footer-row', this.checked)"> Show Footer</label>
+                            <label style="display:flex;align-items:center;gap:10px;font-size:0.8rem;"><input type="checkbox" checked onchange="toggleElement('pEvent', this.checked); toggleElement('dispMatchEvent', this.checked); toggleElement('dispTallyTitle', this.checked);"> Show Event Name</label>
                         </div>
                         <div class="design-group">
                             <div class="design-title">Customization</div>
@@ -273,10 +256,6 @@
 
             <div class="workspace">
                 <div id="socialCard" class="social-card">
-                    <div class="card-header" id="card-header-el">
-                        <img src="assets/r1aa_logo.png" class="header-logo-overlay editable-logo" id="img-header" onclick="triggerUpload('upload-header')" onerror="this.style.opacity='0'">
-                    </div>
-                    
                     <div class="congrats-banner" id="congrats-banner">CONGRATULATIONS!</div>
                     
                     <div class="card-content">
@@ -290,7 +269,7 @@
                                 <div class="podium-container" id="winnerBars"></div>
                             </div>
                             <div id="layoutVictory" class="card-layout">
-                                <div class="photo-frame"><img src="" id="img-team-photo" class="team-photo" style="display:none; width:100%; height:100%; object-fit:cover;"></div>
+                                <div class="photo-frame" style="background:#eee;"><img src="" id="img-team-photo" class="team-photo" style="display:none; width:100%; height:100%; object-fit:cover;"></div>
                                 <div class="victory-details">
                                     <img src="" id="img-sdo-logo" class="sdo-logo-lg" style="display:none;">
                                     <div class="victory-text">
@@ -307,20 +286,10 @@
                                 </div>
                             </div>
                             <div id="layoutTally" class="card-layout">
+                                <div class="event-name-lg" id="dispTallyTitle">MEDAL TALLY</div>
                                 <div class="tally-graphic-table" id="tallyGraphicContent"></div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="card-footer" id="footer-row">
-                        <div class="logos-row">
-                            <div class="footer-logo-box" onclick="triggerUpload('upload-deped')"><img src="assets/deped_logo.png" class="footer-logo-img" id="img-deped" onerror="this.style.opacity='0'"></div>
-                            <div class="footer-logo-box" onclick="triggerUpload('upload-bagongp')"><img src="assets/bagongp_logo.png" class="footer-logo-img" id="img-bagongp" onerror="this.style.opacity='0'"></div>
-                            <div class="footer-logo-box" onclick="triggerUpload('upload-region1')"><img src="assets/region1_logo.png" class="footer-logo-img" id="img-region1" onerror="this.style.opacity='0'"></div>
-                            <div class="footer-logo-box" onclick="triggerUpload('upload-lgu')"><img src="assets/lgu_logo.png" class="footer-logo-img" id="img-lgu" onerror="this.style.opacity='0'"></div>
-                            <div class="footer-logo-box" onclick="triggerUpload('upload-sdo')"><img src="assets/sdo_logo.png" class="footer-logo-img" id="img-sdo" onerror="this.style.opacity='0'"></div>
-                        </div>
-                        <div class="source-note">Source: Game Results and Tabulation Committee</div>
                     </div>
                 </div>
 
@@ -409,14 +378,14 @@
 
         // --- EDITOR LOGIC ---
         window.moveElement = (el, val) => {
-            if(el === 'header') document.getElementById('card-header-el').style.transform = `translateY(${val}px)`;
             if(el === 'banner') document.getElementById('congrats-banner').style.transform = `translateY(${val}px)`;
             if(el === 'text') document.getElementById('text-group-el').style.transform = `translateY(${val}px)`;
             if(el === 'content') document.getElementById('visual-group-el').style.transform = `translateY(${val}px)`;
         };
 
         window.toggleElement = (id, show) => {
-            document.getElementById(id).style.visibility = show ? 'visible' : 'hidden';
+            const el = document.getElementById(id);
+            if(el) el.style.visibility = show ? 'visible' : 'hidden';
         };
 
         window.triggerUpload = (id) => document.getElementById(id).click();
