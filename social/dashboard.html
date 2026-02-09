@@ -100,7 +100,7 @@
         .card-content { 
             flex: 1; width: 100%; 
             display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
-            padding: 30px 40px; /* INCREASED PADDING */
+            padding: 30px 40px;
             z-index: 5; overflow: hidden;
         }
         .text-group { width: 100%; transition: transform 0.2s; }
@@ -110,7 +110,7 @@
             display: flex; 
             justify-content: center; 
             transition: transform 0.2s; 
-            margin-top: 35px; /* ADDED SPACING BETWEEN TEXT AND VISUALS */
+            margin-top: 35px;
         }
 
         .card-layout { display: none; width: 100%; flex-direction: column; align-items: center; }
@@ -120,7 +120,7 @@
         .event-name-lg { font-family: 'Oswald', sans-serif; font-size: 4rem; font-weight: 800; text-transform: uppercase; color: #fbbf24; -webkit-text-stroke: 2px #b45309; text-shadow: 3px 3px 0px #b45309; margin-bottom: 5px; line-height: 1.1; }
         .category-text { font-family: 'Montserrat', sans-serif; font-size: 1.5rem; font-weight: 700; text-transform: uppercase; letter-spacing: 4px; color: white; margin-bottom: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
 
-        /* Tally Title (Specific style to sit under banner) */
+        /* Tally Title */
         .tally-title-custom { 
             font-family: 'Oswald', sans-serif; font-size: 3.5rem; font-weight: 800; 
             text-transform: uppercase; color: #fbbf24; -webkit-text-stroke: 1.5px #b45309; 
@@ -137,12 +137,16 @@
 
         .photo-frame { width: 85%; height: 420px; background: white; padding: 15px; box-shadow: 0 15px 40px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center; overflow: hidden; transform: rotate(-1deg); margin-bottom: 30px; }
         .team-photo { width: 100%; height: 100%; object-fit: cover; }
-        .victory-details { display: flex; align-items: center; width: 90%; justify-content: center; gap: 30px; background: rgba(255,255,255,0.9); padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+        
+        /* UPDATED VICTORY DETAILS */
+        .victory-details { display: flex; align-items: center; width: 95%; justify-content: center; gap: 20px; background: rgba(255,255,255,0.9); padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         .sdo-logo-lg { width: 130px; height: 130px; object-fit: contain; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.3)); }
-        .victory-sdo-name { font-family: 'Oswald', sans-serif; font-size: 4rem; font-weight: 900; color: #dc2626; line-height: 1; text-transform: uppercase; }
-        .victory-rank { font-family: 'Oswald', sans-serif; font-size: 3rem; font-weight: 800; color: #fbbf24; text-shadow: 2px 2px 0 #b45309; text-transform: uppercase; }
+        .victory-text { display: flex; flex-direction: column; text-align: center; }
+        .victory-sdo-name { font-family: 'Oswald', sans-serif; font-size: 3.2rem; font-weight: 900; color: #dc2626; line-height: 1.1; text-transform: uppercase; }
+        .victory-rank { font-family: 'Oswald', sans-serif; font-size: 2.5rem; font-weight: 800; color: #fbbf24; text-shadow: 2px 2px 0 #b45309; text-transform: uppercase; line-height: 1.1; }
 
-        .match-score-box { display: flex; align-items: center; justify-content: space-around; width: 100%; background: rgba(0,0,0,0.3); padding: 40px; border-radius: 30px; backdrop-filter: blur(10px); border: 2px solid rgba(255,255,255,0.2); margin-top: 10px; }
+        /* UPDATED MATCH SCORE BOX */
+        .match-score-box { display: flex; align-items: center; justify-content: space-around; width: 100%; background: rgba(0,0,0,0.3); padding: 25px; border-radius: 30px; backdrop-filter: blur(10px); border: 2px solid rgba(255,255,255,0.2); margin-top: 10px; }
         .team-box { display: flex; flex-direction: column; align-items: center; width: 35%; }
         .team-logo-ph { width: 200px; height: 200px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 4rem; color: white; border: 5px solid white; overflow: hidden; cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
         .team-name-lg { font-family: 'Oswald', sans-serif; font-size: 2.5rem; color: white; text-transform: uppercase; margin-top: 20px; text-shadow: 0 3px 6px rgba(0,0,0,0.6); }
